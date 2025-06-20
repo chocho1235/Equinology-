@@ -1,9 +1,8 @@
 import { ArrowRight, Star, Compass } from 'lucide-react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInView } from 'framer-motion';
-import image from "../images/Hero-Image.webp"
 import ClientThreeBackground from './ClientThreeBackground';
 
 const Hero = () => {
@@ -14,6 +13,12 @@ const Hero = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  
+  // Scroll-based animation for horse - subtle and elegant
+  const { scrollY } = useScroll();
+  const horseRotate = useTransform(scrollY, [0, 600], [0, -3]); // Very subtle rotation
+  const horseY = useTransform(scrollY, [0, 600], [0, -8]); // Gentle lift
+  const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, 0.8, 0.4]); // Fade as you scroll
   
   useEffect(() => {
     // Check prefers-reduced-motion
@@ -39,118 +44,131 @@ const Hero = () => {
   }, [isInView, controls, hasLoaded, reduceMotion]);
 
   return (
-    <div className="relative min-h-screen overflow-hidden" ref={ref}>
+    <div className="relative min-h-screen" ref={ref}>
       {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A]/50 via-[#111111]/30 to-[#0A0A0A]/50 z-30">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A]/50 via-[#111111]/30 to-[#0A0A0A]/50 z-30 overflow-hidden">
         <Suspense fallback={<div className="absolute inset-0 bg-[#0A0A0A]" />}>
           <ClientThreeBackground />
         </Suspense>
       </div>
 
       {/* Content */}
-      <div className="relative z-40 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
-        <div className="text-center lg:text-left lg:grid lg:grid-cols-2 lg:gap-8 items-center">
-          <motion.div
-            initial="hidden"
-            animate={controls}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1 }
-            }}
-            transition={{ duration: reduceMotion ? 0 : 0.5 }}
-            className="space-y-8"
-          >
-            {/* Badge */}
-            <div className="inline-flex items-center space-x-2 bg-[#111111]/50 backdrop-blur-sm px-4 py-2 rounded-full border border-[#3CAAFF]/30">
-              <Compass className="w-4 h-4 text-[#3CAAFF]" />
-              <span className="text-sm text-[#ABABAB]">Equestrian Experts</span>
-            </div>
+      <div className="relative z-40 min-h-screen flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+          <div className="text-center lg:text-left lg:grid lg:grid-cols-12 lg:gap-12 items-center w-full">
+            <motion.div
+              initial="hidden"
+              animate={controls}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 }
+              }}
+              transition={{ duration: reduceMotion ? 0 : 0.5 }}
+              className="lg:col-span-7 space-y-8 w-full overflow-visible"
+            >
+              {/* Badge */}
+              <div className="inline-flex items-center space-x-2 bg-[#111111]/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-[#3CAAFF]/40">
+                <Compass className="w-4 h-4 text-[#3CAAFF]" />
+                <span className="text-sm font-medium text-[#BDBDBD]">Digital Innovation Experts</span>
+              </div>
 
-            {/* Main heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight relative">
-              <span className="block text-[#F5F5F7]">Transform Ideas</span>
-              <span className="block mt-2 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent pb-2">
-                Digital Reality
-              </span>
-            </h1>
+              {/* Main heading */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-relaxed mb-8">
+                <span className="block text-white mb-2">Transform Ideas</span>
+                <span className="block bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent py-1">
+                  Digital Reality
+                </span>
+              </h1>
 
-            {/* Description */}
-            <p className="text-lg text-[#ABABAB] max-w-3xl">
-              Get in touch today for a no-obligation, one-to-one consultation about your project. Depending on the scope of the project, we aim to deliver your perfected project within approximately a week. We won't consider it complete until you're satisfied, and we offer a transparent, fixed and affordable price. No business is complete without a professional website
-            </p>
+              {/* Description */}
+              <p className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl leading-relaxed font-light mt-6">
+                Professional digital solutions that drive business growth. From consultation to delivery, we create exceptional experiences that exceed expectations.
+              </p>
 
-            {/* CTA buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button
-                onClick={() => navigate('/contact')}
-                className="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] text-[#0A0A0A] font-medium hover:shadow-lg hover:shadow-[#3CAAFF]/25 transition-all duration-300"
-              >
-                Contact Us
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </button>
-              <button
-                onClick={() => navigate('/services')}
-                className="inline-flex items-center px-8 py-3 rounded-full border border-[#3CAAFF]/30 hover:border-[#3CAAFF]/60 text-[#ABABAB] hover:text-[#F5F5F7] transition-colors duration-300"
-              >
-                Explore Services
-              </button>
-            </div>
+              {/* CTA buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                <button
+                  onClick={() => navigate('/contact')}
+                  className="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] text-[#0A0A0A] font-semibold hover:shadow-lg hover:shadow-[#3CAAFF]/25 transition-all duration-300"
+                >
+                  Get Started
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => navigate('/services')}
+                  className="inline-flex items-center px-8 py-3 rounded-full border border-[#3CAAFF]/40 hover:border-[#3CAAFF]/80 text-[#BDBDBD] hover:text-white transition-all duration-300 hover:bg-[#3CAAFF]/10 font-semibold"
+                >
+                  View Our Work
+                </button>
+              </div>
 
-            {/* Social proof */}
-            <div className="pt-8 border-t border-[#222222]/30">
-              <div className="flex items-center justify-center lg:justify-start space-x-8">
-                <div>
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.5 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ 
-                          duration: 0.5,
-                          delay: i * 0.2,
-                          ease: "easeOut"
-                        }}
-                      >
-                        <Star className="w-5 h-5 text-[#3CAAFF] fill-current" />
-                      </motion.div>
-                    ))}
+              {/* Social proof */}
+              <div className="pt-8 border-t border-[#333333]/50">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+                  <div className="text-center lg:text-left">
+                    <div className="flex items-center justify-center lg:justify-start mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ 
+                            duration: 0.5,
+                            delay: i * 0.1,
+                            ease: "easeOut"
+                          }}
+                        >
+                          <Star className="w-4 h-4 text-[#3CAAFF] fill-current" />
+                        </motion.div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-[#888888]">Trusted by thousands of business owners</p>
                   </div>
-                  <p className="mt-2 text-sm text-[#777777]">Trusted by 100+ equestrians</p>
-                </div>
-                <div className="h-12 w-px bg-[#222222]/30"></div>
-                <div>
-                  <p className="text-2xl font-bold text-[#F5F5F7]">6</p>
-                  <p className="text-sm text-[#777777]">Years of excellence</p>
-                </div>
-                <div className="h-12 w-px bg-[#222222]/30"></div>
-                <div>
-                  <p className="text-2xl font-bold text-[#F5F5F7]">£200</p>
-                  <p className="text-sm text-[#777777]">Prices starting from</p>
+                  <div className="text-center lg:text-left">
+                    <p className="text-2xl font-bold text-white mb-1">6+</p>
+                    <p className="text-sm text-[#888888]">Years of excellence</p>
+                  </div>
+                  <div className="text-center lg:text-left">
+                    <p className="text-2xl font-bold text-white mb-1">£200</p>
+                    <p className="text-sm text-[#888888]">Starting from</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Hero image/illustration */}
-          <div className="mt-12 lg:mt-0 relative hidden lg:block">
-            <div className="relative mx-auto max-w-[500px]">
-              <div className="aspect-w-5 aspect-h-3 rounded-2xl overflow-hidden bg-gradient-to-br from-[#3CAAFF]/10 to-[#00E0FF]/10 backdrop-blur-3xl">
-                <img
-                  src={image}
-                  alt="Elegant Horse"
-                  className={`object-cover w-full h-full rounded-2xl mix-blend-luminosity opacity-80 transition-opacity duration-300 ${
-                    imageLoaded ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  loading="lazy"
-                  width={500}
-                  height={300}
-                  onLoad={() => setImageLoaded(true)}
-                />
-                {!imageLoaded && (
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0A0A0A] via-transparent to-transparent animate-pulse" />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#0A0A0A] via-transparent to-transparent"></div>
+            {/* Hero image/illustration */}
+            <div className="mt-16 lg:mt-0 lg:col-span-5 relative flex justify-center lg:justify-end">
+              <div className="relative max-w-[600px] w-full">
+                {/* Positioning to complement the 3D sphere */}
+                <motion.div 
+                  className="relative transform lg:-translate-x-4 pb-8"
+                  style={{
+                    rotateZ: horseRotate,
+                    y: horseY,
+                    opacity: horseOpacity,
+                    transformOrigin: "center 80%" // Adjusted pivot point to prevent bottom cutoff
+                  }}
+                >
+                  <div className="aspect-w-4 aspect-h-3 rounded-3xl overflow-visible">
+                    <img
+                      src="/ChatGPT Image Jun 20, 2025, 01_54_47 PM.png"
+                      alt="Elegant Horse"
+                      className={`object-contain w-full h-full rounded-3xl transition-opacity duration-700 ${
+                        imageLoaded ? 'opacity-100' : 'opacity-0'
+                      }`}
+                      loading="lazy"
+                      width={600}
+                      height={450}
+                      onLoad={() => setImageLoaded(true)}
+                    />
+                    {!imageLoaded && (
+                      <div className="absolute inset-0 animate-pulse" />
+                    )}
+                  </div>
+                  
+                  {/* Subtle glow effect to interact with the sphere */}
+                  <div className="absolute -inset-6 bg-gradient-radial from-[#3CAAFF]/8 via-transparent to-transparent rounded-full blur-2xl pointer-events-none opacity-70"></div>
+                </motion.div>
               </div>
             </div>
           </div>

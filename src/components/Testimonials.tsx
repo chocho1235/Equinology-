@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Define types for AnimatedOrb props
@@ -42,32 +42,38 @@ interface TestimonialCardProps {
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive }) => {
   return (
     <div
-      className={`flex-shrink-0 w-[90vw] sm:w-[500px] md:w-[600px] mx-auto ${
+      className={`flex-shrink-0 w-[90vw] sm:w-[500px] md:w-[600px] mx-auto transition-opacity duration-300 ${
         isActive ? 'opacity-100' : 'opacity-30'
-      } transition-opacity duration-300`}
+      }`}
     >
-      <div className="bg-[#111111] p-6 sm:p-8 rounded-xl border border-[#222222]/30">
+      <div className="relative bg-[#181B22] p-8 rounded-2xl border border-[#23262F] shadow-lg overflow-hidden transition-all duration-200 group hover:shadow-blue-500/10 hover:border-blue-500/40 hover:bg-gradient-to-br hover:from-[#181B22] hover:to-[#1a2233] flex flex-col items-center">
+        {/* Quote Icon - centered above text */}
+        <div className="flex items-center justify-center mb-6">
+          <span className="p-4 rounded-full bg-blue-400/10 flex items-center justify-center">
+            <Quote className="w-10 h-10 text-blue-400" />
+          </span>
+        </div>
         {/* Quote Text */}
-        <div className="relative mb-6">
-          <Quote className="absolute -top-3 -left-2 w-8 h-8 text-[#3CAAFF]/10" />
-          <p className="text-lg sm:text-xl text-white/90 leading-relaxed pl-6">
-            {testimonial.quote}
+        <div className="relative mb-8 w-full">
+          <p className="text-xl text-[#BDBDBD] leading-relaxed font-light text-center">
+            “{testimonial.quote}”
           </p>
         </div>
-
         {/* Author Info */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/10">
+        <div className="flex items-center justify-between pt-5 border-t border-[#23262F] mt-6 w-full">
           <div>
             <p className="text-lg font-semibold text-white">
               {testimonial.author}
             </p>
-            <p className="text-base text-[#ABABAB]">
+            <p className="text-base text-[#ABABAB] tracking-wide">
               {testimonial.position}
             </p>
           </div>
           <div className="flex gap-1">
             {[...Array(testimonial.rating)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 text-[#3CAAFF]" />
+              <span key={i} className="inline-flex items-center justify-center p-1 rounded-full bg-blue-400/10 group-hover:scale-110 transition-transform duration-200">
+                <Star className="w-5 h-5 text-blue-400 fill-current" />
+              </span>
             ))}
           </div>
         </div>
@@ -174,19 +180,50 @@ const Testimonials = () => {
   return (
     <section 
       id="testimonials"
-      className="py-16 md:py-24 relative"
+      className="pt-0 pb-24 relative bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]"
       ref={testimonialRef}
     >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white">
-            Hear From Our Clients
-          </h2>
-          <p className="text-[#ABABAB] max-w-xl mx-auto">
-            Discover how we've helped equestrian businesses thrive with tailored digital solutions.
-          </p>
+      {/* Subtle noise/texture background - unified with Facilities */}
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: 'url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)', opacity: 0.25 }} />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-20 relative flex flex-col items-center justify-center">
+          {/* Soft blurred highlight behind heading */}
+          <div className="absolute left-1/2 top-0 -translate-x-1/2 -z-10 w-72 h-24 bg-blue-400/10 blur-2xl rounded-full" />
+          <span className="relative inline-block">
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+              className="text-4xl sm:text-5xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 tracking-tight"
+            >
+              Trusted by{' '}
+              <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-extrabold">
+                Industry
+                <motion.div
+                  initial={{ scaleX: 0, opacity: 0 }}
+                  whileInView={{ scaleX: 1, opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+                  className="absolute left-0 right-0" 
+                  style={{
+                    height: '4px',
+                    borderRadius: '9999px',
+                    background: 'linear-gradient(to right, #38bdf8, #22d3ee)',
+                    bottom: '-6px',
+                    opacity: 1,
+                  }}
+                />
+              </span>{' '}Leaders
+            </motion.h2>
+          </span>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
+            className="text-[#BDBDBD] max-w-xl mx-auto text-lg font-medium tracking-wider mb-10"
+          >
+            See how world-class brands achieve more with our digital expertise.
+          </motion.p>
         </div>
-
         {/* Testimonials Carousel */}
         <div className="relative">
           <div className="w-full max-w-4xl mx-auto overflow-hidden">
@@ -207,36 +244,34 @@ const Testimonials = () => {
               ))}
             </div>
           </div>
-
           {/* Navigation Arrows */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 hover:border-[#3CAAFF]/50 hover:bg-black/70 transition-all duration-300"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-8 p-3 rounded-full bg-[#181B22] border border-[#23262F] shadow-md hover:border-blue-400/40 hover:bg-blue-400/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
             aria-label="Previous testimonial"
           >
-            <ChevronLeft className="w-6 h-6 text-white/70" />
+            <ChevronLeft className="w-6 h-6 text-blue-400" />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 hover:border-[#3CAAFF]/50 hover:bg-black/70 transition-all duration-300"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 sm:translate-x-8 p-3 rounded-full bg-[#181B22] border border-[#23262F] shadow-md hover:border-blue-400/40 hover:bg-blue-400/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
             aria-label="Next testimonial"
           >
-            <ChevronRight className="w-6 h-6 text-white/70" />
+            <ChevronRight className="w-6 h-6 text-blue-400" />
           </button>
-
           {/* Dots Navigation */}
-          <div className="flex justify-center mt-8 space-x-3">
+          <div className="flex justify-center mt-10 space-x-3">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`relative ${
+                className={`relative h-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                   index === activeIndex ? 'w-10' : 'w-3'
-                } h-3 transition-all duration-300`}
+                }`}
               >
-                <div className={`relative h-full rounded-full ${
+                <div className={`relative h-full rounded-full transition-colors duration-300 ${
                   index === activeIndex
-                    ? 'bg-[#3CAAFF]'
+                    ? 'bg-blue-400'
                     : 'bg-white/20'
                 }`}></div>
               </button>

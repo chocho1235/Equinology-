@@ -30,7 +30,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ post, onBackClick }) => {
       className="container mx-auto px-4 py-8 max-w-6xl w-full"
     >
       <Helmet>
-        <title>{`${post.title} | Equinology Articles`}</title>
+        <title>{`${post.title} | Digital Insights`}</title>
         <meta name="description" content={post.summary} />
       </Helmet>
 
@@ -146,7 +146,7 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ post, onBackClick }) => {
               Interested in learning more about how we can help your business?
             </h3>
             <p className="text-gray-400 mb-6 max-w-2xl">
-              Contact us to discuss your digital needs and discover how we can create a tailored solution for your equestrian business.
+              Contact us to discuss your digital needs and discover how we can create a tailored solution for your business.
             </p>
             <button 
               onClick={() => {

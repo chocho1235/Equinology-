@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Article } from '../../data/articleData';
@@ -21,17 +21,25 @@ const itemAnimation = {
   animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
+// Custom formatter for TimeAgo
+const timeAgoFormatter = (value: number, unit: string, suffix: string) => {
+  if (unit === 'week' && value >= 4) {
+    const months = Math.floor(value / 4);
+    return `${months} month${months !== 1 ? 's' : ''} ${suffix}`;
+  }
+  if (unit === 'day' && value >= 30) {
+    const months = Math.floor(value / 30);
+    return `${months} month${months !== 1 ? 's' : ''} ${suffix}`;
+  }
+  // Add other conditions if needed, e.g., for years
+  if (unit === 'month' && value >= 12) {
+    const years = Math.floor(value / 12);
+    return `${years} year${years !== 1 ? 's' : ''} ${suffix}`;
+  }
+  return `${value} ${unit}${value !== 1 ? 's' : ''} ${suffix}`;
+};
+
 const ArticleList: React.FC<ArticleListProps> = ({ posts, isGridView, onViewToggle }) => {
-  const [currentTime, setCurrentTime] = useState(Date.now());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(Date.now());
-    }, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div>
       <div className="flex justify-end mb-6">
@@ -75,7 +83,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ posts, isGridView, onViewTogg
                 <div className="absolute inset-0 bg-gradient-to-t from-[#3CAAFF]/10 via-[#00E0FF]/5 to-transparent mix-blend-overlay"></div>
                 <div className="absolute bottom-0 left-0 p-4 flex items-center gap-2">
                   <p className="text-[#3CAAFF] text-xs uppercase tracking-wider font-medium bg-black/40 px-3 py-1 rounded-full inline-block">
-                    <TimeAgo date={post.timestamp} />
+                    <TimeAgo date={post.timestamp} formatter={timeAgoFormatter} />
                   </p>
                   {post.readTime && (
                     <p className="text-white text-xs font-medium bg-black/40 px-3 py-1 rounded-full inline-flex items-center">

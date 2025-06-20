@@ -17,6 +17,15 @@
   .font-light {
     font-weight: 300;
   }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
 }
 
 /* Smooth scroll for Safari */
@@ -25,3 +34,11 @@
     -webkit-overflow-scrolling: touch;
   }
 } */
+
+.bg-gradient-radial-subtle {
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 176, 255, 0.1) 0%, transparent 70%),
+    radial-gradient(ellipse at 100% 100%, rgba(0, 224, 255, 0.05) 0%, transparent 70%);
+  opacity: 0.03;
+  transition: opacity 0.3s ease-out;
+}

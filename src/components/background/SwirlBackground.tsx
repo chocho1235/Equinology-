@@ -34,12 +34,12 @@ const SwirlBackground = () => {
 
     // Initialize points in a circular pattern
     const initializePoints = (width: number, height: number) => {
-      const numPoints = Math.min(50, Math.floor((width * height) / 40000)); // Reduce points on smaller screens
+      const numPoints = Math.min(30, Math.floor((width * height) / 60000)); // Reduced number of points
       pointsRef.current = Array.from({ length: numPoints }, (_, i) => ({
         x: width / 2,
         y: height / 2,
         angle: (i / numPoints) * Math.PI * 2,
-        speed: 0.1 + Math.random() * 0.1
+        speed: 0.08 + Math.random() * 0.08 // Slightly reduced speed
       }));
     };
 
@@ -64,7 +64,7 @@ const SwirlBackground = () => {
     gradientCanvas.height = 20;
     if (gradientCtx) {
       const gradient = gradientCtx.createRadialGradient(10, 10, 0, 10, 10, 10);
-      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.3)');
+      gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)'); // Reduced opacity
       gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
       gradientCtx.fillStyle = gradient;
       gradientCtx.fillRect(0, 0, 20, 20);
@@ -105,7 +105,7 @@ const SwirlBackground = () => {
         ctx.moveTo(current.x, current.y);
         ctx.lineTo(next.x, next.y);
       }
-      ctx.strokeStyle = 'rgba(59, 130, 246, 0.15)';
+      ctx.strokeStyle = 'rgba(59, 130, 246, 0.1)'; // Reduced opacity
       ctx.lineWidth = 0.5;
       ctx.stroke();
       

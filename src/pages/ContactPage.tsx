@@ -1,7 +1,7 @@
 "use client";
 
-import React, { lazy, Suspense } from 'react';
-import { motion } from 'framer-motion';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useTheme } from "next-themes";
 import {
   Mail,
@@ -10,17 +10,23 @@ import {
   Calendar,
   Users,
   CheckCircle,
-  Shield
+  Shield,
+  ChevronRight,
+  ArrowRight
 } from 'lucide-react';
+import { Contact } from '../components/Contact';
+import ProcessSteps from '../components/ProcessSteps';
 
 // Lazy load the SwirlBackground component
 const SwirlBackground = lazy(() => import('../components/background/SwirlBackground'));
 
 const ContactHero = () => {
   const { theme } = useTheme();
+  const { scrollY } = useScroll();
+  const scrollIndicatorOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-black">
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Swirl background */}
       <div className="absolute inset-0 z-10">
         <Suspense fallback={<div className="absolute inset-0 bg-[#0A0A0A]" />}>
@@ -35,7 +41,7 @@ const ContactHero = () => {
         className="absolute inset-0 bg-[url('/grid-pattern.png')] bg-repeat opacity-[0.03] z-20"
       />
       {/* Content */}
-      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left text */}
           <motion.div
@@ -71,7 +77,7 @@ const ContactHero = () => {
               </span>
             </motion.h1>
             <motion.p
-              className="text-lg text-[#94a3b8]/90 max-w-xl font-light leading-relaxed"
+              className="text-lg text-[#94a3b8]/90 max-w-xl font-light leading-relaxed mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -79,6 +85,27 @@ const ContactHero = () => {
               Have a project in mind? We're here to turn your vision into reality. Our team combines creativity with
               technical expertise to deliver exceptional results.
             </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="flex flex-wrap gap-4"
+            >
+              <a
+                href="#process"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-[#0A0A0A] bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] rounded-lg hover:shadow-lg hover:shadow-[#3CAAFF]/25 transition-all duration-300"
+              >
+                View Our Process
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="mailto:enquiries@equinology.co.uk"
+                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-white border border-[#3CAAFF]/20 rounded-lg hover:bg-[#3CAAFF]/5 transition-all duration-300"
+              >
+                Contact Us
+                <Mail className="w-4 h-4" />
+              </a>
+            </motion.div>
           </motion.div>
           {/* Right quick info */}
           <motion.div
@@ -115,56 +142,77 @@ const ContactHero = () => {
           </motion.div>
         </div>
       </div>
+      {/* Scroll indicator with dynamic opacity */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        style={{ opacity: scrollIndicatorOpacity }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-[#94a3b8]/60 text-sm">Scroll to explore</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1 h-8 rounded-full bg-gradient-to-b from-[#3CAAFF]/30 to-transparent"
+          />
+        </div>
+      </motion.div>
     </section>
   );
 };
 
-// New focus areas section
-const FocusAreas = () => {
-  const areas = [
-    { icon: <Calendar className="w-6 h-6 text-[#3CAAFF]" />, title: 'Strategic Planning', desc: 'Tailored roadmaps aligned with your vision.' },
-    { icon: <Users className="w-6 h-6 text-[#00E0FF]" />, title: 'Expert Team', desc: 'Dedicated specialists in design, development, QA, and more.' },
-    { icon: <Shield className="w-6 h-6 text-[#93c5fd]" />, title: 'Security First', desc: 'Industry-leading practices for data protection.' },
-    { icon: <CheckCircle className="w-6 h-6 text-[#3CAAFF]" />, title: 'Quality Assurance', desc: 'Rigorous testing for flawless delivery.' }
+// Benefits section
+const Benefits = () => {
+  const benefits = [
+    { icon: Calendar, title: 'Fast Turnaround', desc: 'Most projects completed within a week.' },
+    { icon: Users, title: 'Expert Team', desc: 'Dedicated specialists at your service.' },
+    { icon: Shield, title: 'Secure & Reliable', desc: 'Enterprise-grade security standards.' },
+    { icon: CheckCircle, title: 'Quality Assured', desc: 'Thorough testing and optimisation.' }
   ];
 
   return (
-    <section className="py-24 bg-black relative overflow-hidden px-4 sm:px-6 lg:px-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="text-center mb-12 max-w-3xl mx-auto"
-      >
-        <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF]">
-          What We Offer
-        </h2>
-        <p className="mt-4 text-[#94a3b8]/80">
-          Our expertise spans the full project lifecycle, ensuring seamless execution at every step.
-        </p>
-      </motion.div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {areas.map(({ icon, title, desc }, i) => (
-          <motion.div
-            key={i}
-            whileHover={{ scale: 1.05, y: -5 }}
-            className="relative bg-[#111111]/70 backdrop-blur-md p-8 rounded-2xl border border-[#3CAAFF]/10 overflow-hidden"
-          >
+    <section className="py-24 bg-[#0A0A0A] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="flex items-center gap-2 text-[#3CAAFF] text-sm font-medium tracking-wider uppercase mb-4 justify-center">
+            <span className="h-px w-8 bg-gradient-to-r from-[#3CAAFF] to-transparent"></span>
+            <span>Why Choose Us</span>
+            <span className="h-px w-8 bg-gradient-to-l from-[#3CAAFF] to-transparent"></span>
+          </div>
+          <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] mb-4">
+            Benefits of Working With Us
+          </h2>
+          <p className="text-[#94a3b8]/80 max-w-2xl mx-auto">
+            Experience the difference of working with a team that puts your success first.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {benefits.map((benefit, index) => (
             <motion.div
-              className="absolute -top-6 -right-6 w-32 h-32 bg-[#3CAAFF]/10 rounded-full mix-blend-overlay"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            />
-            <div className="relative z-10">
-              <div className="inline-flex items-center justify-center bg-[#3CAAFF]/10 rounded-full p-3 mb-4">
-                {icon}
+              key={benefit.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-[#111111]/70 backdrop-blur-md p-8 rounded-2xl border border-[#3CAAFF]/10 group hover:border-[#3CAAFF]/30 transition-all duration-300"
+            >
+              <div className="bg-[#3CAAFF]/10 p-4 rounded-xl w-fit mb-6 group-hover:bg-[#3CAAFF]/20 transition-colors duration-300">
+                <benefit.icon className="w-6 h-6 text-[#3CAAFF]" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-              <p className="text-[#94a3b8]/80 font-light leading-relaxed">{desc}</p>
-            </div>
-          </motion.div>
-        ))}
+              <h3 className="text-xl font-semibold text-white mb-2">{benefit.title}</h3>
+              <p className="text-[#94a3b8]/80">{benefit.desc}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -173,7 +221,9 @@ const FocusAreas = () => {
 const ContactPage = () => (
   <div className="bg-black min-h-screen">
     <ContactHero />
-    <FocusAreas />
+    <Benefits />
+    <ProcessSteps />
+    <Contact />
   </div>
 );
 
