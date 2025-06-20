@@ -22,6 +22,19 @@
         scrollbar-gutter: stable;
       }
       
+      /* Prevent white flash on load */
+      html, body {
+        background-color: #0A0A0A;
+        margin: 0;
+        padding: 0;
+      }
+      
+      /* Ensure root div takes full height */
+      #root {
+        min-height: 100vh;
+        background-color: #0A0A0A;
+      }
+      
       /* Ensure all motion containers have non-static positioning */
       .motion-container {
         position: relative;
