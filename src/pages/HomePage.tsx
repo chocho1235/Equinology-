@@ -16,7 +16,7 @@ interface CardProps {
 
 const HomePage = () => {
   return (
-    <div className="bg-gradient-to-b from-[#0A0A0A] via-[#101010] to-[#0A0A0A]">
+    <div className="bg-[#0A0A0A]">
       <Hero />
       <Services />
       <FlagCarousel />

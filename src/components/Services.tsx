@@ -46,23 +46,6 @@ const Services = () => {
   const { isMobile, isReducedMotion } = useAnimation();
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Reduce motion values for mobile
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-  
-  // Smoother, lighter spring for mobile
-  const smoothScroll = useSpring(scrollYProgress, {
-    stiffness: isMobile ? 50 : 100,
-    damping: isMobile ? 15 : 30
-  });
-  
-  // Reduced parallax effect for mobile
-  const parallaxAmount = isMobile ? 10 : 20;
-  const parallaxUp = useTransform(smoothScroll, [0, 1], [0, parallaxAmount]);
-  const parallaxDown = useTransform(smoothScroll, [0, 1], [parallaxAmount, 0]);
-
   // Animation config based on device
   const animationConfig = getMobileAnimationConfig(isMobile);
 

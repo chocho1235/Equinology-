@@ -1,7 +1,7 @@
 "use client";
 
 import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useTransform } from 'framer-motion';
 import { useTheme } from "next-themes";
 import {
   Mail,
@@ -22,8 +22,6 @@ const SwirlBackground = lazy(() => import('../components/background/SwirlBackgro
 
 const ContactHero = () => {
   const { theme } = useTheme();
-  const { scrollY } = useScroll();
-  const scrollIndicatorOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-black">
@@ -144,10 +142,8 @@ const ContactHero = () => {
       </div>
       {/* Scroll indicator with dynamic opacity */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.8 }}
-        style={{ opacity: scrollIndicatorOpacity }}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
       >
         <div className="flex flex-col items-center gap-2">

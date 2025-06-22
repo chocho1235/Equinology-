@@ -1,19 +1,44 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, Instagram, Facebook } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Use Link for internal navigation
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Use Link for internal navigation
 import logo from "../images/logo.webp";
 
-const FooterLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
-  <li>
-    <Link 
-      to={to} 
-      className="text-[#777777] hover:text-[#AABBDD] transition-colors duration-200 text-sm relative group"
-    >
-      {children}
-      <span className="absolute bottom-0 left-0 w-0 h-px bg-gradient-to-r from-[#3CAAFF]/0 to-[#3CAAFF] group-hover:w-full transition-all duration-300 ease-out"></span>
-    </Link>
-  </li>
-);
+const FooterLink = ({ to, children }: { to: string; children: React.ReactNode }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isHashLink = to.startsWith('/#');
+  const sectionId = isHashLink ? to.replace('/#', '') : null;
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isHashLink && sectionId) {
+      e.preventDefault();
+      if (location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const section = document.getElementById(sectionId);
+          section?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      } else {
+        const section = document.getElementById(sectionId);
+        section?.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // else: normal navigation
+  };
+
+  return (
+    <li>
+      <Link 
+        to={to} 
+        onClick={handleClick}
+        className="text-[#777777] hover:text-[#AABBDD] transition-colors duration-200 text-sm relative group"
+      >
+        {children}
+        <span className="absolute bottom-0 left-0 w-0 h-px bg-gradient-to-r from-[#3CAAFF]/0 to-[#3CAAFF] group-hover:w-full transition-all duration-300 ease-out"></span>
+      </Link>
+    </li>
+  );
+};
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();

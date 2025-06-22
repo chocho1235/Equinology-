@@ -46,11 +46,7 @@ const Hero = () => {
   return (
     <div className="relative min-h-screen" ref={ref}>
       {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A]/50 via-[#111111]/30 to-[#0A0A0A]/50 z-30 overflow-hidden">
-        <Suspense fallback={<div className="absolute inset-0 bg-[#0A0A0A]" />}>
-          <ClientThreeBackground />
-        </Suspense>
-      </div>
+      <div className="absolute inset-0 bg-[#0A0A0A] z-10" />
 
       {/* Content */}
       <div className="relative z-40 min-h-screen flex items-center">
@@ -91,7 +87,7 @@ const Hero = () => {
                   onClick={() => navigate('/contact')}
                   className="inline-flex items-center px-8 py-3 rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] text-[#0A0A0A] font-semibold hover:shadow-lg hover:shadow-[#3CAAFF]/25 transition-all duration-300"
                 >
-                  Get Started
+                  Contact Us
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </button>
                 <button
@@ -104,7 +100,7 @@ const Hero = () => {
 
               {/* Social proof */}
               <div className="pt-8 border-t border-[#333333]/50">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
                   <div className="text-center lg:text-left">
                     <div className="flex items-center justify-center lg:justify-start mb-2">
                       {[...Array(5)].map((_, i) => (
@@ -127,10 +123,6 @@ const Hero = () => {
                   <div className="text-center lg:text-left">
                     <p className="text-2xl font-bold text-white mb-1">6+</p>
                     <p className="text-sm text-[#888888]">Years of excellence</p>
-                  </div>
-                  <div className="text-center lg:text-left">
-                    <p className="text-2xl font-bold text-white mb-1">£200</p>
-                    <p className="text-sm text-[#888888]">Starting from</p>
                   </div>
                 </div>
               </div>

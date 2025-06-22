@@ -38,16 +38,6 @@ const Facilities = () => {
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   const controls = useAnimation();
   
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Enhanced parallax effects
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.2], [0.8, 1]);
-  
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
@@ -163,11 +153,8 @@ const Facilities = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]"
+      className="relative py-28 overflow-hidden bg-[#0A0A0A]"
     >
-      {/* Subtle noise/texture background */}
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: "url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)", opacity: 0.25 }} />
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header section */}
         <motion.div
@@ -206,22 +193,22 @@ const Facilities = () => {
             transition={{ type: "spring", stiffness: 300 }}
             className="group relative"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[420px] lg:col-span-2">
-              <div className="flex flex-col justify-center p-10 lg:p-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[420px] lg:col-span-2 gap-8 lg:gap-12">
+              <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-16 order-2 lg:order-1">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="flex items-center gap-5 mb-10"
+                  className="flex items-center gap-3 sm:gap-5 mb-6 sm:mb-10"
                 >
-                  <div className="p-4 rounded-full bg-blue-400/10 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
-                    <Globe className="w-8 h-8 text-blue-400" />
+                  <div className="p-3 sm:p-4 rounded-full bg-blue-400/10 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
+                    <Globe className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
                   </div>
                   <div>
                     <span className="text-blue-400 text-xs font-semibold tracking-widest uppercase block mb-1">
                       {facilities[0].category}
                     </span>
-                    <h3 className="text-4xl font-bold text-white mt-1">
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-1">
                       {facilities[0].title}
                     </h3>
                   </div>
@@ -230,7 +217,7 @@ const Facilities = () => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-[#BDBDBD] text-lg leading-relaxed mb-10"
+                  className="text-[#BDBDBD] text-base sm:text-lg leading-relaxed mb-6 sm:mb-10"
                 >
                   {facilities[0].description}
                 </motion.p>
@@ -238,7 +225,7 @@ const Facilities = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="space-y-4 mb-10"
+                  className="space-y-3 sm:space-y-4 mb-6 sm:mb-10"
                 >
                   {facilities[0].features.map((feature, index) => (
                     <motion.div
@@ -246,12 +233,12 @@ const Facilities = () => {
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="flex items-center gap-4 group-hover:scale-105 transition-transform duration-200"
+                      className="flex items-center gap-3 sm:gap-4 group-hover:scale-105 transition-transform duration-200"
                     >
-                      <div className="p-2 rounded-full bg-blue-400/10 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
-                        <Check className="w-5 h-5 text-blue-400" />
+                      <div className="p-1.5 sm:p-2 rounded-full bg-blue-400/10 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 flex-shrink-0">
+                        <Check className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                       </div>
-                      <span className="text-base text-[#BDBDBD] font-light">{feature}</span>
+                      <span className="text-sm sm:text-base text-[#BDBDBD] font-light">{feature}</span>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -262,14 +249,18 @@ const Facilities = () => {
                   whileTap={{ scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 400 }}
                   onClick={handleContactNavigation}
-                  className="flex items-center gap-2 w-fit px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="flex items-center gap-2 w-fit px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold text-sm sm:text-base shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   Learn More
-                  <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-200 group-hover:translate-x-1" />
                 </motion.button>
               </div>
-              <BusinessWebsiteImages />
-              <div className="lg:hidden flex items-center justify-center mt-8">
+              {/* Desktop Image */}
+              <div className="hidden lg:flex items-center justify-center order-1 lg:order-2">
+                <BusinessWebsiteImages />
+              </div>
+              {/* Mobile Image */}
+              <div className="flex items-center justify-center order-1 lg:hidden py-6 px-4">
                 <BusinessWebsiteImages mobile />
               </div>
             </div>
