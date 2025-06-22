@@ -88,6 +88,7 @@ const Testimonials = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   // The required distance between touchStart and touchEnd to be detected as a swipe
   const minSwipeDistance = 50;
@@ -124,6 +125,20 @@ const Testimonials = () => {
       return () => clearInterval(interval);
     }
   }, [isVisible]);
+
+  useEffect(() => {
+    const node = carouselRef.current;
+    if (!node) return;
+    // Handler for touchmove
+    const handleTouchMove = (e: TouchEvent) => {
+      setTouchEnd(e.touches[0].clientX);
+      if (touchStart !== null) e.preventDefault();
+    };
+    node.addEventListener('touchmove', handleTouchMove, { passive: false });
+    return () => {
+      node.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [touchStart]);
 
   const testimonials = [
     {
@@ -201,10 +216,6 @@ const Testimonials = () => {
     setTouchStart(e.targetTouches[0].clientX);
   };
 
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
   const onTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     
@@ -268,9 +279,10 @@ const Testimonials = () => {
         <div className="relative">
           <div 
             className="w-full max-w-4xl mx-auto overflow-hidden"
+            ref={carouselRef}
             onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
+            style={{ touchAction: 'pan-y' }}
           >
             <div 
               className="flex items-stretch transition-transform duration-300 ease-out"
