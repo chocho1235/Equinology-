@@ -114,84 +114,56 @@ const Header = () => {
             </motion.button>
           </div>
 
-          <AnimatePresence
-            onExitComplete={() => {
-              if (pendingNavigation) {
-                pendingNavigation();
-                setPendingNavigation(null);
-              }
-            }}
-          >
-            {isSidebarOpen && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="fixed inset-0 bg-black/90 backdrop-blur-md z-40"
-                  onClick={() => setIsSidebarOpen(false)}
-                />
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
-                >
-                  <div className="flex justify-between items-center mb-12">
-                    <img src={logo} className="w-32 h-auto drop-shadow-lg" alt="Logo" />
+          {isSidebarOpen && (
+            <>
+              <div
+                className="fixed inset-0 bg-black/90 backdrop-blur-md z-40"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+              <div
+                className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
+              >
+                <div className="flex justify-between items-center mb-12">
+                  <img src={logo} className="w-32 h-auto drop-shadow-lg" alt="Logo" />
                   <button
-                      className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[#3CAAFF]/20 transition-all duration-300"
+                    className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[#3CAAFF]/20 transition-all duration-300"
                     onClick={() => setIsSidebarOpen(false)}
                   >
-                      <X className="w-5 h-5" />
+                    <X className="w-5 h-5" />
                   </button>
-                  </div>
-
-                  <nav className="flex flex-col space-y-8">
-                    {navItems.map((item, index) => (
-                      <motion.button
-                        key={index}
-                        onClick={() => {
-                          setIsSidebarOpen(false);
-                          setPendingNavigation(() => item.action);
-                        }}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * index }}
-                        className="text-white text-xl font-medium tracking-wide hover:text-[#3CAAFF] transition-all duration-300 text-left group flex items-center"
-                      >
-                        <span className="relative">
+                </div>
+                <nav className="flex flex-col space-y-8">
+                  {navItems.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setIsSidebarOpen(false);
+                        setPendingNavigation(() => item.action);
+                      }}
+                      className="text-white text-xl font-medium tracking-wide hover:text-[#3CAAFF] transition-all duration-300 text-left group flex items-center"
+                    >
+                      <span className="relative">
                         {item.label}
-                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] group-hover:w-full transition-all duration-300"></span>
-                        </span>
-                      </motion.button>
-                    ))}
-                  </nav>
-
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
-                    onClick={() => {
-                      setIsSidebarOpen(false);
-                      setPendingNavigation(() => () => navigate("/contact"));
-                    }}
-                  >
-                    <span className="flex items-center justify-center">
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] group-hover:w-full transition-all duration-300"></span>
+                      </span>
+                    </button>
+                  ))}
+                </nav>
+                <button
+                  className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setPendingNavigation(() => () => navigate("/contact"));
+                  }}
+                >
+                  <span className="flex items-center justify-center">
                     Contact Us
-                      <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                  </motion.button>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+                    <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
         </header>
       ) : (
         <motion.header
@@ -244,84 +216,56 @@ const Header = () => {
             </motion.button>
           </div>
 
-          <AnimatePresence
-            onExitComplete={() => {
-              if (pendingNavigation) {
-                pendingNavigation();
-                setPendingNavigation(null);
-              }
-            }}
-          >
-            {isSidebarOpen && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="fixed inset-0 bg-black/90 backdrop-blur-md z-40"
-                  onClick={() => setIsSidebarOpen(false)}
-                />
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
-                >
-                  <div className="flex justify-between items-center mb-12">
-                    <img src={logo} className="w-32 h-auto drop-shadow-lg" alt="Logo" />
+          {isSidebarOpen && (
+            <>
+              <div
+                className="fixed inset-0 bg-black/90 backdrop-blur-md z-40"
+                onClick={() => setIsSidebarOpen(false)}
+              />
+              <div
+                className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
+              >
+                <div className="flex justify-between items-center mb-12">
+                  <img src={logo} className="w-32 h-auto drop-shadow-lg" alt="Logo" />
                   <button
-                      className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[#3CAAFF]/20 transition-all duration-300"
+                    className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[#3CAAFF]/20 transition-all duration-300"
                     onClick={() => setIsSidebarOpen(false)}
                   >
-                      <X className="w-5 h-5" />
+                    <X className="w-5 h-5" />
                   </button>
-                  </div>
-
-                  <nav className="flex flex-col space-y-8">
-                    {navItems.map((item, index) => (
-                      <motion.button
-                        key={index}
-                        onClick={() => {
-                          setIsSidebarOpen(false);
-                          setPendingNavigation(() => item.action);
-                        }}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 * index }}
-                        className="text-white text-xl font-medium tracking-wide hover:text-[#3CAAFF] transition-all duration-300 text-left group flex items-center"
-                      >
-                        <span className="relative">
+                </div>
+                <nav className="flex flex-col space-y-8">
+                  {navItems.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setIsSidebarOpen(false);
+                        setPendingNavigation(() => item.action);
+                      }}
+                      className="text-white text-xl font-medium tracking-wide hover:text-[#3CAAFF] transition-all duration-300 text-left group flex items-center"
+                    >
+                      <span className="relative">
                         {item.label}
-                          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] group-hover:w-full transition-all duration-300"></span>
-                        </span>
-                      </motion.button>
-                    ))}
-                  </nav>
-
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
-                    onClick={() => {
-                      setIsSidebarOpen(false);
-                      setPendingNavigation(() => () => navigate("/contact"));
-                    }}
-                  >
-                    <span className="flex items-center justify-center">
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] group-hover:w-full transition-all duration-300"></span>
+                      </span>
+                    </button>
+                  ))}
+                </nav>
+                <button
+                  className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    setPendingNavigation(() => () => navigate("/contact"));
+                  }}
+                >
+                  <span className="flex items-center justify-center">
                     Contact Us
-                      <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    </span>
-                  </motion.button>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
+                    <ChevronRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
+                </button>
+              </div>
+            </>
+          )}
         </motion.header>
       )}
     </div>
