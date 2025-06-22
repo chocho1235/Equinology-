@@ -134,10 +134,10 @@ const Header = () => {
                 />
 
                 <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "-100%" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
                 >
                   <div className="flex justify-between items-center mb-12">
@@ -264,10 +264,10 @@ const Header = () => {
                 />
 
                 <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "-100%" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25, ease: "easeInOut" }}
                   className="fixed top-0 left-0 w-[85%] max-w-sm min-h-screen bg-gradient-to-br from-black/95 to-black/90 backdrop-blur-xl z-50 flex flex-col p-8 shadow-2xl border-r border-[#3CAAFF]/10"
                 >
                   <div className="flex justify-between items-center mb-12">

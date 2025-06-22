@@ -53,33 +53,33 @@ const Services = () => {
   const services = [
     {
       icon: <PenTool className="w-10 h-10 text-[#3CAAFF]" />,
-      title: "Equestrian Web Design",
-      description: "As equestrian specialists, we speak your language. Our personal web design knowledge allows us to help build your perfect personal website tailored to your specific needs.",
+      title: "Web Design",
+      description: "We specialise in web design. Our personal knowledge allows us to help build your perfect website tailored to your specific needs.",
     },
     {
       icon: <Layout className="w-10 h-10 text-[#3CAAFF]" />,
       title: "Software Development",
-      description: "We don't just offer specialist websites—we also create specific software that reflects real horse-world knowledge to support your equestrian business.",
+      description: "We offer specialist websites and also create specific software that reflects real-world knowledge to support your business.",
     },
     {
       icon: <Compass className="w-10 h-10 text-[#3CAAFF]" />,
       title: "Detailed Planning",
-      description: "Our in-depth planning turns your equestrian vision into reality. We carefully map each step—from inspiring concepts to precise timelines—giving you a clear path to success.",
+      description: "Our in depth planning turns your vision into reality. We carefully map each step, from inspiring concepts to precise timelines, giving you a clear path to success.",
     },
     {
       icon: <Lightbulb className="w-10 h-10 text-[#3CAAFF]" />,
       title: "Full Transparency",
-      description: "We provide clear, upfront pricing with no hidden fees or confusing technical jargon—giving you complete peace of mind.",
+      description: "We provide clear, upfront pricing with no hidden fees or confusing technical jargon. You get complete peace of mind.",
     },
     {
       icon: <Ruler className="w-10 h-10 text-[#3CAAFF]" />,
       title: "Personal Touch",
-      description: "Your equestrian business deserves a bespoke solution. We handcraft every aspect of your site—no pre-made templates, just design uniquely tailored to you.",
+      description: "Your business deserves a bespoke solution. We handcraft every aspect of your site. No pre made templates, just design uniquely tailored to you.",
     },
     {
       icon: <Users className="w-10 h-10 text-[#3CAAFF]" />,
       title: "Feedback",
-      description: "Our discussions are straightforward and realistic—we say 'no' as openly as we say 'yes'. Expect honest feedback and clear guidance.",
+      description: "Our discussions are straightforward and realistic. We say 'no' as openly as we say 'yes'. Expect honest feedback and clear guidance.",
     },
   ];
 
@@ -124,7 +124,7 @@ const Services = () => {
               }}
               className="text-[#ABABAB] max-w-2xl mx-auto"
             >
-              We offer an extensive range of design and personalised services tailored to the unique needs of every individual industry, from equestrian to construction, we have it covered.
+              We offer an extensive range of design and personalised services tailored to the unique needs of every individual industry. From web design to construction, we have it covered.
             </motion.p>
           )}
         </div>
