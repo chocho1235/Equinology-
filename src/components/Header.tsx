@@ -21,6 +21,8 @@ const Header = () => {
 
   const { disableAnimations } = useAnimation();
 
+  const [pendingNavigation, setPendingNavigation] = useState<null | (() => void)>(null);
+
   // Memoize navigation handlers
   const handleNavigation = useCallback((sectionId: string) => {
     if (location.pathname !== "/") {
@@ -112,7 +114,14 @@ const Header = () => {
             </motion.button>
           </div>
 
-          <AnimatePresence>
+          <AnimatePresence
+            onExitComplete={() => {
+              if (pendingNavigation) {
+                pendingNavigation();
+                setPendingNavigation(null);
+              }
+            }}
+          >
             {isSidebarOpen && (
               <>
                 <motion.div
@@ -147,9 +156,7 @@ const Header = () => {
                         key={index}
                         onClick={() => {
                           setIsSidebarOpen(false);
-                          setTimeout(() => {
-                            item.action();
-                          }, 300);
+                          setPendingNavigation(() => item.action);
                         }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -173,9 +180,7 @@ const Header = () => {
                     className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
                     onClick={() => {
                       setIsSidebarOpen(false);
-                      setTimeout(() => {
-                        navigate("/contact");
-                      }, 300);
+                      setPendingNavigation(() => () => navigate("/contact"));
                     }}
                   >
                     <span className="flex items-center justify-center">
@@ -239,7 +244,14 @@ const Header = () => {
             </motion.button>
           </div>
 
-          <AnimatePresence>
+          <AnimatePresence
+            onExitComplete={() => {
+              if (pendingNavigation) {
+                pendingNavigation();
+                setPendingNavigation(null);
+              }
+            }}
+          >
             {isSidebarOpen && (
               <>
                 <motion.div
@@ -274,9 +286,7 @@ const Header = () => {
                         key={index}
                         onClick={() => {
                           setIsSidebarOpen(false);
-                          setTimeout(() => {
-                            item.action();
-                          }, 300);
+                          setPendingNavigation(() => item.action);
                         }}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -300,9 +310,7 @@ const Header = () => {
                     className="mt-auto w-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-6 py-4 rounded-2xl text-lg font-medium shadow-lg hover:shadow-xl hover:shadow-[#3CAAFF]/25 transition-all duration-300 text-[#0A0A0A] group"
                     onClick={() => {
                       setIsSidebarOpen(false);
-                      setTimeout(() => {
-                        navigate("/contact");
-                      }, 300);
+                      setPendingNavigation(() => () => navigate("/contact"));
                     }}
                   >
                     <span className="flex items-center justify-center">
