@@ -96,7 +96,7 @@ function HeroSection() {
   const contentOpacity = useTransform(scrollY, [0, 350], [1, 0]);
   const scrollCueOpacity = useTransform(scrollY, [0, 150], [1, 0]);
   const backgroundY = useTransform(scrollY, [0, 800], [0, -200]);
-  const scale = useTransform(scrollY, [0, 300], [1, 1.1]);
+  const scale = 1;
 
   const handleScroll = () => {
     const servicesSection = document.getElementById("services");
