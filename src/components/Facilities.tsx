@@ -340,32 +340,6 @@ const Facilities = ({ isMobile }: FacilitiesProps) => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center relative"
-        >
-          <div className="relative">
-            <h3 className="text-2xl font-bold text-white mb-4">
-              Ready to Transform Your Business?
-            </h3>
-            <p className="text-[#ABABAB] text-base mb-6">
-              Let's create something extraordinary together.
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleContactNavigation}
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold text-base shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              Get Started
-              <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1" />
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

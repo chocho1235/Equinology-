@@ -64,7 +64,7 @@ const Hero = ({ isMobile }: HeroProps) => {
                 visible: { opacity: 1, y: 0 }
               }}
               transition={{ duration: reduceMotion ? 0 : (isMobile ? 0.3 : 0.5) }}
-              className="lg:col-span-7 space-y-8 w-full overflow-visible"
+              className={`${isMobile ? 'w-full' : 'lg:col-span-7'} space-y-8 overflow-visible`}
             >
               {/* Badge */}
               <div className="inline-flex items-center space-x-2 bg-[#111111]/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-[#3CAAFF]/40">
@@ -81,7 +81,7 @@ const Hero = ({ isMobile }: HeroProps) => {
               </h1>
 
               {/* Description */}
-              <p className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl leading-relaxed font-light mt-6">
+              <p className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light mt-6">
                 Professional digital solutions that drive business growth. From consultation to delivery, we create exceptional experiences that exceed expectations.
               </p>
 
@@ -102,7 +102,7 @@ const Hero = ({ isMobile }: HeroProps) => {
                 </button>
               </div>
 
-              {/* Social proof - simplified animations for mobile */}
+              {/* Social proof */}
               <div className="pt-8 border-t border-[#333333]/50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
                   <div className="text-center lg:text-left">
@@ -133,7 +133,7 @@ const Hero = ({ isMobile }: HeroProps) => {
             </motion.div>
 
             {/* Hero image/illustration */}
-            <div className="mt-16 lg:mt-0 lg:col-span-5 relative flex justify-center lg:justify-end">
+            <div className="mt-16 lg:mt-0 lg:col-span-5 relative flex justify-center lg:justify-end hidden md:flex">
               <div className="relative max-w-[600px] w-full">
                 <motion.div 
                   className="relative transform lg:-translate-x-4 pb-8"

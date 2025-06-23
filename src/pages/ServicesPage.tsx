@@ -95,14 +95,14 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
   const scrollY = useScroll().scrollY;
   const opacity = useTransform(
     scrollY,
-    [0, isMobile ? 150 : 300],
+    [0, isMobile ? 100 : 300],
     [1, 0]
   );
-  const y = useTransform(scrollY, [0, 300], [0, 100]);
-  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const y = useTransform(scrollY, [0, 300], [0, isMobile ? 50 : 100]);
+  const scale = useTransform(scrollY, [0, 300], [1, isMobile ? 0.9 : 0.8]);
   const scrollIndicatorOpacity = useTransform(
     scrollY,
-    [0, isMobile ? 75 : 150],
+    [0, isMobile ? 50 : 150],
     [1, 0]
   );
 
@@ -122,96 +122,99 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <motion.div 
+        <motion.div 
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ duration: 1.5 }}
+          animate={{ opacity: isMobile ? 0.2 : 0.4 }}
+          transition={{ duration: isMobile ? 1 : 1.5 }}
           style={{ opacity }}
           className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-[#3CAAFF]/20 to-transparent rounded-full blur-3xl"
-      />
+        />
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          transition={{ duration: 1.5, delay: 0.2 }}
+          animate={{ opacity: isMobile ? 0.15 : 0.3 }}
+          transition={{ duration: isMobile ? 1 : 1.5, delay: isMobile ? 0.1 : 0.2 }}
           style={{ opacity }}
           className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-[#00E0FF]/20 to-transparent rounded-full blur-3xl"
-            />
-          </div>
+        />
+      </div>
         
       <div className="relative w-full max-w-[90rem] mx-auto px-4 md:px-6 lg:px-8">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: isMobile ? 0.5 : 0.8 }}
           style={{ opacity, y, scale }}
           className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center"
         >
-          {/* Subtle line decoration */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            style={{ opacity }}
-            className="absolute -top-12 left-1/2 -translate-x-1/2 w-40 h-[1px] bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent"
-          />
+          {/* Subtle line decoration - hidden on mobile */}
+          {!isMobile && (
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              style={{ opacity }}
+              className="absolute -top-12 left-1/2 -translate-x-1/2 w-40 h-[1px] bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent"
+            />
+          )}
 
           <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1]"
-        >
+          >
             Crafting Digital
-          <br />
-          <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+            <br />
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               Experiences
-          </span>
-        </motion.h1>
+            </span>
+          </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+          <motion.p
+            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.2 : 0.4 }}
             className="text-xl text-[#BDBDBD] mb-16 font-light max-w-2xl leading-relaxed px-4"
           >
             We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
           </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+          <motion.div
+            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.3 : 0.6 }}
             className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#BDBDBD] mb-16 px-4"
           >
-            <div className="flex items-center gap-3 group">
-              <Shield className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
-              <span className="group-hover:text-white transition-colors duration-300">Enterprise Grade</span>
+            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
+              <Shield className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
+              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Enterprise Grade</span>
             </div>
-            <div className="flex items-center gap-3 group">
-              <Zap className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
-              <span className="group-hover:text-white transition-colors duration-300">Lightning Fast</span>
+            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
+              <Zap className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
+              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Lightning Fast</span>
             </div>
-            <div className="flex items-center gap-3 group">
-              <Star className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
-              <span className="group-hover:text-white transition-colors duration-300">Award Winning</span>
+            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
+              <Star className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
+              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Award Winning</span>
             </div>
           </motion.div>
         </motion.div>
       </div>
 
+      {/* Scroll indicator - simplified on mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
+        transition={{ delay: isMobile ? 0.5 : 1, duration: isMobile ? 0.5 : 1 }}
         style={{ opacity: scrollIndicatorOpacity }}
         onClick={handleScroll}
         className="group fixed bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-4 z-10"
-        >
+      >
         <motion.div 
           className="relative w-px h-16 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20"
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
+          transition={{ duration: isMobile ? 0.5 : 1, delay: isMobile ? 0.6 : 1.2 }}
         >
           <motion.div
             className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF]"
@@ -220,14 +223,14 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
               height: ["0%", "100%"]
             }}
             transition={{ 
-              duration: 1.5,
+              duration: isMobile ? 1 : 1.5,
               repeat: Infinity,
               ease: "easeInOut"
             }}
             style={{ height: "50%" }}
           />
         </motion.div>
-        <span className="text-sm tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300">
+        <span className={`text-sm tracking-wider uppercase text-[#BDBDBD] ${isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}`}>
           Explore
         </span>
       </motion.div>
