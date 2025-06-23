@@ -69,7 +69,7 @@ const Hero = ({ isMobile }: HeroProps) => {
               {/* Badge */}
               <div className="inline-flex items-center space-x-2 bg-[#111111]/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-[#3CAAFF]/40">
                 <Compass className="w-4 h-4 text-[#3CAAFF]" />
-                <span className="text-sm font-medium text-[#BDBDBD]">Digital Innovation Experts</span>
+                <span className="text-sm font-medium text-[#BDBDBD]">Experts in Equestrian</span>
               </div>
 
               {/* Main heading */}
