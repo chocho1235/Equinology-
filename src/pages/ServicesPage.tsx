@@ -28,6 +28,7 @@ import {
   useInView,
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from 'react-responsive';
 
 /** --------------------------------------------------------------------------------------------------------------------
  * GLOBAL PAGE BACKGROUND
@@ -90,13 +91,20 @@ function useStaggeredAnimation(count: number) {
  *  • Only inner content translates/fades, section itself stays 100% opaque for route transitions.
  *  • Removed old transition clash that caused Safari flashing.
  * ------------------------------------------------------------------------------------------------------------------ */
-function HeroSection() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 140]);
-  const contentOpacity = useTransform(scrollY, [0, 350], [1, 0]);
-  const scrollCueOpacity = useTransform(scrollY, [0, 150], [1, 0]);
-  const backgroundY = useTransform(scrollY, [0, 800], [0, -200]);
-  const scale = 1;
+function HeroSection({ isMobile }: { isMobile: boolean }) {
+  const scrollY = useScroll().scrollY;
+  const opacity = useTransform(
+    scrollY,
+    [0, isMobile ? 150 : 300],
+    [1, 0]
+  );
+  const y = useTransform(scrollY, [0, 300], [0, 100]);
+  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+  const scrollIndicatorOpacity = useTransform(
+    scrollY,
+    [0, isMobile ? 75 : 150],
+    [1, 0]
+  );
 
   const handleScroll = () => {
     const servicesSection = document.getElementById("services");
@@ -108,102 +116,122 @@ function HeroSection() {
   };
 
   return (
-    <section className="relative grid min-h-screen place-items-center overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
-      {/* Parallax background */}
+    <motion.section
+      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden"
+      style={{ opacity: opacity as any }}
+    >
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <motion.div 
-        style={{ y: backgroundY, scale, background: "url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)", opacity: 0.25 }}
-        className="pointer-events-none absolute inset-0 z-0" 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.4 }}
+          transition={{ duration: 1.5 }}
+          style={{ opacity }}
+          className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-[#3CAAFF]/20 to-transparent rounded-full blur-3xl"
       />
-      {/* Floating elements for depth */}
-      <motion.div 
-        style={{ y: useTransform(scrollY, [0, 1000], [0, -300]) }}
-        className="absolute top-20 left-20 w-32 h-32 bg-[#3CAAFF]/5 rounded-full blur-3xl"
-      />
-      <motion.div 
-        style={{ y: useTransform(scrollY, [0, 1000], [0, -150]) }}
-        className="absolute bottom-20 right-20 w-48 h-48 bg-[#00E0FF]/5 rounded-full blur-3xl"
-      />
-      {/* Content */}
-      <motion.div
-        style={{ y, opacity: contentOpacity }}
-        className="relative z-10 px-4 text-center max-w-6xl mx-auto"
-      >
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="inline-block mb-6"
-        >
-          <div className="px-6 py-2 text-sm font-medium border border-[#3CAAFF]/20 bg-[#3CAAFF]/5 rounded-full inline-flex items-center">
-            <motion.span
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="mr-2 h-2 w-2 rounded-full bg-[#3CAAFF]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ duration: 1.5, delay: 0.2 }}
+          style={{ opacity }}
+          className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-[#00E0FF]/20 to-transparent rounded-full blur-3xl"
             />
-            <span className="text-[#3CAAFF]/90">Premium Digital Solutions</span>
           </div>
-        </motion.div>
         
-        <motion.h1
-          initial={{ opacity: 0, y: 32 }}
+      <div className="relative w-full max-w-[90rem] mx-auto px-4 md:px-6 lg:px-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-          className="mb-8 text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight"
+          transition={{ duration: 0.8 }}
+          style={{ opacity, y, scale }}
+          className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center"
         >
-            Digital Excellence
+          {/* Subtle line decoration */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            style={{ opacity }}
+            className="absolute -top-12 left-1/2 -translate-x-1/2 w-40 h-[1px] bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent"
+          />
+
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1]"
+        >
+            Crafting Digital
           <br />
           <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-            Delivered
+              Experiences
           </span>
         </motion.h1>
+
         <motion.p
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-          className="mx-auto mb-12 max-w-3xl text-xl text-[#BDBDBD] leading-relaxed font-light"
-        >
-          Elevating businesses through innovative digital solutions. From custom web
-          development to comprehensive branding, we create sophisticated digital
-          experiences that drive growth and success.
-        </motion.p>
-        <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
-          whileTap={{ scale: 0.96 }}
-          whileHover={{ scale: 1.02 }}
-          onClick={handleScroll}
-          className="relative inline-flex items-center gap-3 overflow-hidden rounded-full px-10 py-4 bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] text-[#0A0A0A] font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25 group"
-        >
-          <span className="relative">Explore Our Services</span>
-          <ChevronRight className="relative w-5 h-5 transition-transform group-hover:translate-x-1" />
-        </motion.button>
-      </motion.div>
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-xl text-[#BDBDBD] mb-16 font-light max-w-2xl leading-relaxed px-4"
+          >
+            We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
+          </motion.p>
 
-      {/* scroll cue */}
-      <div className="fixed inset-x-0 bottom-12 flex justify-center pointer-events-none z-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          style={{ opacity: scrollCueOpacity }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="flex flex-col items-center gap-2"
-        >
-          <span className="text-sm text-[#BDBDBD]/60">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-              times: [0, 0.6, 1]
-            }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#BDBDBD] mb-16 px-4"
           >
-            <ChevronRight className="h-5 w-5 rotate-90 text-[#3CAAFF]/80" />
+            <div className="flex items-center gap-3 group">
+              <Shield className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
+              <span className="group-hover:text-white transition-colors duration-300">Enterprise Grade</span>
+            </div>
+            <div className="flex items-center gap-3 group">
+              <Zap className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
+              <span className="group-hover:text-white transition-colors duration-300">Lightning Fast</span>
+            </div>
+            <div className="flex items-center gap-3 group">
+              <Star className="w-5 h-5 text-[#3CAAFF] group-hover:text-[#00E0FF] transition-colors duration-300" />
+              <span className="group-hover:text-white transition-colors duration-300">Award Winning</span>
+            </div>
           </motion.div>
         </motion.div>
       </div>
-    </section>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        style={{ opacity: scrollIndicatorOpacity }}
+        onClick={handleScroll}
+        className="group fixed bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-4 z-10"
+        >
+        <motion.div 
+          className="relative w-px h-16 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 1, delay: 1.2 }}
+        >
+          <motion.div
+            className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF]"
+            animate={{
+              y: ["0%", "100%"],
+              height: ["0%", "100%"]
+            }}
+            transition={{ 
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            style={{ height: "50%" }}
+          />
+        </motion.div>
+        <span className="text-sm tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300">
+          Explore
+        </span>
+      </motion.div>
+    </motion.section>
   );
 }
 
@@ -211,121 +239,117 @@ function HeroSection() {
  * BRANDING & IDENTITY SECTION
  *  • Re-implemented with useFadeIn() per element instead of continuous scrollOpacity.
  * ------------------------------------------------------------------------------------------------------------------ */
-function BrandingIdentitySection() {
+function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
   const items = [
     {
-      title: "Logo Design",
-      desc: "We create unique, eye-catching logos that capture the essence of what you. Whether you run a riding school, competition yard or from another industry we design highly technical logos that seamlessly intertwine text and icons or opt for a more simplistic, elegant approach tailored to your brand.",
+      title: "Brand Strategy & Design",
+      desc: "We craft distinctive brand identities that reflect your company's values and vision. Our strategic design process combines thoughtful research with creative execution to develop memorable brands that connect with your target audience.",
       image: "https://i.ibb.co/HLZ3VMKb/GALLOP.webp",
-      icon: <Palette className="h-8 w-8 text-blue-400" />,
+      icon: <Palette className="h-6 w-6 text-[#3CAAFF]" />,
       features: [
-        "Custom logo design",
-        "Multiple design concepts",
+        "Brand strategy",
+        "Logo design",
+        "Visual identity",
         "Brand guidelines",
-        "File formats for all uses",
       ],
     },
     {
-      title: "Brand Collateral",
-      desc: "We design high-quality business cards, signage, and digital assets tailored to the equestrian industry. Our branding materials ensure a sophisticated and professional presence across print and digital platforms, maintaining a consistent identity for your equestrian business.",
-      image:
-        "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&q=80&w=600",
-      icon: <Award className="h-8 w-8 text-blue-400" />,
+      title: "Print & Digital Design",
+      desc: "We design compelling visual materials across all mediums. From business stationery to digital assets, we ensure your brand maintains a consistent and professional presence that builds recognition and trust.",
+      image: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?auto=format&q=80&w=600",
+      icon: <Award className="h-6 w-6 text-[#3CAAFF]" />,
       features: [
-        "Business cards",
-        "Signage design",
-        "Social media templates",
-        "Email signatures",
+        "Business collateral",
+        "Marketing materials",
+        "Digital assets",
+        "Social media design",
       ],
     },
     {
-      title: "Visual Identity",
-      desc: "A strong visual identity sets your brand apart. We develop sophisticated branding systems, including color palettes, typography, and imagery, ensuring that your equestrian business maintains a professional and recognizable presence across all platforms.",
-      image:
-        "https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&q=80&w=600",
-      icon: <Heart className="h-8 w-8 text-blue-400" />,
+      title: "Creative Direction",
+      desc: "We provide creative direction to ensure your brand's visual storytelling is cohesive and impactful. Our approach combines strategic thinking with design excellence to create memorable brand experiences.",
+      image: "https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&q=80&w=600",
+      icon: <Heart className="h-6 w-6 text-[#3CAAFF]" />,
       features: [
-        "Color palette development",
-        "Typography system",
-        "Imagery guidelines",
-        "Brand voice definition",
+        "Art direction",
+        "Visual storytelling",
+        "Brand photography",
+        "Design systems",
       ],
     },
   ];
 
   return (
-    <section className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: "url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)", opacity: 0.25 }} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="relative py-32 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: isMobile ? 0.5 : 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
-            Branding &
+            Brand Design
             <br />
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-              Identity
+              & Identity
             </span>
       </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
-            Crafting distinctive brand identities that capture your essence and resonate with your audience.
+            Creating distinctive brand identities that leave lasting impressions.
           </p>
         </motion.div>
-        <div className="space-y-32">
+
+        <div className="grid gap-16 md:gap-24">
           {items.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: isMobile ? 20 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: index * 0.1, ease: 'easeOut' }}
+              transition={{ 
+                duration: isMobile ? 0.5 : 0.7, 
+                delay: isMobile ? 0 : index * 0.1 
+              }}
               viewport={{ once: true, amount: 0.2 }}
-              className="flex flex-col items-center gap-12 lg:flex-row"
+              className="group relative grid md:grid-cols-2 gap-8 items-center"
             >
-              {/* image */}
-              <div
-                className={`lg:w-1/2 ${
-                  index % 2 === 0 ? "lg:order-1" : "lg:order-2"
-                }`}
-              >
-                <div className="group relative">
-                    <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-r from-[#3CAAFF]/20 to-[#00E0FF]/20 blur-2xl transition-all duration-500 group-hover:blur-3xl" />
+              <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8">
+                  <div className={`absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="relative z-10 h-auto max-h-[420px] w-full rounded-2xl object-cover shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.03] group-hover:grayscale-0 group-hover:saturate-150"
+                    className="w-full h-[300px] object-cover transform transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
               </div>
 
-              {/* text */}
-              <div
-                className={`lg:w-1/2 ${
-                  index % 2 === 0 ? "lg:order-2" : "lg:order-1"
-                }`}
-              >
-                <div className="mb-6 flex items-center gap-4">
-                    <div className="rounded-xl border border-[#3CAAFF]/20 bg-[#3CAAFF]/5 p-4">
+              <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
                     {item.icon}
                   </div>
-                    <h3 className="text-2xl font-semibold text-white">
+                  <h3 className="text-xl font-medium text-white">
                     {item.title}
                   </h3>
                 </div>
-                  <p className="mb-6 text-lg leading-relaxed text-[#BDBDBD]">
+                
+                <p className="text-[#BDBDBD] leading-relaxed">
                   {item.desc}
                 </p>
-                <ul className="space-y-3">
+
+                <div className="grid grid-cols-2 gap-3">
                   {item.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-3 text-[#BDBDBD]">
-                        <Check className="h-5 w-5 text-[#3CAAFF]" />
+                    <div 
+                      key={feature} 
+                      className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                    >
+                      <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
                         <span>{feature}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -338,409 +362,130 @@ function BrandingIdentitySection() {
 /** --------------------------------------------------------------------------------------------------------------------
  * GENERIC SECTION COMPONENTS BELOW – UNCHANGED LOGIC BUT REFACTORED TO useFadeIn() FOR PERFORMANCE
  * ------------------------------------------------------------------------------------------------------------------ */
-function ServicesSection() {
+function ServicesSection({ isMobile }: { isMobile: boolean }) {
   const services = [
     {
-      title: "Custom Website Design & Development",
-      problem: "Need a professional website that brings in customers?",
-      solution: "We design and build custom websites from scratch",
-      description: "Get a completely custom website designed specifically for your business. We handle everything: design, development, content, images, and launch. Your website will be mobile-friendly, fast-loading, and optimized for search engines.",
+      title: "Website Design & Development",
+      desc: "We deliver professional, responsive websites optimised for performance and user experience. Our development process ensures your site meets modern web standards while achieving your business objectives.",
       icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
-      includes: ["Custom design & development", "Mobile responsive", "Search engine optimized", "Content management system"],
-      outcome: "Professional website live quickly",
+      features: [
+        "Responsive design",
+        "Performance optimisation",
+        "SEO implementation",
+        "Content management",
+      ],
     },
     {
-      title: "E-commerce Store Development",
-      problem: "Need a professional online store?",
-      solution: "We build complete e-commerce websites that turn visitors into customers.",
-      description: "Custom online store with payment processing, inventory management, and customer accounts. Mobile-optimized and ready to sell worldwide.",
-      icon: <ShoppingBag className="h-8 w-8 text-[#3CAAFF]" />,
-      includes: [
-        "Custom store design",
-        "Payment gateway setup",
-        "Product catalog system",
-        "Order management",
+      title: "E-commerce Solutions",
+      desc: "We build secure, scalable e-commerce platforms that drive sales. Our solutions include comprehensive payment integration, inventory management, and customer account systems.",
+      icon: <ShoppingBag className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Secure transactions",
+        "Inventory management",
         "Customer accounts",
-        "Mobile optimization",
+        "Payment integration",
       ],
-      outcome: "Ready to take orders quickly",
     },
     {
-      title: "Business Management Software",
-      problem: "Spending too much time on repetitive tasks?",
-      solution: "We create custom software that automates your business operations.",
-      description: "Tailored solutions for booking systems, client management, invoicing, and workflow automation. Built specifically for your business needs.",
-      icon: <Code className="h-8 w-8 text-[#3CAAFF]" />,
-      includes: [
-        "Custom business logic",
-        "Automated workflows",
-        "Data management",
-        "User permissions",
-        "Reporting dashboard",
-        "Integration capabilities",
+      title: "Web Applications",
+      desc: "We develop custom web applications that streamline your business operations. Our solutions focus on efficiency, scalability, and user experience to meet your specific requirements.",
+      icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Custom development",
+        "Process automation",
+        "System integration",
+        "User management",
       ],
-      outcome: "Save significant time on admin work",
     },
     {
-      title: "Search Engine Optimization (SEO)",
-      problem: "Not showing up on Google?",
-      solution: "We optimize your website to rank higher in search results.",
-      description: "Complete SEO strategy including keyword research, content optimization, technical improvements, and ongoing monitoring to increase your visibility.",
-      icon: <Search className="h-8 w-8 text-[#3CAAFF]" />,
-      includes: [
-        "Keyword research",
-        "On-page optimization",
-        "Technical SEO audit",
+      title: "Digital Marketing & SEO",
+      desc: "We implement comprehensive SEO and digital marketing strategies to improve your online visibility. Our approach combines technical optimisation with content strategy to drive qualified traffic.",
+      icon: <Search className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Technical SEO",
         "Content strategy",
-        "Local SEO setup",
-        "Monthly reporting",
+        "Performance tracking",
+        "Conversion optimisation",
       ],
-      outcome: "Higher Google rankings quickly",
-    },
-    {
-      title: "Website Hosting & Maintenance",
-      problem: "Worried about website security, backups, and updates?",
-      solution: "We host and maintain your website so you don't have to worry",
-      description: "Professional website hosting with daily backups, security monitoring, software updates, and technical support. Your website stays fast, secure, and always online while we handle all the technical stuff.",
-      icon: <Globe className="h-6 w-6 text-[#3CAAFF]" />,
-      includes: ["Secure hosting", "Daily backups", "Security monitoring", "Technical support"],
-      outcome: "99.9% uptime with complete peace of mind",
-    },
-    {
-      title: "Digital Marketing & Analytics",
-      problem: "Don't know how your website and marketing are performing?",
-      solution: "We set up tracking and provide monthly performance reports",
-      description: "Get clear insights into your website visitors, where they come from, and what they do. We set up Google Analytics, create custom dashboards, and provide monthly reports with actionable recommendations.",
-      icon: <Users className="h-6 w-6 text-[#3CAAFF]" />,
-      includes: ["Analytics setup", "Performance tracking", "Monthly reports", "Marketing recommendations"],
-      outcome: "Clear data to make better business decisions",
     },
   ];
 
   return (
-    <section id="services" className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: "url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)", opacity: 0.25 }} />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section className="relative py-32 overflow-hidden" id="services">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: isMobile ? 0.5 : 0.8 }}
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
-            How We Help Your
+            Professional
             <br />
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-              Business Grow
+              Web Solutions
             </span>
       </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
-            Simple solutions for common business problems. No technical jargon, just results.
+            Delivering strategic digital solutions that drive business growth.
           </p>
         </motion.div>
-        <div className="space-y-16">
+
+        <div className="grid gap-16 md:gap-24">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: isMobile ? 20 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: index * 0.1, ease: 'easeOut' }}
+              transition={{ 
+                duration: isMobile ? 0.5 : 0.7, 
+                delay: isMobile ? 0 : index * 0.1 
+              }}
               viewport={{ once: true, amount: 0.2 }}
-              className={`flex flex-col lg:flex-row gap-12 items-center ${index % 2 === 0 ? '' : 'lg:flex-row-reverse'}`}
+              className="group relative grid md:grid-cols-2 gap-8 items-center"
             >
-              {/* Content */}
-              <div className="lg:w-1/2 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="rounded-xl border border-[#3CAAFF]/20 bg-[#3CAAFF]/5 p-3">
+              <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8">
+                  <div className={`absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+                  <div className="relative z-10 flex flex-col items-center justify-center min-h-[300px]">
+                    <div className="p-4 rounded-2xl bg-[#3CAAFF]/5 border border-[#3CAAFF]/10 mb-6">
                 {service.icon}
               </div>
-                  <h3 className="text-2xl font-bold text-white">
-                {service.title}
-              </h3>
+                    <div className="text-center">
+                      <h4 className="text-lg font-medium text-white mb-2">Request a Consultation</h4>
+                      <p className="text-sm text-[#BDBDBD]">Discuss your project requirements</p>
             </div>
-                
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-[#BDBDBD] text-lg leading-relaxed">{service.problem}</p>
+                  </div>
+                </div>
                   </div>
                   
-                  <div>
-                    <p className="text-white text-xl font-medium leading-relaxed">{service.solution}</p>
-                  </div>
-                  
-                  <p className="text-[#BDBDBD] leading-relaxed">
-                {service.description}
-              </p>
+              <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
+                    {service.icon}
+                </div>
+                  <h3 className="text-xl font-medium text-white">
+                    {service.title}
+                  </h3>
                 </div>
                 
-                <div className="bg-[#181B22] rounded-xl p-6 border border-[#2a2d35]">
-                  <p className="text-[#00E0FF] font-medium mb-3">What's Included:</p>
-                  <ul className="space-y-2">
-                    {service.includes.map((item) => (
-                      <li key={item} className="flex items-center gap-3 text-[#BDBDBD]">
-                        <Check className="h-4 w-4 text-[#3CAAFF] flex-shrink-0" />
-                        <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-                </div>
-                
-                <div className="bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 rounded-xl p-6 border border-[#3CAAFF]/20">
-                  <p className="text-[#3CAAFF] font-medium mb-2">Expected Outcome:</p>
-                  <p className="text-white font-medium">{service.outcome}</p>
-                </div>
-              </div>
-              
-              {/* Visual representation */}
-              <motion.div 
-                className="lg:w-1/2"
-                initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                animate={{ 
-                  opacity: 1, 
-                  x: 0,
-                  transition: {
-                    duration: 0.8,
-                    ease: "easeOut",
-                    delay: index * 0.15 + 0.3
-                  }
-                }}
-              >
-                <motion.div 
-                  className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-[#181B22] to-[#0F1117] border border-[#3CAAFF]/20 p-8 relative overflow-hidden group"
-                  whileHover={{ 
-                    scale: 1.02,
-                    borderColor: "rgba(60, 170, 255, 0.4)",
-                    boxShadow: "0 20px 40px rgba(60, 170, 255, 0.1)"
-                  }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  {/* Background pattern */}
-                  <div className="absolute inset-0 opacity-5">
+                <p className="text-[#BDBDBD] leading-relaxed">
+                  {service.desc}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {service.features.map((feature) => (
                     <div 
-                      className="absolute inset-0" 
-                      style={{
-                        backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0)`,
-                        backgroundSize: '20px 20px'
-                      }}
-                    />
-                  </div>
-                  
-                  {/* Service-specific visual */}
-                  {index === 0 && ( // Website Design
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="bg-[#2a2d35] rounded-lg p-4 mb-4 border border-[#3CAAFF]/30">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-3 h-3 rounded-full bg-[#FF6B6B]" />
-                          <div className="w-3 h-3 rounded-full bg-[#FFD93D]" />
-                          <div className="w-3 h-3 rounded-full bg-[#6BCF7F]" />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="h-2 bg-[#3CAAFF]/30 rounded w-3/4" />
-                          <div className="h-2 bg-[#BDBDBD]/20 rounded w-1/2" />
-                          <div className="h-8 bg-[#3CAAFF]/20 rounded" />
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Smartphone className="w-6 h-6 text-[#3CAAFF]" />
-                        <Globe className="w-6 h-6 text-[#00E0FF]" />
-                        <Zap className="w-6 h-6 text-[#3CAAFF]" />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {index === 1 && ( // E-commerce
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="grid grid-cols-2 gap-3 mb-4">
-                        {[1,2,3,4].map((item) => (
-                          <div key={item} className="bg-[#2a2d35] rounded-lg p-3 border border-[#3CAAFF]/20">
-                            <div className="w-full h-8 bg-[#3CAAFF]/20 rounded mb-2" />
-                            <div className="h-1 bg-[#BDBDBD]/30 rounded mb-1" />
-                            <div className="h-1 bg-[#BDBDBD]/30 rounded w-2/3" />
+                      key={feature} 
+                      className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                    >
+                      <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
+                      <span>{feature}</span>
                           </div>
                         ))}
                       </div>
-                      <div className="flex justify-center gap-3">
-                        <ShoppingBag className="w-6 h-6 text-[#3CAAFF]" />
-                        <div className="w-6 h-6 rounded bg-[#00E0FF]/20 flex items-center justify-center text-xs text-[#00E0FF]">£</div>
-                        <Check className="w-6 h-6 text-[#6BCF7F]" />
-                      </div>
                     </div>
-                  )}
-                  
-                  {index === 2 && ( // Business Software
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="bg-[#2a2d35] rounded-lg p-4 mb-4 border border-[#3CAAFF]/30">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[#3CAAFF] text-sm font-medium">Dashboard</span>
-                          <Users className="w-4 h-4 text-[#3CAAFF]" />
-                        </div>
-                        <div className="grid grid-cols-3 gap-2 mb-3">
-                          <div className="bg-[#3CAAFF]/20 rounded p-2 text-center">
-                            <div className="text-xs text-[#3CAAFF]">24</div>
-                            <div className="text-xs text-[#BDBDBD]">Clients</div>
-                          </div>
-                          <div className="bg-[#00E0FF]/20 rounded p-2 text-center">
-                            <div className="text-xs text-[#00E0FF]">12</div>
-                            <div className="text-xs text-[#BDBDBD]">Bookings</div>
-                          </div>
-                          <div className="bg-[#6BCF7F]/20 rounded p-2 text-center">
-                            <div className="text-xs text-[#6BCF7F]">£2.4k</div>
-                            <div className="text-xs text-[#BDBDBD]">Revenue</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center gap-3">
-                        <Zap className="w-6 h-6 text-[#3CAAFF]" />
-                        <Users className="w-6 h-6 text-[#00E0FF]" />
-                        <Star className="w-6 h-6 text-[#6BCF7F]" />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {index === 3 && ( // SEO
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="bg-[#2a2d35] rounded-lg p-4 mb-4 border border-[#3CAAFF]/30">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Search className="w-4 h-4 text-[#3CAAFF]" />
-                          <span className="text-[#3CAAFF] text-sm">Search Results</span>
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-[#6BCF7F]/20 flex items-center justify-center text-xs text-[#6BCF7F]">1</div>
-                            <div className="h-2 bg-[#6BCF7F]/30 rounded flex-1" />
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-[#3CAAFF]/20 flex items-center justify-center text-xs text-[#3CAAFF]">2</div>
-                            <div className="h-2 bg-[#3CAAFF]/30 rounded flex-1" />
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded bg-[#BDBDBD]/20 flex items-center justify-center text-xs text-[#BDBDBD]">3</div>
-                            <div className="h-2 bg-[#BDBDBD]/20 rounded w-3/4" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center gap-3">
-                        <Search className="w-6 h-6 text-[#3CAAFF]" />
-                        <Globe className="w-6 h-6 text-[#00E0FF]" />
-                        <ArrowRight className="w-6 h-6 text-[#6BCF7F]" />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {index === 4 && ( // Hosting
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="bg-[#2a2d35] rounded-lg p-4 mb-4 border border-[#3CAAFF]/30">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[#6BCF7F] text-sm font-medium">System Status</span>
-                          <div className="w-2 h-2 rounded-full bg-[#6BCF7F] animate-pulse" />
-                        </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-[#BDBDBD]">Uptime</span>
-                            <span className="text-xs text-[#6BCF7F]">99.9%</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-[#BDBDBD]">Speed</span>
-                            <span className="text-xs text-[#3CAAFF]">1.2s</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-[#BDBDBD]">Security</span>
-                            <span className="text-xs text-[#6BCF7F]">Protected</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center gap-3">
-                        <Globe className="w-6 h-6 text-[#3CAAFF]" />
-                        <Shield className="w-6 h-6 text-[#6BCF7F]" />
-                        <Zap className="w-6 h-6 text-[#00E0FF]" />
-                      </div>
-                    </div>
-                  )}
-                  
-                  {index === 5 && ( // Analytics
-                    <div className="relative h-full flex flex-col justify-center">
-                      <div className="bg-[#2a2d35] rounded-lg p-4 mb-4 border border-[#3CAAFF]/30">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Users className="w-4 h-4 text-[#3CAAFF]" />
-                          <span className="text-[#3CAAFF] text-sm">Analytics</span>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="flex items-end gap-1 h-12">
-                            {[3, 7, 5, 9, 6, 8, 4].map((height, i) => (
-                              <motion.div 
-                                key={i} 
-                                className="bg-[#3CAAFF]/30 rounded-sm flex-1" 
-                                initial={{ height: 0 }}
-                                animate={{ 
-                                  height: `${height * 4}px`,
-                                  transition: {
-                                    duration: 0.8,
-                                    delay: i * 0.1 + 0.5,
-                                    ease: "easeOut"
-                                  }
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <motion.div 
-                            className="text-center"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ 
-                              opacity: 1, 
-                              y: 0,
-                              transition: { delay: 1.2, duration: 0.6 }
-                            }}
-                          >
-                            <span className="text-xs text-[#6BCF7F]">↗ +127% Growth</span>
-                          </motion.div>
-                        </div>
-                      </div>
-                      <div className="flex justify-center gap-3">
-                        <motion.div
-                          animate={{ 
-                            rotate: [0, 10, -10, 0],
-                            transition: { 
-                              duration: 2, 
-                              repeat: Infinity, 
-                              delay: 1.5,
-                              ease: "easeInOut" 
-                            }
-                          }}
-                        >
-                          <Users className="w-6 h-6 text-[#3CAAFF]" />
-                        </motion.div>
-                        <motion.div
-                          animate={{ 
-                            scale: [1, 1.2, 1],
-                            transition: { 
-                              duration: 2, 
-                              repeat: Infinity, 
-                              delay: 1.7,
-                              ease: "easeInOut" 
-                            }
-                          }}
-                        >
-                          <Star className="w-6 h-6 text-[#00E0FF]" />
-                        </motion.div>
-                        <motion.div
-                          animate={{ 
-                            x: [0, 5, 0],
-                            transition: { 
-                              duration: 2, 
-                              repeat: Infinity, 
-                              delay: 1.9,
-                              ease: "easeInOut" 
-                            }
-                          }}
-                        >
-                          <ArrowRight className="w-6 h-6 text-[#6BCF7F]" />
-                        </motion.div>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              </motion.div>
             </motion.div>
           ))}
         </div>
@@ -898,6 +643,7 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
 export default function ServicesPage() {
   const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   
   useEffect(() => {
     // Immediate mount to prevent flash
@@ -920,9 +666,9 @@ export default function ServicesPage() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="relative bg-transparent text-[#F5F5F7]"
           >
-            <HeroSection />
-            <BrandingIdentitySection />
-            <ServicesSection />
+            <HeroSection isMobile={isMobile} />
+            <BrandingIdentitySection isMobile={isMobile} />
+            <ServicesSection isMobile={isMobile} />
             <GlobalReachSection />
             <ContactSection navigate={navigate} />
           </motion.main>
