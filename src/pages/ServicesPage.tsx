@@ -93,16 +93,13 @@ function useStaggeredAnimation(count: number) {
  * ------------------------------------------------------------------------------------------------------------------ */
 function HeroSection({ isMobile }: { isMobile: boolean }) {
   const scrollY = useScroll().scrollY;
-  const opacity = useTransform(
-    scrollY,
-    [0, isMobile ? 100 : 300],
-    [1, 0]
-  );
+  // Only apply scroll fade on desktop
+  const opacity = isMobile ? 1 : useTransform(scrollY, [0, 300], [1, 0]);
   const y = useTransform(scrollY, [0, 300], [0, isMobile ? 50 : 100]);
   const scale = useTransform(scrollY, [0, 300], [1, isMobile ? 0.9 : 0.8]);
-  const scrollIndicatorOpacity = useTransform(
+  const indicatorOpacity = useTransform(
     scrollY,
-    [0, isMobile ? 50 : 150],
+    [0, isMobile ? 20 : 150],
     [1, 0]
   );
 
@@ -118,7 +115,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
   return (
     <motion.section
       className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden"
-      style={{ opacity: opacity as any }}
+      style={isMobile ? undefined : { opacity: opacity as any }}
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -126,14 +123,14 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: isMobile ? 0.2 : 0.4 }}
           transition={{ duration: isMobile ? 1 : 1.5 }}
-          style={{ opacity }}
+          style={isMobile ? undefined : { opacity }}
           className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-[#3CAAFF]/20 to-transparent rounded-full blur-3xl"
         />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isMobile ? 0.15 : 0.3 }}
           transition={{ duration: isMobile ? 1 : 1.5, delay: isMobile ? 0.1 : 0.2 }}
-          style={{ opacity }}
+          style={isMobile ? undefined : { opacity }}
           className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-[#00E0FF]/20 to-transparent rounded-full blur-3xl"
         />
       </div>
@@ -143,7 +140,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
           initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: isMobile ? 0.5 : 0.8 }}
-          style={{ opacity, y, scale }}
+          style={isMobile ? { y, scale } : { opacity, y, scale }}
           className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center"
         >
           {/* Subtle line decoration - hidden on mobile */}
@@ -201,12 +198,12 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
         </motion.div>
       </div>
 
-      {/* Scroll indicator - simplified on mobile */}
+      {/* Scroll/Swipe indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: isMobile ? 0.5 : 1, duration: isMobile ? 0.5 : 1 }}
-        style={{ opacity: scrollIndicatorOpacity }}
+        style={{ opacity: indicatorOpacity }}
         onClick={handleScroll}
         className="group fixed bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-4 z-10"
       >
@@ -231,7 +228,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
           />
         </motion.div>
         <span className={`text-sm tracking-wider uppercase text-[#BDBDBD] ${isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}`}>
-          Explore
+          {isMobile ? 'Swipe Down' : 'Explore'}
         </span>
       </motion.div>
     </motion.section>
