@@ -5,7 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useInView } from 'framer-motion';
 import ClientThreeBackground from './ClientThreeBackground';
 
-const Hero = () => {
+interface HeroProps {
+  isMobile: boolean;
+}
+
+const Hero = ({ isMobile }: HeroProps) => {
   const navigate = useNavigate();
   const controls = useAnimation();
   const ref = useRef(null);
@@ -14,11 +18,11 @@ const Hero = () => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   
-  // Scroll-based animation for horse - subtle and elegant
+  // Scroll-based animation for horse - simplified for mobile
   const { scrollY } = useScroll();
-  const horseRotate = useTransform(scrollY, [0, 600], [0, -3]); // Very subtle rotation
-  const horseY = useTransform(scrollY, [0, 600], [0, -8]); // Gentle lift
-  const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, 0.8, 0.4]); // Fade as you scroll
+  const horseRotate = useTransform(scrollY, [0, 600], [0, isMobile ? -1.5 : -3]); // Reduced rotation
+  const horseY = useTransform(scrollY, [0, 600], [0, isMobile ? -4 : -8]); // Reduced movement
+  const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, isMobile ? 0.9 : 0.8, isMobile ? 0.6 : 0.4]); // Less fade
   
   useEffect(() => {
     // Check prefers-reduced-motion
@@ -27,12 +31,12 @@ const Hero = () => {
     const handler = () => setReduceMotion(media.matches);
     media.addEventListener('change', handler);
     // Delay animations until after first paint
-    const timeout = setTimeout(() => setHasLoaded(true), 100);
+    const timeout = setTimeout(() => setHasLoaded(true), isMobile ? 50 : 100);
     return () => {
       media.removeEventListener('change', handler);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isInView && hasLoaded && !reduceMotion) {
@@ -56,10 +60,10 @@ const Hero = () => {
               initial="hidden"
               animate={controls}
               variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1 }
+                hidden: { opacity: 0, y: isMobile ? 10 : 20 },
+                visible: { opacity: 1, y: 0 }
               }}
-              transition={{ duration: reduceMotion ? 0 : 0.5 }}
+              transition={{ duration: reduceMotion ? 0 : (isMobile ? 0.3 : 0.5) }}
               className="lg:col-span-7 space-y-8 w-full overflow-visible"
             >
               {/* Badge */}
@@ -98,7 +102,7 @@ const Hero = () => {
                 </button>
               </div>
 
-              {/* Social proof */}
+              {/* Social proof - simplified animations for mobile */}
               <div className="pt-8 border-t border-[#333333]/50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
                   <div className="text-center lg:text-left">
@@ -109,8 +113,8 @@ const Hero = () => {
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ 
-                            duration: 0.5,
-                            delay: i * 0.1,
+                            duration: isMobile ? 0.3 : 0.5,
+                            delay: isMobile ? 0 : i * 0.1,
                             ease: "easeOut"
                           }}
                         >
@@ -131,14 +135,13 @@ const Hero = () => {
             {/* Hero image/illustration */}
             <div className="mt-16 lg:mt-0 lg:col-span-5 relative flex justify-center lg:justify-end">
               <div className="relative max-w-[600px] w-full">
-                {/* Positioning to complement the 3D sphere */}
                 <motion.div 
                   className="relative transform lg:-translate-x-4 pb-8"
                   style={{
                     rotateZ: horseRotate,
                     y: horseY,
                     opacity: horseOpacity,
-                    transformOrigin: "center 80%" // Adjusted pivot point to prevent bottom cutoff
+                    transformOrigin: "center 80%"
                   }}
                 >
                   <div className="aspect-w-4 aspect-h-3 rounded-3xl overflow-visible">
@@ -158,8 +161,10 @@ const Hero = () => {
                     )}
                   </div>
                   
-                  {/* Subtle glow effect to interact with the sphere */}
-                  <div className="absolute -inset-6 bg-gradient-radial from-[#3CAAFF]/8 via-transparent to-transparent rounded-full blur-2xl pointer-events-none opacity-70"></div>
+                  {/* Subtle glow effect - reduced on mobile */}
+                  <div className={`absolute -inset-6 bg-gradient-radial from-[#3CAAFF]/8 via-transparent to-transparent rounded-full blur-2xl pointer-events-none ${
+                    isMobile ? 'opacity-40' : 'opacity-70'
+                  }`}></div>
                 </motion.div>
               </div>
             </div>

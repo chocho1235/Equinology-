@@ -31,11 +31,15 @@ const AnimatedOrb: React.FC<AnimatedOrbProps> = ({ style, customAnimation, class
   );
 };
 
-const Facilities = () => {
+interface FacilitiesProps {
+  isMobile: boolean;
+}
+
+const Facilities = ({ isMobile }: FacilitiesProps) => {
   const { disableAnimations } = useAnimationContext();
   const navigate = useNavigate();
   const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+  const isInView = useInView(containerRef, { once: true, margin: isMobile ? "-50px" : "-100px" });
   const controls = useAnimation();
   
   useEffect(() => {
@@ -49,21 +53,22 @@ const Facilities = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
+        staggerChildren: isMobile ? 0.1 : 0.2,
+        delayChildren: isMobile ? 0.1 : 0.3
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: isMobile ? 20 : 40 },
     visible: { 
       opacity: 1, 
       y: 0,
       transition: {
         type: "spring",
-        stiffness: 100,
-        damping: 20
+        stiffness: isMobile ? 150 : 100,
+        damping: isMobile ? 25 : 20,
+        duration: isMobile ? 0.3 : 0.5
       }
     }
   };
@@ -189,7 +194,7 @@ const Facilities = () => {
         >
           <motion.div
             variants={itemVariants}
-            whileHover={{ scale: 1.015, y: -4 }}
+            whileHover={isMobile ? {} : { scale: 1.015, y: -4 }}
             transition={{ type: "spring", stiffness: 300 }}
             className="group relative"
           >
@@ -268,15 +273,16 @@ const Facilities = () => {
         </motion.div>
 
         {/* Secondary Solutions Grid - Clean even layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        >
           {facilities.slice(1).map((facility, index) => (
             <motion.div
               key={facility.title}
               variants={itemVariants}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
+              whileHover={isMobile ? {} : { scale: 1.02, y: -4 }}
+              transition={{ type: "spring", stiffness: 300 }}
               className="group relative"
             >
               <div className="relative rounded-2xl bg-gradient-to-br from-[#1a1d24] via-[#181b22] to-[#151821] border border-[#2a2d35] shadow-lg overflow-hidden h-full flex flex-col hover:border-blue-400/40 transition-colors duration-200">
@@ -333,7 +339,7 @@ const Facilities = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Call to Action */}
         <motion.div

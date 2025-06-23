@@ -30,7 +30,6 @@ const AnimatedOrb: React.FC<AnimatedOrbProps> = ({ style, customAnimation, class
 // Testimonial card component
 interface TestimonialCardProps {
   testimonial: {
-    id: number;
     quote: string;
     author: string;
     position: string;
@@ -82,7 +81,11 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
   );
 };
 
-const Testimonials = () => {
+interface TestimonialsProps {
+  isMobile: boolean;
+}
+
+const Testimonials = ({ isMobile }: TestimonialsProps) => {
   const testimonialRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
@@ -91,7 +94,7 @@ const Testimonials = () => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // The required distance between touchStart and touchEnd to be detected as a swipe
-  const minSwipeDistance = 50;
+  const minSwipeDistance = isMobile ? 30 : 50;
 
   // Simple intersection observer for lazy loading
   useEffect(() => {
@@ -102,7 +105,7 @@ const Testimonials = () => {
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: isMobile ? 0.05 : 0.1 }
     );
 
     if (testimonialRef.current) {
@@ -110,13 +113,12 @@ const Testimonials = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isMobile]);
 
   // Auto-advance testimonials on mobile for better UX
   useEffect(() => {
     if (!isVisible) return;
     
-    const isMobile = window.innerWidth < 768;
     if (isMobile) {
       const interval = setInterval(() => {
         setActiveIndex((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
@@ -124,7 +126,7 @@ const Testimonials = () => {
       
       return () => clearInterval(interval);
     }
-  }, [isVisible]);
+  }, [isVisible, isMobile]);
 
   useEffect(() => {
     const node = carouselRef.current;
@@ -242,101 +244,71 @@ const Testimonials = () => {
           <div className="absolute left-1/2 top-0 -translate-x-1/2 -z-10 w-32 h-10 sm:w-48 sm:h-16 bg-blue-400/5 blur-xl rounded-full" />
           <span className="relative inline-block">
             <motion.h2
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: isMobile ? 12 : 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
+              transition={{ duration: isMobile ? 0.4 : 0.7, ease: 'easeOut' }}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 sm:mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 tracking-tight px-4"
             >
               Trusted by{' '}
-              <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 font-extrabold">
-                Industry
-                <motion.div
-                  initial={{ scaleX: 0, opacity: 0 }}
-                  whileInView={{ scaleX: 1, opacity: 1 }}
-                  transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
-                  className="absolute left-0 right-0" 
-                  style={{
-                    height: '3px',
-                    borderRadius: '9999px',
-                    background: 'linear-gradient(to right, #38bdf8, #22d3ee)',
-                    bottom: '-4px',
-                    opacity: 1,
-                  }}
-                />
-              </span>{' '}Leaders
+              <span className="text-white">Our Clients</span>
             </motion.h2>
           </span>
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: isMobile ? 8 : 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: 'easeOut' }}
-            className="text-[#BDBDBD] max-w-xl mx-auto text-sm sm:text-base md:text-lg font-medium tracking-wider mb-6 sm:mb-8 md:mb-10 px-4"
+            transition={{ duration: isMobile ? 0.3 : 0.5, delay: isMobile ? 0.1 : 0.2 }}
+            className="text-[#BDBDBD] max-w-2xl mx-auto text-base sm:text-lg md:text-xl leading-relaxed"
           >
-            Discover how businesses of all sizes transform and grow with our tailored digital solutions.
+            See what our clients say about working with us
           </motion.p>
         </div>
-        {/* Testimonials Carousel */}
-        <div className="relative">
-          <div 
-            className="w-full max-w-4xl mx-auto overflow-hidden"
-            ref={carouselRef}
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-            style={{ touchAction: 'pan-y' }}
-          >
+
+        {/* Testimonial Carousel */}
+        <div 
+          ref={carouselRef}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          className="relative"
+        >
+          <div className="overflow-hidden">
             <div 
-              className="flex items-stretch transition-transform duration-300 ease-out"
+              className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${activeIndex * 100}%)` }}
             >
               {testimonials.map((testimonial, index) => (
-                <div key={testimonial.id} className="w-full flex-shrink-0 px-2 sm:px-3 md:px-4">
-                  <TestimonialCard
-                    testimonial={{
-                      id: testimonial.id,
-                      ...testimonial.testimonial
-                    }}
+                <motion.div
+                  key={testimonial.id}
+                  initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: isMobile ? 0.3 : 0.5,
+                    delay: isMobile ? index * 0.1 : index * 0.2
+                  }}
+                  className="flex-shrink-0 w-full"
+                >
+                  <TestimonialCard 
+                    testimonial={testimonial.testimonial}
                     isActive={index === activeIndex}
                   />
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-          {/* Navigation Arrows - Hidden on very small screens */}
-          <button
-            onClick={handlePrev}
-            className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-4 md:-translate-x-8 p-2 sm:p-3 rounded-full bg-[#181B22] border border-[#23262F] shadow-md hover:border-blue-400/40 hover:bg-blue-400/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 z-10"
-            aria-label="Previous testimonial"
-          >
-            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-400" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-4 md:translate-x-8 p-2 sm:p-3 rounded-full bg-[#181B22] border border-[#23262F] shadow-md hover:border-blue-400/40 hover:bg-blue-400/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 z-10"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-400" />
-          </button>
-          {/* Dots Navigation */}
-          <div className="flex justify-center mt-6 sm:mt-8 md:mt-10 space-x-2 sm:space-x-3">
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-center gap-2 mt-8">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`relative h-2 sm:h-3 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 touch-manipulation ${
-                  index === activeIndex ? 'w-6 sm:w-8 md:w-10' : 'w-2 sm:w-3'
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === activeIndex 
+                    ? 'bg-blue-400 w-6' 
+                    : 'bg-blue-400/30 hover:bg-blue-400/50'
                 }`}
-              >
-                <div className={`relative h-full rounded-full transition-colors duration-300 ${
-                  index === activeIndex
-                    ? 'bg-blue-400'
-                    : 'bg-white/20'
-                }`}></div>
-              </button>
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
             ))}
-          </div>
-          {/* Mobile swipe indicator */}
-          <div className="sm:hidden text-center mt-4">
-            <p className="text-xs text-[#ABABAB]/60">← Swipe to navigate →</p>
           </div>
         </div>
       </div>
