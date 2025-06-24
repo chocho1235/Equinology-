@@ -264,12 +264,12 @@ const Testimonials = ({ isMobile }: TestimonialsProps) => {
         </div>
 
         {/* Testimonial Carousel */}
-        <div 
+          <div 
           ref={carouselRef}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           className="relative"
-        >
+          >
           <div className="overflow-hidden">
             <div 
               className="flex transition-transform duration-500 ease-out"
@@ -286,7 +286,7 @@ const Testimonials = ({ isMobile }: TestimonialsProps) => {
                   }}
                   className="flex-shrink-0 w-full"
                 >
-                  <TestimonialCard 
+                  <TestimonialCard
                     testimonial={testimonial.testimonial}
                     isActive={index === activeIndex}
                   />

@@ -52,6 +52,13 @@ const Hero = ({ isMobile }: HeroProps) => {
       {/* Background with gradient */}
       <div className="absolute inset-0 bg-[#0A0A0A] z-10" />
 
+      {/* Three.js Background */}
+      <div className="absolute inset-0 z-20">
+        <Suspense fallback={null}>
+          <ClientThreeBackground />
+        </Suspense>
+      </div>
+
       {/* Content */}
       <div className="relative z-40 min-h-screen flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">

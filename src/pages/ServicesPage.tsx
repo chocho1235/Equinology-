@@ -119,21 +119,21 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
+      <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: isMobile ? 0.2 : 0.4 }}
           transition={{ duration: isMobile ? 1 : 1.5 }}
           style={isMobile ? undefined : { opacity }}
           className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-[#3CAAFF]/20 to-transparent rounded-full blur-3xl"
-        />
+      />
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isMobile ? 0.15 : 0.3 }}
           transition={{ duration: isMobile ? 1 : 1.5, delay: isMobile ? 0.1 : 0.2 }}
           style={isMobile ? undefined : { opacity }}
           className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-[#00E0FF]/20 to-transparent rounded-full blur-3xl"
-        />
-      </div>
+            />
+          </div>
         
       <div className="relative w-full max-w-[90rem] mx-auto px-4 md:px-6 lg:px-8">
         <motion.div 
@@ -159,26 +159,26 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1]"
-          >
+        >
             Crafting Digital
-            <br />
-            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+          <br />
+          <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               Experiences
-            </span>
-          </motion.h1>
+          </span>
+        </motion.h1>
 
-          <motion.p
+        <motion.p
             initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
             transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.2 : 0.4 }}
             className="text-xl text-[#BDBDBD] mb-16 font-light max-w-2xl leading-relaxed px-4"
-          >
+        >
             We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
-          </motion.p>
+        </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
             transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.3 : 0.6 }}
             className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#BDBDBD] mb-16 px-4"
           >
@@ -195,7 +195,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
               <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Award Winning</span>
             </div>
           </motion.div>
-        </motion.div>
+      </motion.div>
       </div>
 
       {/* Scroll/Swipe indicator */}
@@ -207,7 +207,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
         onClick={handleScroll}
         className="group fixed bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-4 z-10"
       >
-        <motion.div 
+        <motion.div
           className="relative w-px h-16 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20"
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
