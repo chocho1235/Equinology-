@@ -368,6 +368,44 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       title: "Website Design & Development",
       desc: "We deliver professional, responsive websites optimised for performance and user experience. Our development process ensures your site meets modern web standards while achieving your business objectives.",
       icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
+      illustration: (
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Browser Window Frame */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg overflow-hidden shadow-xl">
+            {/* Browser Header */}
+            <div className="flex items-center gap-2 px-4 py-3 bg-[#252525]">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
+              </div>
+              <div className="flex-1 ml-2">
+                <div className="w-24 h-2 bg-[#333] rounded" />
+              </div>
+            </div>
+            {/* Browser Content */}
+            <div className="p-4">
+              {/* Header Section */}
+              <div className="mb-4">
+                <div className="w-16 h-2 bg-[#3CAAFF] rounded mb-2" />
+                <div className="w-32 h-2 bg-[#333] rounded" />
+              </div>
+              {/* Content Blocks */}
+              <div className="space-y-3">
+                <div className="w-full h-24 bg-gradient-to-r from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded" />
+                <div className="flex gap-2">
+                  <div className="w-1/3 h-8 bg-[#333] rounded" />
+                  <div className="w-1/3 h-8 bg-[#333] rounded" />
+                  <div className="w-1/3 h-8 bg-[#333] rounded" />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Decorative Elements */}
+          <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl" />
+          <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
+        </div>
+      ),
       features: [
         "Responsive design",
         "Performance optimisation",
@@ -379,6 +417,30 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       title: "E-commerce Solutions",
       desc: "We build secure, scalable e-commerce platforms that drive sales. Our solutions include comprehensive payment integration, inventory management, and customer account systems.",
       icon: <ShoppingBag className="h-6 w-6 text-[#3CAAFF]" />,
+      illustration: (
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Product Grid */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
+            <div className="grid grid-cols-2 gap-4">
+              {/* Product Cards */}
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="w-full aspect-square bg-gradient-to-br from-[#3CAAFF]/10 to-[#00E0FF]/10 rounded-lg" />
+                  <div className="w-3/4 h-2 bg-[#333] rounded" />
+                  <div className="w-1/2 h-2 bg-[#3CAAFF] rounded" />
+                </div>
+              ))}
+            </div>
+            {/* Shopping Cart Indicator */}
+            <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3CAAFF] rounded-full flex items-center justify-center">
+              <ShoppingBag className="w-3 h-3 text-white" />
+            </div>
+          </div>
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-16 h-16 bg-[#3CAAFF]/20 rounded-full blur-xl" />
+          <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
+        </div>
+      ),
       features: [
         "Secure transactions",
         "Inventory management",
@@ -390,6 +452,38 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       title: "Web Applications",
       desc: "We develop custom web applications that streamline your business operations. Our solutions focus on efficiency, scalability, and user experience to meet your specific requirements.",
       icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
+      illustration: (
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Dashboard Layout */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
+            {/* Sidebar */}
+            <div className="flex gap-4">
+              <div className="w-16 space-y-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-full h-8 bg-[#252525] rounded" />
+                ))}
+              </div>
+              {/* Main Content */}
+              <div className="flex-1 space-y-4">
+                {/* Charts */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="h-16 bg-gradient-to-tr from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded" />
+                  <div className="h-16 bg-gradient-to-tr from-[#00E0FF]/20 to-[#3CAAFF]/20 rounded" />
+                </div>
+                {/* Data Table */}
+                <div className="space-y-2">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="w-full h-4 bg-[#252525] rounded" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Decorative Elements */}
+          <div className="absolute -top-4 right-0 w-16 h-16 bg-[#3CAAFF]/20 rounded-full blur-xl" />
+          <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
+        </div>
+      ),
       features: [
         "Custom development",
         "Process automation",
@@ -401,6 +495,42 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       title: "Digital Marketing & SEO",
       desc: "We implement comprehensive SEO and digital marketing strategies to improve your online visibility. Our approach combines technical optimisation with content strategy to drive qualified traffic.",
       icon: <Search className="h-6 w-6 text-[#3CAAFF]" />,
+      illustration: (
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Analytics Dashboard */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
+            {/* Graph */}
+            <div className="mb-4">
+              <div className="w-full h-32 bg-[#252525] rounded-lg relative overflow-hidden">
+                <div className="absolute inset-0 flex items-end">
+                  {[...Array(7)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 mx-0.5"
+                      style={{
+                        height: `${Math.random() * 60 + 20}%`,
+                        background: `linear-gradient(180deg, #3CAAFF ${i * 10}%, #00E0FF)`
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            {/* Metrics */}
+            <div className="grid grid-cols-2 gap-2">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="w-12 h-2 bg-[#3CAAFF] rounded" />
+                  <div className="w-16 h-2 bg-[#333] rounded" />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Decorative Elements */}
+          <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl" />
+          <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
+        </div>
+      ),
       features: [
         "Technical SEO",
         "Content strategy",
@@ -426,7 +556,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               Web Solutions
             </span>
-      </h2>
+          </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
             Delivering strategic digital solutions that drive business growth.
           </p>
@@ -448,23 +578,17 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
               <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
                 <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8">
                   <div className={`absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                  <div className="relative z-10 flex flex-col items-center justify-center min-h-[300px]">
-                    <div className="p-4 rounded-2xl bg-[#3CAAFF]/5 border border-[#3CAAFF]/10 mb-6">
-                {service.icon}
-              </div>
-                    <div className="text-center">
-                      <h4 className="text-lg font-medium text-white mb-2">Request a Consultation</h4>
-                      <p className="text-sm text-[#BDBDBD]">Discuss your project requirements</p>
-            </div>
+                  <div className="relative z-10 min-h-[300px]">
+                    {service.illustration}
                   </div>
                 </div>
-                  </div>
-                  
+              </div>
+
               <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
                     {service.icon}
-                </div>
+                  </div>
                   <h3 className="text-xl font-medium text-white">
                     {service.title}
                   </h3>
@@ -482,10 +606,10 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                     >
                       <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
                       <span>{feature}</span>
-                          </div>
-                        ))}
-                      </div>
                     </div>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
