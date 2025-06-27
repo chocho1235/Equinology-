@@ -42,3 +42,32 @@
   opacity: 0.03;
   transition: opacity 0.3s ease-out;
 }
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+@keyframes blink {
+  0%, 39% { opacity: 1; }
+  40%, 49% { opacity: 0; }
+  50%, 89% { opacity: 1; }
+  90%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1.2s infinite;
+  will-change: opacity;
+}

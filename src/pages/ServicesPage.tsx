@@ -556,7 +556,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               Web Solutions
             </span>
-          </h2>
+      </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
             Delivering strategic digital solutions that drive business growth.
           </p>
@@ -582,13 +582,13 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                     {service.illustration}
                   </div>
                 </div>
-              </div>
-
+                  </div>
+                  
               <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
                     {service.icon}
-                  </div>
+                </div>
                   <h3 className="text-xl font-medium text-white">
                     {service.title}
                   </h3>
@@ -606,10 +606,10 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                     >
                       <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
                       <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
             </motion.div>
           ))}
         </div>

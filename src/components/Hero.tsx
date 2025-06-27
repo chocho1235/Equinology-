@@ -1,8 +1,8 @@
-import { ArrowRight, Star, Compass } from 'lucide-react';
-import { motion, useAnimation, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useRef, Suspense, useState } from 'react';
+import { motion, useAnimation, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useInView } from 'framer-motion';
+import { ArrowRight, Compass, Star } from 'lucide-react';
+import { Suspense } from 'react';
 import ClientThreeBackground from './ClientThreeBackground';
 
 interface HeroProps {
@@ -12,40 +12,90 @@ interface HeroProps {
 const Hero = ({ isMobile }: HeroProps) => {
   const navigate = useNavigate();
   const controls = useAnimation();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const ref = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  
+
   // Scroll-based animation for horse - simplified for mobile
   const { scrollY } = useScroll();
   const horseRotate = useTransform(scrollY, [0, 600], [0, isMobile ? -1.5 : -3]); // Reduced rotation
   const horseY = useTransform(scrollY, [0, 600], [0, isMobile ? -4 : -8]); // Reduced movement
   const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, isMobile ? 0.9 : 0.8, isMobile ? 0.6 : 0.4]); // Less fade
+
+  // Simplified rotating words with consistent styling
+  const rotatingWords = [
+    "Ideas",
+    "Dreams",
+    "Visions",
+    "Goals",
+    "Future"
+  ];
   
-  useEffect(() => {
-    // Check prefers-reduced-motion
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setReduceMotion(media.matches);
-    const handler = () => setReduceMotion(media.matches);
-    media.addEventListener('change', handler);
-    // Delay animations until after first paint
-    const timeout = setTimeout(() => setHasLoaded(true), isMobile ? 50 : 100);
-    return () => {
-      media.removeEventListener('change', handler);
-      clearTimeout(timeout);
-    };
-  }, [isMobile]);
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(200);
+
+  // Function to simulate human typing patterns
+  const getHumanizedDelay = () => {
+    // Common letters typed faster
+    const fastLetters = 'etaoinshrdlu';
+    const nextChar = rotatingWords[currentWordIndex][displayText.length];
+    
+    if (isDeleting) {
+      return Math.random() * 40 + 30; // Faster deletion
+    }
+    
+    // Simulate thinking at word start
+    if (displayText.length === 0) {
+      return Math.random() * 500 + 200;
+    }
+    
+    // Type common letters faster
+    if (fastLetters.includes(nextChar?.toLowerCase() || '')) {
+      return Math.random() * 60 + 70;
+    }
+    
+    // Slower for less common letters
+    return Math.random() * 100 + 120;
+  };
 
   useEffect(() => {
-    if (isInView && hasLoaded && !reduceMotion) {
-      controls.start("visible");
-    }
-    if (reduceMotion) {
-      controls.set("visible");
-    }
-  }, [isInView, controls, hasLoaded, reduceMotion]);
+    let timeout: NodeJS.Timeout;
+    const currentWord = rotatingWords[currentWordIndex];
+    
+    const updateText = () => {
+      if (!isDeleting) {
+        // Typing
+        if (displayText.length < currentWord.length) {
+          setDisplayText(currentWord.slice(0, displayText.length + 1));
+          const delay = getHumanizedDelay();
+          timeout = setTimeout(updateText, delay);
+        } else {
+          // Natural pause at the end of the word
+          timeout = setTimeout(() => setIsDeleting(true), Math.random() * 1000 + 1000);
+        }
+      } else {
+        // Deleting
+        if (displayText.length > 0) {
+          setDisplayText(displayText.slice(0, -1));
+          const delay = getHumanizedDelay();
+          timeout = setTimeout(updateText, delay);
+        } else {
+          setIsDeleting(false);
+          setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
+          // Pause before starting next word
+          timeout = setTimeout(updateText, Math.random() * 300 + 200);
+        }
+      }
+    };
+
+    timeout = setTimeout(updateText, getHumanizedDelay());
+    return () => clearTimeout(timeout);
+  }, [currentWordIndex, displayText, isDeleting, rotatingWords]);
+
+  useEffect(() => {
+    controls.start('visible');
+  }, [controls]);
 
   return (
     <div className="relative min-h-screen" ref={ref}>
@@ -70,27 +120,56 @@ const Hero = ({ isMobile }: HeroProps) => {
                 hidden: { opacity: 0, y: isMobile ? 10 : 20 },
                 visible: { opacity: 1, y: 0 }
               }}
-              transition={{ duration: reduceMotion ? 0 : (isMobile ? 0.3 : 0.5) }}
+              transition={{ duration: isMobile ? 0.3 : 0.5 }}
               className={`${isMobile ? 'w-full' : 'lg:col-span-7'} space-y-8 overflow-visible`}
             >
-              {/* Badge */}
-              <div className="inline-flex items-center space-x-2 bg-[#111111]/60 backdrop-blur-sm px-5 py-2.5 rounded-full border border-[#3CAAFF]/40">
-                <Compass className="w-4 h-4 text-[#3CAAFF]" />
-                <span className="text-sm font-medium text-[#BDBDBD]">Experts in Equestrian</span>
-              </div>
-
-              {/* Main heading */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-relaxed mb-8">
-                <span className="block text-white mb-2">Transform Ideas</span>
-                <span className="block bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent py-1">
-                  Digital Reality
+              {/* Enhanced badge */}
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="inline-flex items-center gap-2.5 bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl px-5 py-2.5 rounded-full border border-[#3CAAFF]/20 shadow-[0_0_20px_rgba(60,170,255,0.05)] hover:border-[#3CAAFF]/30 hover:shadow-[0_0_25px_rgba(60,170,255,0.08)] transition-all duration-300"
+              >
+                <Compass className="w-4 h-4 text-[#3CAAFF] animate-pulse" />
+                <span className="text-sm font-medium bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent tracking-wide">
+                  Experts in Equestrian & Agriculture
                 </span>
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#3CAAFF]/10 via-transparent to-[#3CAAFF]/10 animate-gradient" />
+              </motion.div>
+
+              {/* Main heading - Dynamic width container */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 relative">
+                <div className="inline-flex items-center text-white relative z-20 mb-1">
+                  <span>Transform</span>
+                  <div className="relative inline-flex ml-3">
+                    <span className="relative block h-[1.2em] overflow-hidden">
+                      <div className="absolute left-0 whitespace-nowrap text-white">
+                        {displayText}
+                        <span className="inline-block w-[3px] h-[1em] bg-white ml-[2px] animate-blink"></span>
+                      </div>
+                      <span className="invisible whitespace-nowrap">{rotatingWords[currentWordIndex]}</span>
+                    </span>
+                  </div>
+                </div>
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="block bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mt-3 leading-[1.15] pb-1"
+                >
+                  Digital Reality
+                </motion.span>
               </h1>
 
-              {/* Description */}
-              <p className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light mt-6">
+              {/* Description with adjusted spacing */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light mt-4"
+              >
                 Professional digital solutions that drive business growth. From consultation to delivery, we create exceptional experiences that exceed expectations.
-              </p>
+              </motion.p>
 
               {/* CTA buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">

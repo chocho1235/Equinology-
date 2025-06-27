@@ -7,6 +7,7 @@ interface SidebarNavProps {
 }
 
 const navLinks = [
+  { label: 'Home', path: '/' },
   { label: 'Services', path: '/services' },
   { label: 'Testimonials', path: '/#testimonials' },
   { label: 'Articles', path: '/articles' },
@@ -31,15 +32,8 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ onClose }) => {
 
   return (
     <nav className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-12">
+      <div className="flex items-center mb-12">
         <span className="text-2xl font-bold text-white">Menu</span>
-        <button
-          aria-label="Close menu"
-          onClick={onClose}
-          className="p-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#3CAAFF]/30 transition-all duration-200"
-        >
-          <X className="w-6 h-6 text-white" />
-        </button>
       </div>
       <ul className="flex-1 flex flex-col gap-6">
         {navLinks.map(link => (
