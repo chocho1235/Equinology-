@@ -21,10 +21,10 @@ const Hero = ({ isMobile }: HeroProps) => {
   const horseY = useTransform(scrollY, [0, 600], [0, isMobile ? -4 : -8]); // Reduced movement
   const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, isMobile ? 0.9 : 0.8, isMobile ? 0.6 : 0.4]); // Less fade
 
-  // Simplified rotating words with consistent styling
+  // Words with potential typos for realistic effect
   const rotatingWords = [
     "Ideas",
-    "Dreams",
+    "Dreams", 
     "Visions",
     "Goals",
     "Future"
@@ -33,31 +33,51 @@ const Hero = ({ isMobile }: HeroProps) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(200);
 
-  // Function to simulate human typing patterns
-  const getHumanizedDelay = () => {
-    // Common letters typed faster
-    const fastLetters = 'etaoinshrdlu';
-    const nextChar = rotatingWords[currentWordIndex][displayText.length];
+  // Realistic human typing simulation
+  const getRealisticDelay = (char: string = '', position: number = 0) => {
+    // Base typing speed variations
+    const baseSpeed = 80 + Math.random() * 40; // 80-120ms base
     
-    if (isDeleting) {
-      return Math.random() * 40 + 30; // Faster deletion
+    // Letter-specific variations
+    const difficultLetters = 'qwzxcvbnm';
+    const easyLetters = 'asdf';
+    const commonLetters = 'etaoinshrdlu';
+    
+    let multiplier = 1;
+    
+    if (char) {
+      const lowerChar = char.toLowerCase();
+      if (difficultLetters.includes(lowerChar)) {
+        multiplier = 1.3 + Math.random() * 0.4; // Slower for difficult letters
+      } else if (easyLetters.includes(lowerChar)) {
+        multiplier = 0.7 + Math.random() * 0.2; // Faster for easy letters
+      } else if (commonLetters.includes(lowerChar)) {
+        multiplier = 0.8 + Math.random() * 0.3; // Moderate for common letters
+      }
     }
     
-    // Simulate thinking at word start
-    if (displayText.length === 0) {
-      return Math.random() * 500 + 200;
+    // Position-based variations (slower at start, faster in middle)
+    if (position === 0) {
+      multiplier *= 1.5; // Slower start
+    } else if (position > 2) {
+      multiplier *= 0.9; // Faster once in rhythm
     }
     
-    // Type common letters faster
-    if (fastLetters.includes(nextChar?.toLowerCase() || '')) {
-      return Math.random() * 60 + 70;
+    // Random hesitations (very rare)
+    if (Math.random() < 0.05) {
+      multiplier *= 2; // Occasional hesitation
     }
     
-    // Slower for less common letters
-    return Math.random() * 100 + 120;
+    // Burst typing (occasional fast sequences)
+    if (Math.random() < 0.15 && position > 1) {
+      multiplier *= 0.6; // Fast burst
+    }
+    
+    return Math.floor(baseSpeed * multiplier);
   };
+
+
   
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -65,31 +85,37 @@ const Hero = ({ isMobile }: HeroProps) => {
     
     const updateText = () => {
       if (!isDeleting) {
-        // Typing
+        // Typing phase
         if (displayText.length < currentWord.length) {
+          const nextChar = currentWord[displayText.length];
+          
+          // Perfect typing - no mistakes
           setDisplayText(currentWord.slice(0, displayText.length + 1));
-          const delay = getHumanizedDelay();
+          const delay = getRealisticDelay(nextChar, displayText.length);
           timeout = setTimeout(updateText, delay);
         } else {
-          // Natural pause at the end of the word
-          timeout = setTimeout(() => setIsDeleting(true), Math.random() * 1000 + 1000);
+          // Word complete, start deleting immediately (no pause)
+          setIsDeleting(true);
+          timeout = setTimeout(updateText, 300 + Math.random() * 200);
         }
       } else {
-        // Deleting
+        // Deleting phase
         if (displayText.length > 0) {
           setDisplayText(displayText.slice(0, -1));
-          const delay = getHumanizedDelay();
-          timeout = setTimeout(updateText, delay);
+          // Faster, consistent deletion speed
+          const deleteSpeed = 40 + Math.random() * 20;
+          timeout = setTimeout(updateText, deleteSpeed);
         } else {
+          // Move to next word immediately
           setIsDeleting(false);
           setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
-          // Pause before starting next word
-          timeout = setTimeout(updateText, Math.random() * 300 + 200);
+          // Tiny pause before starting next word
+          timeout = setTimeout(updateText, 100 + Math.random() * 100);
         }
       }
     };
 
-    timeout = setTimeout(updateText, getHumanizedDelay());
+    timeout = setTimeout(updateText, getRealisticDelay());
     return () => clearTimeout(timeout);
   }, [currentWordIndex, displayText, isDeleting, rotatingWords]);
 
@@ -137,15 +163,15 @@ const Hero = ({ isMobile }: HeroProps) => {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#3CAAFF]/10 via-transparent to-[#3CAAFF]/10 animate-gradient" />
               </motion.div>
 
-              {/* Main heading - Dynamic width container */}
+              {/* Main heading - Centered with fixed space for mobile */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 relative">
-                <div className="inline-flex items-center text-white relative z-20 mb-1">
+                <div className={`${isMobile ? 'flex flex-col items-center' : 'inline-flex items-center'} text-white relative z-20 mb-1`}>
                   <span>Transform</span>
-                  <div className="relative inline-flex ml-3">
-                    <span className="relative block h-[1.2em] overflow-hidden">
-                      <div className="absolute left-0 whitespace-nowrap text-white">
+                  <div className={`relative inline-flex ${isMobile ? 'mt-1' : 'ml-3'}`}>
+                    <span className={`relative block h-[1.2em] overflow-hidden ${isMobile ? 'w-[5.5em] text-center' : ''}`}>
+                      <div className={`absolute whitespace-nowrap text-white ${isMobile ? 'left-1/2 transform -translate-x-1/2' : 'left-0'}`}>
                         {displayText}
-                        <span className="inline-block w-[3px] h-[1em] bg-white ml-[2px] animate-blink"></span>
+                        <span className="inline-block w-[2px] h-[0.9em] bg-white ml-[1px] animate-realistic-blink shadow-sm"></span>
                       </div>
                       <span className="invisible whitespace-nowrap">{rotatingWords[currentWordIndex]}</span>
                     </span>

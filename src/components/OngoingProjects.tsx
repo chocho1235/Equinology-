@@ -14,7 +14,7 @@ const projects = [
     id: 1,
     title: "AI-Powered Equine Marketplace",
     subtitle: "FindMyHorse.co.uk",
-    description: "Revolutionary platform connecting horse enthusiasts with their perfect companions through advanced AI matching.",
+    description: "Aggregates listings from major horse selling platforms, using AI to match enthusiasts with their perfect equine partners.",
     status: "In Development",
     progress: 75,
     category: "Marketplace",
