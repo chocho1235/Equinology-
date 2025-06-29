@@ -4,6 +4,7 @@ import Services from '../components/Services';
 import FlagCarousel from '../components/FlagCarousel';
 import Facilities from '../components/Facilities';
 import Testimonials from '../components/Testimonials';
+import OngoingProjects from '../components/OngoingProjects';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -22,6 +23,7 @@ const HomePage = () => {
     <div className="bg-[#0A0A0A]">
       <Hero isMobile={isMobile} />
       <Services />
+      <OngoingProjects />
       <FlagCarousel />
       <Facilities isMobile={isMobile} />
       <Testimonials isMobile={isMobile} />

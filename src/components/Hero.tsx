@@ -14,7 +14,7 @@ const Hero = ({ isMobile }: HeroProps) => {
   const controls = useAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-
+  
   // Scroll-based animation for horse - simplified for mobile
   const { scrollY } = useScroll();
   const horseRotate = useTransform(scrollY, [0, 600], [0, isMobile ? -1.5 : -3]); // Reduced rotation
@@ -58,7 +58,7 @@ const Hero = ({ isMobile }: HeroProps) => {
     // Slower for less common letters
     return Math.random() * 100 + 120;
   };
-
+  
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     const currentWord = rotatingWords[currentWordIndex];
@@ -150,7 +150,7 @@ const Hero = ({ isMobile }: HeroProps) => {
                       <span className="invisible whitespace-nowrap">{rotatingWords[currentWordIndex]}</span>
                     </span>
                   </div>
-                </div>
+              </div>
                 <motion.span
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
