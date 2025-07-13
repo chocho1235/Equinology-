@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+  import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Search, Heart, Shield, Zap, Wifi, Plane, Droplets, BarChart3, 
@@ -27,7 +27,7 @@ const projects = [
       inquiries: "340+"
     },
     tags: ["React", "Node.js", "PostgreSQL", "API Integration"],
-    timeline: "Jan 2024 - Apr 2024"
+    timeline: "Apr 2025 - Jul 2025"
   },
   {
     id: 2,
@@ -46,7 +46,7 @@ const projects = [
       efficiency: "+28%"
     },
     tags: ["Vue.js", "Python", "MySQL", "Chart.js"],
-    timeline: "Mar 2024 - Aug 2024"
+    timeline: "May 2025 - Oct 2025"
   },
   {
     id: 3,
@@ -65,7 +65,7 @@ const projects = [
       satisfaction: "94%"
     },
     tags: ["React", "Express.js", "MongoDB", "Socket.io"],
-    timeline: "May 2024 - Oct 2024"
+    timeline: "Jun 2025 - Dec 2025"
   }
 ];
 
@@ -86,17 +86,96 @@ const ProjectTimeline = ({ project, index }: { project: any, index: number }) =>
   return (
     <motion.div
       ref={timelineRef}
-      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+      initial={{ opacity: 0, x: -50 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: index * 0.15 }}
       className="relative"
     >
-      <div className={`flex items-center gap-16 ${isEven ? 'flex-row' : 'flex-row-reverse'}`}>
-        
+      {/* Mobile Layout: Always left-aligned */}
+      <div className="flex items-start gap-4 md:hidden">
+        {/* Content - Always on left for mobile */}
+        <div className="flex-1 space-y-3">
+          {/* Header */}
+          <div className="flex items-center gap-2">
+            <motion.div 
+              className={`p-2 rounded-xl bg-gradient-to-br ${project.color} shadow-md`}
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Icon className="w-4 h-4 text-white" />
+            </motion.div>
+            <div className="text-left">
+              <h3 className="text-lg font-bold text-white leading-tight">{project.title}</h3>
+              <p className="text-[#3CAAFF] font-semibold text-xs">{project.subtitle}</p>
+            </div>
+          </div>
+
+          {/* Description - Condensed */}
+          <div className="text-left">
+            <p className="text-xs text-[#B8BCC4] leading-relaxed mb-2">
+              {project.description}
+            </p>
+            <div className="flex items-center gap-1 mb-2">
+              <Clock className="w-3 h-3 text-[#3CAAFF]" />
+              <span className="text-xs text-[#3CAAFF] font-medium">{project.timeline}</span>
+            </div>
+          </div>
+
+          {/* Progress Bar - Compact */}
+          <div className="space-y-1">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-1">
+                <div className={`w-1 h-1 rounded-full ${
+                  project.status === 'Beta Testing' ? 'bg-yellow-400' :
+                  project.status === 'In Development' ? 'bg-blue-400' :
+                  'bg-purple-400'
+                }`} />
+                <span className="text-xs text-white/90 font-medium">{project.status}</span>
+              </div>
+              <span className="text-xs text-[#3CAAFF] font-bold">{project.progress}%</span>
+            </div>
+            <div className="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: `${project.progress}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+                className="h-1.5 bg-gradient-to-r from-[#3CAAFF] via-[#00E0FF] to-[#3CAAFF] rounded-full"
+              />
+            </div>
+          </div>
+
+          {/* Tags - Minimal */}
+          <div className="flex flex-wrap gap-1">
+            {project.tags.slice(0, 3).map((tag: string, tagIndex: number) => (
+              <motion.span
+                key={tag}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: tagIndex * 0.1 }}
+                className="px-2 py-0.5 rounded-full bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 border border-[#3CAAFF]/30 text-xs font-medium text-[#3CAAFF] backdrop-blur-sm"
+              >
+                {tag}
+              </motion.span>
+            ))}
+            {project.tags.length > 3 && (
+              <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 border border-[#3CAAFF]/30 text-xs font-medium text-[#3CAAFF] backdrop-blur-sm">
+                +{project.tags.length - 3}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Timeline Space - Minimal for mobile */}
+        <div className="w-4 flex-shrink-0" />
+      </div>
+
+      {/* Desktop Layout: Alternating sides */}
+      <div className={`hidden md:flex items-center gap-16 ${isEven ? 'flex-row' : 'flex-row-reverse'}`}>
         {/* Content */}
         <div className="flex-1 space-y-8">
-          
           {/* Header */}
           <div className={`flex items-center gap-4 ${isEven ? 'justify-start' : 'justify-end'}`}>
             <div className="flex items-center gap-4">
@@ -191,6 +270,13 @@ const OngoingProjects = () => {
     target: sectionRef,
     offset: ["start 0.3", "end 0.7"]
   });
+
+  // Smooth transforms for better animation
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const arrowPosition = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const arrowOpacity = useTransform(scrollYProgress, [0, 0.1, 0.85, 1], [0, 1, 1, 1]);
+  const showTick = useTransform(scrollYProgress, [0.9, 1], [0, 1]);
+  const showArrow = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
   
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
@@ -243,14 +329,14 @@ const OngoingProjects = () => {
         </motion.div>
 
         {/* Projects Timeline */}
-        <div className="relative space-y-24 mb-32">
+        <div className="relative space-y-12 md:space-y-24 mb-32">
           {/* Enhanced Scroll-Based Timeline Line */}
-          <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-px h-full">
+          <div className="absolute left-1/2 top-0 transform -translate-x-1/2 w-px h-full md:block hidden">
             {/* Glow Effect */}
             <motion.div
               className="absolute inset-0 w-1 bg-gradient-to-b from-[#3CAAFF]/40 to-[#00E0FF]/40 blur-sm -left-0.5"
               style={{
-                height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+                height: lineHeight
               }}
             />
             
@@ -258,7 +344,7 @@ const OngoingProjects = () => {
             <motion.div
               className="relative w-full bg-gradient-to-b from-[#3CAAFF] via-[#00E0FF] to-[#3CAAFF] shadow-lg shadow-[#3CAAFF]/30"
               style={{
-                height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+                height: lineHeight
               }}
             />
             
@@ -266,7 +352,7 @@ const OngoingProjects = () => {
             <motion.div
               className="absolute top-0 left-0 w-full bg-gradient-to-b from-white/20 to-transparent"
               style={{
-                height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"])
+                height: lineHeight
               }}
               animate={{
                 opacity: [0.3, 0.7, 0.3]
@@ -276,24 +362,51 @@ const OngoingProjects = () => {
               }}
             />
             
-            {/* Moving Arrow at Bottom */}
+            {/* Moving Arrow/Tick */}
             <motion.div
-              className="absolute w-6 h-6 -left-2.5 flex items-center justify-center"
+              className="absolute w-6 h-6 -left-3 flex items-center justify-center"
               style={{
-                top: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]),
-                opacity: useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0])
+                top: arrowPosition,
+                opacity: arrowOpacity
               }}
             >
               <div className="relative">
-                {/* Arrow Glow */}
+                {/* Glow Effect */}
                 <div className="absolute inset-0 rounded-full bg-[#3CAAFF]/30 blur-sm scale-150" />
                 
-                {/* Arrow Background */}
+                {/* Background Circle */}
                 <div className="relative w-6 h-6 rounded-full bg-gradient-to-br from-[#3CAAFF] to-[#00E0FF] shadow-lg shadow-[#3CAAFF]/50 flex items-center justify-center">
-                  <ArrowDown className="w-3 h-3 text-white" />
+                  {/* Arrow Icon */}
+                  <motion.div
+                    style={{ opacity: showArrow }}
+                    className="absolute"
+                  >
+                    <ArrowDown className="w-3 h-3 text-white" />
+                  </motion.div>
+                  
+                  {/* Tick Icon */}
+                  <motion.div
+                    style={{ 
+                      opacity: showTick,
+                      scale: showTick
+                    }}
+                    className="absolute"
+                  >
+                    <CheckCircle className="w-3 h-3 text-white" />
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
+          </div>
+
+          {/* Mobile Timeline Line */}
+          <div className="absolute right-4 top-0 w-px h-full md:hidden">
+            <motion.div
+              className="w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF] rounded-full"
+              style={{
+                height: lineHeight
+              }}
+            />
           </div>
           
           {projects.map((project, index) => (
@@ -330,7 +443,7 @@ const OngoingProjects = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-center"
               >
-                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">19</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">5</div>
                 <div className="text-[#B8BCC4] text-lg">Team Members</div>
               </motion.div>
               
@@ -341,7 +454,7 @@ const OngoingProjects = () => {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="text-center"
               >
-                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">50+</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">500+</div>
                 <div className="text-[#B8BCC4] text-lg">Clients Served</div>
               </motion.div>
               
@@ -352,7 +465,7 @@ const OngoingProjects = () => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-center"
               >
-                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">98%</div>
+                <div className="text-5xl font-bold bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent mb-3">99%</div>
                 <div className="text-[#B8BCC4] text-lg">Success Rate</div>
               </motion.div>
             </div>
