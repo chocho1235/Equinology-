@@ -20,13 +20,26 @@ const HomePage = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   
   return (
-    <div className="bg-[#0A0A0A]">
-      <Hero isMobile={isMobile} />
-      <Services />
-      <OngoingProjects />
-      <FlagCarousel />
-      <Facilities isMobile={isMobile} />
-      <Testimonials isMobile={isMobile} />
+    <div className="bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A] to-[#0F0F0F] relative">
+      {/* Global Enhanced Background */}
+      <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(60,170,255,0.08)_0%,transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(0,224,255,0.05)_0%,transparent_40%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(60,170,255,0.03)_0%,transparent_40%)]" />
+        
+        {/* Animated grid */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xMDAgMEwwIDEwMCIgc3Ryb2tlPSJyZ2JhKDYwLDE3MCwyNTUsMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+CjxwYXRoIGQ9Ik0wIDBMMTAwIDEwMCIgc3Ryb2tlPSJyZ2JhKDYwLDE3MCwyNTUsMC4wMykiIHN0cm9rZS13aWR0aD0iMC41Ii8+CjwvnZnPgo=')] opacity-20" />
+      </div>
+      
+      {/* Content with relative positioning */}
+      <div className="relative z-10">
+        <Hero isMobile={isMobile} />
+        <Services />
+        <OngoingProjects />
+        <FlagCarousel />
+        <Facilities isMobile={isMobile} />
+        <Testimonials isMobile={isMobile} />
+      </div>
     </div>
   );
 };

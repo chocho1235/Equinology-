@@ -235,33 +235,53 @@ const Testimonials = ({ isMobile }: TestimonialsProps) => {
   return (
     <section 
       id="testimonials"
-      className="pt-0 pb-16 sm:pb-20 md:pb-24 relative bg-[#0A0A0A]"
+      className="pt-0 pb-16 sm:pb-20 md:pb-24 relative"
       ref={testimonialRef}
     >
       <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-12 sm:mb-16 md:mb-20 relative flex flex-col items-center justify-center">
-          {/* Soft blurred highlight behind heading */}
-          <div className="absolute left-1/2 top-0 -translate-x-1/2 -z-10 w-32 h-10 sm:w-48 sm:h-16 bg-blue-400/5 blur-xl rounded-full" />
-          <span className="relative inline-block">
-            <motion.h2
-              initial={{ opacity: 0, y: isMobile ? 12 : 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: isMobile ? 0.4 : 0.7, ease: 'easeOut' }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 sm:mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 tracking-tight px-4"
-            >
-              Trusted by{' '}
-              <span className="text-white">Our Clients</span>
-            </motion.h2>
-          </span>
-          <motion.p
-            initial={{ opacity: 0, y: isMobile ? 8 : 16 }}
+        
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-24"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)] mb-12"
+          >
+            <Quote className="w-6 h-6 text-[#3CAAFF]" />
+            <span className="text-white/90 font-semibold text-base">Client Stories</span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: isMobile ? 0.3 : 0.5, delay: isMobile ? 0.1 : 0.2 }}
-            className="text-[#BDBDBD] max-w-2xl mx-auto text-base sm:text-lg md:text-xl leading-relaxed"
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-4xl lg:text-5xl font-bold mb-8 leading-tight"
+          >
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              Trusted by{" "}
+            </span>
+            <span className="text-white">Our Clients</span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg text-[#B8BCC4] max-w-4xl mx-auto leading-relaxed"
           >
             See what our clients say about working with us
           </motion.p>
-        </div>
+        </motion.div>
 
         {/* Testimonial Carousel */}
           <div 

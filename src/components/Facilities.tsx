@@ -158,7 +158,7 @@ const Facilities = ({ isMobile }: FacilitiesProps) => {
   return (
     <section 
       ref={containerRef} 
-      className="relative py-28 overflow-hidden bg-[#0A0A0A]"
+      className="relative py-28 overflow-hidden"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header section */}
@@ -168,20 +168,34 @@ const Facilities = ({ isMobile }: FacilitiesProps) => {
           variants={containerVariants}
           className="text-center mb-28 md:mb-36"
         >
+          {/* Badge - centered above heading */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center mb-8"
+          >
+            <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)]">
+              <Building2 className="w-6 h-6 text-[#3CAAFF]" />
+              <span className="text-white/90 font-semibold text-base">What We Build</span>
+            </div>
+          </motion.div>
+          
+          {/* Heading - centered */}
           <motion.div 
             variants={itemVariants}
-            className="inline-block"
+            className="mb-6"
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
-              Digital Solutions for<br />
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white leading-snug">
+              Digital Solutions for{" "}
+              <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
                 Modern Business
               </span>
             </h2>
           </motion.div>
+          
+          {/* Description - centered */}
           <motion.p
             variants={itemVariants}
-            className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed mt-10"
+            className="text-lg text-[#B8BCC4] max-w-2xl mx-auto leading-relaxed"
           >
             Empowering enterprises with cutting-edge digital solutions that drive growth and innovation.
           </motion.p>

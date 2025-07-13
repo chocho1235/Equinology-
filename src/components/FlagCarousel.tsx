@@ -82,7 +82,7 @@ const FlagCarousel = () => {
               {/* Glow effect */}
               <div className={`absolute -inset-1 bg-gradient-to-r ${stat.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />
               
-              <div className="relative bg-gradient-to-br from-[#1a1a1a]/90 via-[#151515]/80 to-[#0f0f0f]/90 backdrop-blur-xl p-8 rounded-2xl border border-white/10 group-hover:border-white/30 transition-all duration-500 h-full flex flex-col items-center justify-center shadow-2xl group-hover:shadow-3xl">
+              <div className="relative bg-gradient-to-br from-[#1a1a1a]/90 via-[#151515]/80 to-[#0f0f0f]/90 backdrop-blur-xl p-8 rounded-2xl border border-[#3CAAFF]/20 group-hover:border-[#3CAAFF]/40 transition-all duration-500 h-full flex flex-col items-center justify-center shadow-2xl group-hover:shadow-3xl">
                 {/* Animated background pattern */}
                 <div className="absolute inset-0 bg-[url('/grid.svg')] bg-repeat opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500 rounded-2xl" />
                 
@@ -136,7 +136,7 @@ const FlagCarousel = () => {
           {/* Glow effect */}
           <div className={`absolute -inset-1 bg-gradient-to-r ${stat.color} rounded-xl blur-lg opacity-0 group-hover:opacity-15 transition-opacity duration-500`} />
           
-          <div className="relative bg-gradient-to-br from-[#1a1a1a]/90 via-[#151515]/80 to-[#0f0f0f]/90 backdrop-blur-xl p-6 rounded-xl border border-white/10 group-hover:border-white/25 transition-all duration-500 h-full flex flex-col items-center justify-center shadow-xl group-hover:shadow-2xl">
+          <div className="relative bg-gradient-to-br from-[#1a1a1a]/90 via-[#151515]/80 to-[#0f0f0f]/90 backdrop-blur-xl p-6 rounded-xl border border-[#3CAAFF]/20 group-hover:border-[#3CAAFF]/40 transition-all duration-500 h-full flex flex-col items-center justify-center shadow-xl group-hover:shadow-2xl">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[url('/grid.svg')] bg-repeat opacity-[0.02] group-hover:opacity-[0.04] transition-opacity duration-500 rounded-xl" />
             
@@ -168,35 +168,53 @@ const FlagCarousel = () => {
   );
 
   return (
-    <section ref={containerRef} className="relative py-28 overflow-hidden bg-[#0A0A0A]">
+    <section ref={containerRef} className="relative py-28 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Header Section */}
         <div className="text-center mb-16">
           {disableAnimations ? (
             <>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)] mb-12">
+                <Globe className="w-6 h-6 text-[#3CAAFF]" />
+                <span className="text-white/90 font-semibold text-base">Our Impact</span>
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-bold mb-8">
                 <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">Proven Excellence</span>
               </h2>
-              <p className="text-gray-400 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+              <p className="text-lg text-[#B8BCC4] max-w-4xl mx-auto leading-relaxed">
                 Our track record speaks for itself. From startups to enterprise solutions, we deliver results that drive business growth worldwide.
               </p>
             </>
           ) : (
             <>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)] mb-12"
+              >
+                <Globe className="w-6 h-6 text-[#3CAAFF]" />
+                <span className="text-white/90 font-semibold text-base">Our Impact</span>
+              </motion.div>
+              
               <motion.h2
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.7, ease: [0.165, 0.84, 0.44, 1] }}
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6"
+                className="text-4xl lg:text-5xl font-bold mb-8"
               >
                 <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">Proven Excellence</span>
               </motion.h2>
+              
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                className="text-gray-400 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed"
+                className="text-lg text-[#B8BCC4] max-w-4xl mx-auto leading-relaxed"
               >
                 Our track record speaks for itself. From startups to enterprise solutions, we deliver results that drive business growth worldwide.
               </motion.p>

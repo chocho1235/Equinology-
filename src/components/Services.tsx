@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
-import { PenTool, Layout, Compass, Lightbulb, Ruler, Users } from 'lucide-react';
+import { PenTool, Layout, Compass, Lightbulb, Ruler, Users, Sparkles } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
 import React from 'react';
 import { useAnimation } from '../contexts/AnimationContext';
@@ -92,59 +92,91 @@ const Services = () => {
   }, [isReducedMotion]);
 
   return (
-    <section id="services" className="relative py-20 sm:py-32 overflow-hidden bg-[#0A0A0A]" ref={containerRef}>
-      <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          {isReducedMotion ? (
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-                Our Services
-              </span>
-            </h2>
-          ) : (
-            <motion.h2
-              {...animationConfig}
-              className="text-3xl sm:text-4xl font-bold mb-4"
-            >
-              <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-                Our Services
-              </span>
-            </motion.h2>
-          )}
-          
-          {!isReducedMotion && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, margin: isMobile ? "-40px" : "-80px" }}
-              transition={{ 
-                duration: isMobile ? 0.4 : 0.7,
-                delay: isMobile ? 0.1 : 0.2,
-                ease: "easeOut"
-              }}
-              className="text-[#ABABAB] max-w-2xl mx-auto"
-            >
-              We offer an extensive range of design and personalised services tailored to the unique needs of every individual industry. From web design to construction, we have it covered.
-            </motion.p>
-          )}
-        </div>
+    <section id="services" className="relative py-32 overflow-hidden" ref={containerRef}>
 
+      <div className="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8">
+        
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-24"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)] mb-12"
+          >
+            <Sparkles className="w-6 h-6 text-[#3CAAFF]" />
+            <span className="text-white/90 font-semibold text-base">What We Offer</span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-4xl lg:text-5xl font-bold mb-8 leading-tight"
+          >
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              Our Services
+            </span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-lg text-[#B8BCC4] max-w-4xl mx-auto leading-relaxed"
+          >
+            We offer an extensive range of design and personalised services tailored to the unique needs of every individual industry. From web design to construction, we have it covered.
+          </motion.p>
+        </motion.div>
+
+        {/* Enhanced Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={service.title}
-              style={{
-                opacity: showCards ? 1 : 0,
-                transition: isReducedMotion
-                  ? 'none'
-                  : `opacity 0.7s cubic-bezier(0.4,0,0.2,1) ${0.15 * index + 0.1}s`
-              }}
-              className="bg-[#111111]/50 backdrop-blur-sm p-8 rounded-2xl border border-[#3CAAFF]/20 hover:border-[#3CAAFF]/50 transition-all duration-300"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="group relative"
             >
-              {service.icon}
-              <h3 className="text-xl font-semibold text-white mt-6 mb-4">{service.title}</h3>
-              <p className="text-[#ABABAB]">{service.description}</p>
-            </div>
+              {/* Card Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#111111]/60 to-[#111111]/40 backdrop-blur-sm rounded-3xl border border-[#3CAAFF]/20 group-hover:border-[#3CAAFF]/50 transition-all duration-300 shadow-lg shadow-black/20" />
+              
+              {/* Hover Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#3CAAFF]/5 to-[#00E0FF]/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-300 blur-sm" />
+              
+              {/* Card Content */}
+              <div className="relative p-8 space-y-6">
+                {/* Icon */}
+                <motion.div
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3CAAFF]/10 to-[#00E0FF]/10 flex items-center justify-center group-hover:scale-105 transition-transform duration-300"
+                  whileHover={{ rotate: 5 }}
+                >
+                  {service.icon}
+                </motion.div>
+                
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-white group-hover:text-[#3CAAFF] transition-colors duration-300">
+                  {service.title}
+                </h3>
+                
+                {/* Description */}
+                <p className="text-[#B8BCC4] leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                  {service.description}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
