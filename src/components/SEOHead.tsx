@@ -13,8 +13,8 @@ interface SEOHeadProps {
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Web Design UK | Affordable Web Design Services | Equestrian & Business Websites',
-  description = 'Professional web design services across the UK. Specialising in equestrian, agricultural, and business websites. Affordable web design from £299. Expert web developers in the UK.',
+  title = 'Web Design UK | Equestrian & Agricultural Websites | £299',
+  description = 'Professional web design services across the UK. Specialising in equestrian and agricultural websites. Affordable web design from £299.',
   keywords = 'web design UK, cheap web design, affordable web design, equestrian web design, agricultural web design, horses for sale website, business website design, web development UK, website designer, local web design, professional web design, responsive web design, e-commerce website, WordPress web design, custom website design, small business website, UK web designer, web design services, website development, digital agency UK',
   canonical = 'https://equinology.co.uk',
   ogImage = 'https://equinology.co.uk/cardpreview.png',
