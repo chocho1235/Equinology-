@@ -22,7 +22,7 @@ import {
 const BrochureSection = () => {
   const flipBook = useRef<any>(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = 6; // Total number of pages (including covers)
+  const totalPages = 3; // Only front cover + 2 pages
 
   const nextPage = () => {
     if (flipBook.current) {
@@ -278,132 +278,6 @@ const BrochureSection = () => {
                       <div style={{ fontSize: '0.9rem' }}>Client Satisfaction</div>
                     </div>
                   </div>
-                </div>
-
-                {/* Page 3 - Innovation */}
-                <div className="page" style={{ 
-                  background: '#f8fafc',
-                  padding: '40px',
-                  color: '#1f2937',
-                  height: '100%',
-                  overflow: 'hidden'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
-                    <div style={{
-                      width: '60px',
-                      height: '60px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-                      borderRadius: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginRight: '20px'
-                    }}>
-                      <Code className="w-7 h-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: 0 }}>Innovation</h3>
-                      <p style={{ color: '#3CAAFF', margin: 0, fontWeight: '500' }}>Cutting-Edge Solutions</p>
-                    </div>
-                  </div>
-                  <p style={{ fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '30px' }}>
-                    We stay ahead of the curve by embracing emerging technologies and 
-                    innovative methodologies to deliver future-proof solutions.
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-                    <Star className="w-5 h-5 text-blue-500" style={{ marginRight: '10px' }} />
-                    <span>React, Node.js, Python, AI Integration</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-                    <Star className="w-5 h-5 text-blue-500" style={{ marginRight: '10px' }} />
-                    <span>Cloud Solutions & Microservices</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
-                    <Star className="w-5 h-5 text-blue-500" style={{ marginRight: '10px' }} />
-                    <span>Mobile-First Development</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Star className="w-5 h-5 text-blue-500" style={{ marginRight: '10px' }} />
-                    <span>Performance Optimization</span>
-                  </div>
-                </div>
-
-                {/* Page 4 - CTA */}
-                <div className="page" style={{ 
-                  background: '#f8fafc',
-                  padding: '40px',
-                  color: '#1f2937',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  height: '100%'
-                }}>
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    background: 'linear-gradient(135deg, #3CAAFF 0%, #00E0FF 100%)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '30px'
-                  }}>
-                    <Globe className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px' }}>
-                    Ready to Start?
-                  </h3>
-                  <p style={{ fontSize: '1.1rem', marginBottom: '30px', maxWidth: '300px' }}>
-                    Let's turn your vision into reality with our proven expertise and commitment to excellence.
-                  </p>
-                  <div style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '12px 24px',
-                    borderRadius: '50px',
-                    background: 'linear-gradient(135deg, #3CAAFF 0%, #00E0FF 100%)',
-                    color: 'white',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}>
-                    <span>Get Started Today</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
-
-                {/* Back Cover */}
-                <div className="page-cover" style={{ 
-                  background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '40px',
-                  color: 'white',
-                  textAlign: 'center',
-                  height: '100%'
-                }}>
-                  <div style={{
-                    width: '60px',
-                    height: '60px',
-                    background: 'rgba(255,255,255,0.1)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '20px'
-                  }}>
-                    <Globe className="w-7 h-7" />
-                  </div>
-                  <h4 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '15px' }}>
-                    Thank You
-                  </h4>
-                  <p style={{ opacity: 0.8, maxWidth: '250px' }}>
-                    Ready to transform your business with our proven expertise? Let's build something amazing together.
-                  </p>
                 </div>
               </HTMLFlipBook>
             </div>
