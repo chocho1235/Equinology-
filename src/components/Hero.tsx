@@ -161,7 +161,7 @@ const Hero = ({ isMobile }: HeroProps) => {
               </motion.div>
 
               {/* Main heading - Centered with fixed space for mobile */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6 relative">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 relative">
                 <div className="flex flex-col items-center lg:items-start relative z-20 mb-1">
                   <span className="text-white mb-2">Transform Your</span>
                   <div className="relative inline-flex">
