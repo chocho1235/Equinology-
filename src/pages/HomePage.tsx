@@ -2,6 +2,7 @@ import React from 'react';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
 import FlagCarousel from '../components/FlagCarousel';
+import BrochureSection from '../components/BrochureSection';
 import Facilities from '../components/Facilities';
 import Testimonials from '../components/Testimonials';
 import OngoingProjects from '../components/OngoingProjects';
@@ -37,6 +38,7 @@ const HomePage = () => {
         <Services />
         <OngoingProjects />
         <FlagCarousel />
+        <BrochureSection />
         <Facilities isMobile={isMobile} />
         <Testimonials isMobile={isMobile} />
       </div>

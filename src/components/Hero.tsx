@@ -21,99 +21,57 @@ const Hero = ({ isMobile }: HeroProps) => {
   const horseY = useTransform(scrollY, [0, 600], [0, isMobile ? -4 : -8]); // Reduced movement
   const horseOpacity = useTransform(scrollY, [0, 300, 600], [1, isMobile ? 0.9 : 0.8, isMobile ? 0.6 : 0.4]); // Less fade
 
-  // Extended word list for dynamic rotation
+  // Extended word list for dynamic rotation - starting with most professional
   const rotatingWords = [
-    "Ideas",
-    "Dreams", 
-    "Visions",
-    "Goals",
-    "Future",
     "Business",
-    "Brand",
-    "Website",
     "Strategy",
     "Success",
     "Growth",
     "Innovation",
-    "Potential",
+    "Excellence",
+    "Enterprise",
+    "Solution",
+    "Service",
+    "Platform",
+    "Product",
+    "Brand",
+    "Website",
+    "Company",
+    "Project",
+    "Venture",
+    "Experience",
+    "Identity",
     "Vision",
     "Mission",
-    "Passion",
-    "Project",
-    "Startup",
-    "Company",
-    "Concept",
+    "Potential",
+    "Impact",
+    "Goals",
     "Plan",
-    "Ambition",
     "Purpose",
+    "Future",
+    "Ideas",
+    "Concept",
+    "Startup",
+    "Ambition",
     "Journey",
     "Story",
-    "Legacy",
-    "Impact",
-    "Venture",
-    "Enterprise",
-    "Platform",
-    "Solution",
-    "Product",
-    "Service",
-    "Experience",
-    "Identity"
+    "Dreams",
+    "Visions",
+    "Passion"
   ];
   
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   
-  // Function to get random word index (avoiding immediate repeats)
-  const getRandomWordIndex = (currentIndex: number) => {
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * rotatingWords.length);
-    } while (newIndex === currentIndex && rotatingWords.length > 1);
-    return newIndex;
+  // Function to get next word index in order
+  const getNextWordIndex = (currentIndex: number) => {
+    return (currentIndex + 1) % rotatingWords.length;
   };
 
-  // Realistic human typing simulation
-  const getRealisticDelay = (char: string = '', position: number = 0) => {
-    // Base typing speed variations
-    const baseSpeed = 80 + Math.random() * 40; // 80-120ms base
-    
-    // Letter-specific variations
-    const difficultLetters = 'qwzxcvbnm';
-    const easyLetters = 'asdf';
-    const commonLetters = 'etaoinshrdlu';
-    
-    let multiplier = 1;
-    
-    if (char) {
-      const lowerChar = char.toLowerCase();
-      if (difficultLetters.includes(lowerChar)) {
-        multiplier = 1.3 + Math.random() * 0.4; // Slower for difficult letters
-      } else if (easyLetters.includes(lowerChar)) {
-        multiplier = 0.7 + Math.random() * 0.2; // Faster for easy letters
-      } else if (commonLetters.includes(lowerChar)) {
-        multiplier = 0.8 + Math.random() * 0.3; // Moderate for common letters
-      }
-    }
-    
-    // Position-based variations (slower at start, faster in middle)
-    if (position === 0) {
-      multiplier *= 1.5; // Slower start
-    } else if (position > 2) {
-      multiplier *= 0.9; // Faster once in rhythm
-    }
-    
-    // Random hesitations (very rare)
-    if (Math.random() < 0.05) {
-      multiplier *= 2; // Occasional hesitation
-    }
-    
-    // Burst typing (occasional fast sequences)
-    if (Math.random() < 0.15 && position > 1) {
-      multiplier *= 0.6; // Fast burst
-    }
-    
-    return Math.floor(baseSpeed * multiplier);
+  // Enhanced smooth typewriter effect with variable timing
+  const getSmoothDelay = () => {
+    return 80; // Slightly faster for more fluid typing
   };
 
 
@@ -130,31 +88,31 @@ const Hero = ({ isMobile }: HeroProps) => {
           
           // Perfect typing - no mistakes
           setDisplayText(currentWord.slice(0, displayText.length + 1));
-          const delay = getRealisticDelay(nextChar, displayText.length);
+          const delay = getSmoothDelay();
           timeout = setTimeout(updateText, delay);
         } else {
-          // Word complete, start deleting immediately (no pause)
+          // Word complete, start deleting after smooth pause
           setIsDeleting(true);
-          timeout = setTimeout(updateText, 300 + Math.random() * 200);
+          timeout = setTimeout(updateText, 800);
         }
       } else {
         // Deleting phase
         if (displayText.length > 0) {
           setDisplayText(displayText.slice(0, -1));
-          // Faster, consistent deletion speed
-          const deleteSpeed = 40 + Math.random() * 20;
+          // Smooth deletion speed
+          const deleteSpeed = 40;
           timeout = setTimeout(updateText, deleteSpeed);
         } else {
-          // Move to random next word immediately
+          // Move to next word in order
           setIsDeleting(false);
-          setCurrentWordIndex((prev) => getRandomWordIndex(prev));
-          // Tiny pause before starting next word
-          timeout = setTimeout(updateText, 100 + Math.random() * 100);
+          setCurrentWordIndex((prev) => getNextWordIndex(prev));
+          // Smooth pause before starting next word
+          timeout = setTimeout(updateText, 300);
         }
       }
     };
 
-    timeout = setTimeout(updateText, getRealisticDelay());
+    timeout = setTimeout(updateText, getSmoothDelay());
     return () => clearTimeout(timeout);
   }, [currentWordIndex, displayText, isDeleting, rotatingWords]);
 
@@ -207,13 +165,13 @@ const Hero = ({ isMobile }: HeroProps) => {
                 <div className="flex flex-col items-center lg:items-start relative z-20 mb-1">
                   <span className="text-white mb-2">Transform Your</span>
                   <div className="relative inline-flex">
-                    <span className="relative block h-[1.2em] overflow-hidden">
-                      <div className="absolute whitespace-nowrap bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent left-0 top-0">
+                    <div className="relative">
+                      <div className="whitespace-nowrap bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent leading-[1.2] transition-all duration-75">
                         {displayText}
-                        <span className="inline-block w-[2px] h-[0.9em] bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] ml-[1px] animate-realistic-blink shadow-sm"></span>
+                        <span className="inline-block w-[2px] h-[1.2em] bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] ml-[1px] animate-realistic-blink shadow-sm"></span>
                       </div>
-                      <span className="invisible whitespace-nowrap">{rotatingWords[currentWordIndex]}</span>
-                    </span>
+                      <div className="invisible whitespace-nowrap absolute left-0 top-0 leading-[1.2]">{rotatingWords[currentWordIndex]}</div>
+                    </div>
                   </div>
               </div>
               </h1>

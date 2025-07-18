@@ -101,3 +101,34 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* React PageFlip styles */
+.flipbook {
+  position: relative;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.flipbook .page {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.flipbook .page-cover {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .flipbook {
+    transform: scale(0.8);
+  }
+}
