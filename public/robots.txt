@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://equinology.co.uk/sitemap.xml
+Sitemap: https://www.equinology.co.uk/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
