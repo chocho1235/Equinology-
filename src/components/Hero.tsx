@@ -71,7 +71,7 @@ const Hero = ({ isMobile }: HeroProps) => {
 
   // Enhanced smooth typewriter effect with variable timing
   const getSmoothDelay = () => {
-    return 80; // Slightly faster for more fluid typing
+    return 120; // Slower, more deliberate typing
   };
 
 

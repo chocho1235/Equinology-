@@ -18,6 +18,9 @@ import {
   Search,
   GripVertical,
   Shield,
+  Sparkles,
+  Target,
+  TrendingUp,
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -31,215 +34,305 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
 
 /** --------------------------------------------------------------------------------------------------------------------
- * GLOBAL PAGE BACKGROUND
+ * ENHANCED PAGE BACKGROUND
  * ------------------------------------------------------------------------------------------------------------------ */
 function PageBackground() {
   return (
-    <div
-      aria-hidden
-      style={{ opacity: 0.03 }}
-      className="fixed inset-0 -z-10 bg-[#0A0A0A]"
-    >
-      {/* Base gradient - moved to CSS for better performance */}
-      <div className="absolute inset-0 bg-gradient-radial-subtle" />
+    <div className="fixed inset-0 -z-10 bg-[#0A0A0A]">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]" />
       
-      {/* Noise texture */}
-      <div className="absolute inset-0 mix-blend-overlay opacity-5 bg-[url('/noise.png')]" />
-      
-      {/* Grid pattern */}
-      <div className="absolute inset-0 opacity-5 bg-[url('/grid.svg')] bg-[length:16rem_16rem]" />
+      {/* Animated background elements */}
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-1/4 right-1/4 w-96 h-96 bg-[#3CAAFF]/5 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-[#00E0FF]/5 rounded-full blur-3xl"
+      />
     </div>
   );
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
- * HOOKS / HELPERS
+ * IMPROVED HOOKS & HELPERS
  * ------------------------------------------------------------------------------------------------------------------ */
-function useFadeIn() {
-  /** A tiny helper that fades the element in only once when it enters the viewport. */
-  const ref = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(ref, { once: true, margin: "-15%" });
-  return [ref, isInView] as const;
+function useSmoothScroll() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { 
+    once: true, 
+    margin: "-10%",
+    amount: 0.3 
+  });
+  
+  return { ref, isInView };
 }
 
-function useStaggeredAnimation(count: number) {
-  /** Creates staggered animations for multiple elements */
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
+function useParallaxScroll(speed: number = 0.5) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
   
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1, rootMargin: "-50px" }
-    );
-    
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
+  const y = useTransform(scrollYProgress, [0, 1], [0, speed * 100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
   
-  return { ref, isVisible };
+  return { ref, y, opacity };
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
- * HERO
- *  • Scroll-linked parallax cleaned up – no more double-controlled opacity.
- *  • Only inner content translates/fades, section itself stays 100% opaque for route transitions.
- *  • Removed old transition clash that caused Safari flashing.
+ * ENHANCED HERO SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function HeroSection({ isMobile }: { isMobile: boolean }) {
-  const scrollY = useScroll().scrollY;
-  // Only apply scroll fade on desktop
-  const opacity = isMobile ? 1 : useTransform(scrollY, [0, 300], [1, 0]);
-  const y = useTransform(scrollY, [0, 300], [0, isMobile ? 50 : 100]);
-  const scale = useTransform(scrollY, [0, 300], [1, isMobile ? 0.9 : 0.8]);
-  const indicatorOpacity = useTransform(
-    scrollY,
-    [0, isMobile ? 20 : 150],
-    [1, 0]
-  );
+  const { ref, y, opacity } = useParallaxScroll(0.3);
+  const { ref: contentRef, isInView } = useSmoothScroll();
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
-  const handleScroll = () => {
+  // Hide scroll indicator when user scrolls
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 100) {
+        setShowScrollIndicator(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScrollToServices = () => {
     const servicesSection = document.getElementById("services");
     if (servicesSection) {
-      const yOffset = -80;
+      const yOffset = -120;
       const y = servicesSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      
+      // Hide indicator immediately when clicked
+      setShowScrollIndicator(false);
+      
+      window.scrollTo({ 
+        top: y, 
+        behavior: 'smooth' 
+      });
     }
   };
 
   return (
-    <motion.section
-      className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden"
-      style={isMobile ? undefined : { opacity: opacity as any }}
-    >
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Enhanced background elements */}
       <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isMobile ? 0.2 : 0.4 }}
-          transition={{ duration: isMobile ? 1 : 1.5 }}
-          style={isMobile ? undefined : { opacity }}
-          className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-[#3CAAFF]/20 to-transparent rounded-full blur-3xl"
-      />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isMobile ? 0.15 : 0.3 }}
-          transition={{ duration: isMobile ? 1 : 1.5, delay: isMobile ? 0.1 : 0.2 }}
-          style={isMobile ? undefined : { opacity }}
-          className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-[#00E0FF]/20 to-transparent rounded-full blur-3xl"
-            />
-          </div>
-        
-      <div className="relative w-full max-w-[90rem] mx-auto px-4 md:px-6 lg:px-8">
-        <motion.div 
-          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: isMobile ? 0.5 : 0.8 }}
-          style={isMobile ? { y, scale } : { opacity, y, scale }}
-          className="relative w-full max-w-4xl mx-auto text-center flex flex-col items-center"
-        >
-          {/* Subtle line decoration - hidden on mobile */}
-          {!isMobile && (
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              style={{ opacity }}
-              className="absolute -top-12 left-1/2 -translate-x-1/2 w-40 h-[1px] bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent"
-            />
-          )}
-
-          <motion.h1 
-            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.1 : 0.2 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1]"
-        >
-            Crafting Digital
-          <br />
-          <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-              Experiences
-          </span>
-        </motion.h1>
-
-        <motion.p
-            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-          animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.2 : 0.4 }}
-            className="text-xl text-[#BDBDBD] mb-16 font-light max-w-2xl leading-relaxed px-4"
-        >
-            We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
-        </motion.p>
-
+        ref={ref}
+        style={{ y, opacity }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
           <motion.div
-            initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-          animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: isMobile ? 0.4 : 0.8, delay: isMobile ? 0.3 : 0.6 }}
-            className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#BDBDBD] mb-16 px-4"
-          >
-            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
-              <Shield className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
-              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Enterprise Grade</span>
-            </div>
-            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
-              <Zap className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
-              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Lightning Fast</span>
-            </div>
-            <div className={`flex items-center gap-3 ${isMobile ? '' : 'group'}`}>
-              <Star className={`w-5 h-5 text-[#3CAAFF] ${isMobile ? '' : 'group-hover:text-[#00E0FF] transition-colors duration-300'}`} />
-              <span className={isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}>Award Winning</span>
-            </div>
-          </motion.div>
+            animate={{
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-[#3CAAFF]/10 rounded-full"
+          />
+          <motion.div
+            animate={{
+              rotate: [360, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-[#00E0FF]/10 rounded-full"
+          />
+        </div>
       </motion.div>
+
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          ref={contentRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ 
+            duration: 0.8, 
+            ease: [0.25, 0.46, 0.45, 0.94] 
+          }}
+          className="text-center space-y-8"
+        >
+          {/* Enhanced badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center gap-3 bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl px-6 py-3 rounded-full border border-[#3CAAFF]/20 shadow-[0_0_30px_rgba(60,170,255,0.1)]"
+          >
+            <Sparkles className="w-4 h-4 text-[#3CAAFF] animate-pulse" />
+            <span className="text-sm font-medium text-white/90 tracking-wide">
+              Professional Digital Solutions
+            </span>
+          </motion.div>
+
+          {/* Enhanced heading */}
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
+          >
+            Crafting Digital
+            <br />
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              Excellence
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="text-xl text-[#BDBDBD] max-w-3xl mx-auto leading-relaxed font-light"
+          >
+            We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
+          </motion.p>
+
+          {/* Enhanced feature highlights */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="flex flex-wrap justify-center gap-8 text-[#BDBDBD]"
+          >
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="flex items-center gap-3 group cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
+                <Shield className="w-5 h-5 text-[#3CAAFF]" />
+              </div>
+              <span className="group-hover:text-white transition-colors duration-300">Enterprise Grade</span>
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="flex items-center gap-3 group cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
+                <Zap className="w-5 h-5 text-[#3CAAFF]" />
+              </div>
+              <span className="group-hover:text-white transition-colors duration-300">Lightning Fast</span>
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.05, y: -2 }}
+              className="flex items-center gap-3 group cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
+                <Star className="w-5 h-5 text-[#3CAAFF]" />
+              </div>
+              <span className="group-hover:text-white transition-colors duration-300">Award Winning</span>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
 
-      {/* Scroll/Swipe indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: isMobile ? 0.5 : 1, duration: isMobile ? 0.5 : 1 }}
-        style={{ opacity: indicatorOpacity }}
-        onClick={handleScroll}
-        className="group fixed bottom-8 left-1/2 -translate-x-1/2 cursor-pointer flex flex-col items-center gap-4 z-10"
-      >
-        <motion.div
-          className="relative w-px h-16 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20"
-          initial={{ scaleY: 0 }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: isMobile ? 0.5 : 1, delay: isMobile ? 0.6 : 1.2 }}
-        >
+      {/* Enhanced intuitive scroll indicator */}
+      <AnimatePresence>
+        {showScrollIndicator && (
           <motion.div
-            className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF]"
-            animate={{
-              y: ["0%", "100%"],
-              height: ["0%", "100%"]
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ 
-              duration: isMobile ? 1 : 1.5,
-              repeat: Infinity,
-              ease: "easeInOut"
+              enter: { delay: 1.2, duration: 0.8 },
+              exit: { duration: 0.5 }
             }}
-            style={{ height: "50%" }}
-          />
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10"
+          >
+        {/* Scroll hint container */}
+        <motion.div
+          onClick={handleScrollToServices}
+          className="group cursor-pointer flex flex-col items-center gap-4 scroll-indicator"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {/* Animated scroll line */}
+          <motion.div
+            className="relative w-px h-24 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded-full"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}
+          >
+            <motion.div
+              className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF] rounded-full"
+              animate={{
+                y: ["0%", "100%"],
+              }}
+              transition={{ 
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              style={{ height: "40%" }}
+            />
+          </motion.div>
+          
+          {/* Scroll text with animation */}
+          <motion.div
+            className="flex flex-col items-center gap-2"
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="text-sm tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300 font-medium">
+              Scroll to Explore
+            </span>
+            <motion.div
+              className="w-2 h-2 bg-[#3CAAFF] rounded-full"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
         </motion.div>
-        <span className={`text-sm tracking-wider uppercase text-[#BDBDBD] ${isMobile ? '' : 'group-hover:text-white transition-colors duration-300'}`}>
-          {isMobile ? 'Swipe Down' : 'Explore'}
-        </span>
-      </motion.div>
-    </motion.section>
+        
+        {/* Additional visual cue */}
+        <motion.div
+          className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60"
+          animate={{ opacity: [0.6, 0.2, 0.6] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent rounded-full" />
+        </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
   );
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
- * BRANDING & IDENTITY SECTION
- *  • Re-implemented with useFadeIn() per element instead of continuous scrollOpacity.
+ * ENHANCED BRANDING & IDENTITY SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
+  const { ref, isInView } = useSmoothScroll();
+  
   const items = [
     {
       title: "Brand Strategy & Design",
@@ -280,13 +373,12 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-32 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: isMobile ? 0.5 : 0.8 }}
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
           className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -295,7 +387,7 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               & Identity
             </span>
-      </h2>
+          </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
             Creating distinctive brand identities that leave lasting impressions.
           </p>
@@ -305,49 +397,66 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
           {items.map((item, index) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: isMobile ? 20 : 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ 
-                duration: isMobile ? 0.5 : 0.7, 
-                delay: isMobile ? 0 : index * 0.1 
+                duration: 0.8, 
+                delay: index * 0.2 
               }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="group relative grid md:grid-cols-2 gap-8 items-center"
+              className="group relative grid md:grid-cols-2 gap-12 items-center"
             >
-              <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
-                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8">
-                  <div className={`absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+              <motion.div 
+                className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8 border border-[#3CAAFF]/10">
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/5 to-[#00E0FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-[300px] object-cover transform transition-transform duration-700 group-hover:scale-105"
+                    className="relative z-10 w-full h-[300px] object-cover rounded-xl transform transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-              </div>
+              </motion.div>
 
               <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
+                <motion.div 
+                  className="flex items-center gap-3"
+                  whileHover={{ x: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="p-3 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
                     {item.icon}
                   </div>
-                  <h3 className="text-xl font-medium text-white">
+                  <h3 className="text-2xl font-semibold text-white">
                     {item.title}
                   </h3>
-                </div>
+                </motion.div>
                 
-                <p className="text-[#BDBDBD] leading-relaxed">
+                <p className="text-[#BDBDBD] leading-relaxed text-lg">
                   {item.desc}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
-                  {item.features.map((feature) => (
-                    <div 
+                <div className="grid grid-cols-2 gap-4">
+                  {item.features.map((feature, featureIndex) => (
+                    <motion.div 
                       key={feature} 
-                      className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                      className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ 
+                        duration: 0.5, 
+                        delay: index * 0.2 + featureIndex * 0.1 
+                      }}
                     >
-                      <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
-                        <span>{feature}</span>
-                    </div>
+                      <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
+                      <span className="font-medium">{feature}</span>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -360,9 +469,11 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
- * GENERIC SECTION COMPONENTS BELOW – UNCHANGED LOGIC BUT REFACTORED TO useFadeIn() FOR PERFORMANCE
+ * ENHANCED SERVICES SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function ServicesSection({ isMobile }: { isMobile: boolean }) {
+  const { ref, isInView } = useSmoothScroll();
+  
   const services = [
     {
       title: "Website Design & Development",
@@ -370,9 +481,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
       illustration: (
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Browser Window Frame */}
-          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg overflow-hidden shadow-xl">
-            {/* Browser Header */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg overflow-hidden shadow-xl border border-[#3CAAFF]/10">
             <div className="flex items-center gap-2 px-4 py-3 bg-[#252525]">
               <div className="flex gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
@@ -383,14 +492,11 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                 <div className="w-24 h-2 bg-[#333] rounded" />
               </div>
             </div>
-            {/* Browser Content */}
             <div className="p-4">
-              {/* Header Section */}
               <div className="mb-4">
                 <div className="w-16 h-2 bg-[#3CAAFF] rounded mb-2" />
                 <div className="w-32 h-2 bg-[#333] rounded" />
               </div>
-              {/* Content Blocks */}
               <div className="space-y-3">
                 <div className="w-full h-24 bg-gradient-to-r from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded" />
                 <div className="flex gap-2">
@@ -401,7 +507,6 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
               </div>
             </div>
           </div>
-          {/* Decorative Elements */}
           <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl" />
           <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
         </div>
@@ -419,10 +524,8 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       icon: <ShoppingBag className="h-6 w-6 text-[#3CAAFF]" />,
       illustration: (
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Product Grid */}
-          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4 border border-[#3CAAFF]/10">
             <div className="grid grid-cols-2 gap-4">
-              {/* Product Cards */}
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="space-y-2">
                   <div className="w-full aspect-square bg-gradient-to-br from-[#3CAAFF]/10 to-[#00E0FF]/10 rounded-lg" />
@@ -431,12 +534,10 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                 </div>
               ))}
             </div>
-            {/* Shopping Cart Indicator */}
             <div className="absolute -top-2 -right-2 w-6 h-6 bg-[#3CAAFF] rounded-full flex items-center justify-center">
               <ShoppingBag className="w-3 h-3 text-white" />
             </div>
           </div>
-          {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-16 h-16 bg-[#3CAAFF]/20 rounded-full blur-xl" />
           <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
         </div>
@@ -454,23 +555,18 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       icon: <Code className="h-6 w-6 text-[#3CAAFF]" />,
       illustration: (
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Dashboard Layout */}
-          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
-            {/* Sidebar */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4 border border-[#3CAAFF]/10">
             <div className="flex gap-4">
               <div className="w-16 space-y-3">
                 {[...Array(4)].map((_, i) => (
                   <div key={i} className="w-full h-8 bg-[#252525] rounded" />
                 ))}
               </div>
-              {/* Main Content */}
               <div className="flex-1 space-y-4">
-                {/* Charts */}
                 <div className="grid grid-cols-2 gap-2">
                   <div className="h-16 bg-gradient-to-tr from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded" />
                   <div className="h-16 bg-gradient-to-tr from-[#00E0FF]/20 to-[#3CAAFF]/20 rounded" />
                 </div>
-                {/* Data Table */}
                 <div className="space-y-2">
                   {[...Array(3)].map((_, i) => (
                     <div key={i} className="w-full h-4 bg-[#252525] rounded" />
@@ -479,7 +575,6 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
               </div>
             </div>
           </div>
-          {/* Decorative Elements */}
           <div className="absolute -top-4 right-0 w-16 h-16 bg-[#3CAAFF]/20 rounded-full blur-xl" />
           <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
         </div>
@@ -497,9 +592,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
       icon: <Search className="h-6 w-6 text-[#3CAAFF]" />,
       illustration: (
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Analytics Dashboard */}
-          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4">
-            {/* Graph */}
+          <div className="relative w-full max-w-[280px] bg-[#1A1A1A] rounded-lg p-4 border border-[#3CAAFF]/10">
             <div className="mb-4">
               <div className="w-full h-32 bg-[#252525] rounded-lg relative overflow-hidden">
                 <div className="absolute inset-0 flex items-end">
@@ -516,7 +609,6 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                 </div>
               </div>
             </div>
-            {/* Metrics */}
             <div className="grid grid-cols-2 gap-2">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="space-y-1">
@@ -526,7 +618,6 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
               ))}
             </div>
           </div>
-          {/* Decorative Elements */}
           <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl" />
           <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl" />
         </div>
@@ -541,13 +632,21 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden" id="services">
+    <section ref={ref} className="relative py-32 overflow-hidden" id="services">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: isMobile ? 10 : 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: isMobile ? 0.5 : 0.8 }}
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
           className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -556,7 +655,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
             <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
               Web Solutions
             </span>
-      </h2>
+          </h2>
           <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
             Delivering strategic digital solutions that drive business growth.
           </p>
@@ -566,50 +665,67 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
           {services.map((service, index) => (
             <motion.div
               key={service.title}
-              initial={{ opacity: 0, y: isMobile ? 20 : 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ 
-                duration: isMobile ? 0.5 : 0.7, 
-                delay: isMobile ? 0 : index * 0.1 
+                duration: 0.8, 
+                delay: index * 0.2 
               }}
-              viewport={{ once: true, amount: 0.2 }}
-              className="group relative grid md:grid-cols-2 gap-8 items-center"
+              className="group relative grid md:grid-cols-2 gap-12 items-center"
             >
-              <div className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
-                <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8">
-                  <div className={`absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/10 to-[#00E0FF]/10 transition-opacity duration-300 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+              <motion.div 
+                className={`${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8 border border-[#3CAAFF]/10">
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-[#3CAAFF]/5 to-[#00E0FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
                   <div className="relative z-10 min-h-[300px]">
                     {service.illustration}
                   </div>
                 </div>
-                  </div>
+              </motion.div>
                   
               <div className={`${index % 2 === 0 ? "md:order-2" : "md:order-1"} space-y-6`}>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#3CAAFF]/5 border border-[#3CAAFF]/10">
+                <motion.div 
+                  className="flex items-center gap-3"
+                  whileHover={{ x: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="p-3 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
                     {service.icon}
-                </div>
-                  <h3 className="text-xl font-medium text-white">
+                  </div>
+                  <h3 className="text-2xl font-semibold text-white">
                     {service.title}
                   </h3>
-                </div>
+                </motion.div>
                 
-                <p className="text-[#BDBDBD] leading-relaxed">
+                <p className="text-[#BDBDBD] leading-relaxed text-lg">
                   {service.desc}
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
-                  {service.features.map((feature) => (
-                    <div 
+                <div className="grid grid-cols-2 gap-4">
+                  {service.features.map((feature, featureIndex) => (
+                    <motion.div 
                       key={feature} 
-                      className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                      className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ 
+                        duration: 0.5, 
+                        delay: index * 0.2 + featureIndex * 0.1 
+                      }}
                     >
-                      <div className="w-1 h-1 rounded-full bg-[#3CAAFF]" />
-                      <span>{feature}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                      <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
+                      <span className="font-medium">{feature}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -619,141 +735,238 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
- * GLOBAL REACH & CONTACT – unchanged except minor style tweaks for consistency.
+ * BUSINESS WEBSITES & EQUESTRIAN EXPERTISE SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
-const globalReachItems = [
-  {
-    title: "Digital Presence",
-    description:
-      "Establish a strong online presence that works for you 24/7, reaching potential clients worldwide.",
-    icon: <Globe className="h-6 w-6 text-blue-400" />,
-  },
-  {
-    title: "Mobile Accessibility",
-    description:
-      "Ensure your services are accessible to clients on any device, anywhere in the world.",
-    icon: <Smartphone className="h-6 w-6 text-blue-400" />,
-  },
-  {
-    title: "Social Media Integration",
-    description:
-      "Seamlessly connect your website with social platforms to expand your reach and engagement.",
-    icon: <Share2 className="h-6 w-6 text-blue-400" />,
-  },
-  {
-    title: "Search Visibility",
-    description:
-      "Optimise your online presence to be easily found by those searching for your services.",
-    icon: <Search className="h-6 w-6 text-blue-400" />,
-  },
-];
+function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
+  const { ref, isInView } = useSmoothScroll();
 
-function GlobalReachSection() {
-  return (
-    <section className="relative bg-[#0A0A0A] py-20 overflow-hidden">
-      <div className="absolute top-10 left-10 w-64 h-64 bg-[#3CAAFF]/3 rounded-full blur-3xl" />
-      <div className="absolute bottom-10 right-10 w-48 h-48 bg-[#00E0FF]/3 rounded-full blur-3xl" />
-      <div className="container mx-auto px-4">
-        <motion.div 
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="mx-auto mb-16 max-w-3xl text-center"
-        >
-          <h2 className="mb-6 text-4xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text">
-            Digital Reach & Connectivity
-          </h2>
-          <p className="text-lg text-gray-300">
-            Expand your influence and connect with clients globally through a powerful digital presence
-          </p>
-        </motion.div>
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-r from-[#0A0A0A] to-transparent" />
-          <div className="absolute right-0 top-0 bottom-0 z-10 w-8 bg-gradient-to-l from-[#0A0A0A] to-transparent" />
-          <div className="flex gap-8 overflow-x-auto pb-8 px-2 scrollbar-hide">
-            {globalReachItems.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                viewport={{ once: true, amount: 0.2 }}
-                whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.3 } }}
-                className="group relative w-[300px] flex-shrink-0 rounded-lg bg-[#111111] p-6 cursor-pointer"
-              >
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-400/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="relative">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-400/5 transition-colors group-hover:bg-blue-400/10">
-                    {item.icon}
-                  </div>
-                  <h3 className="mb-2 text-xl font-semibold text-white transition-colors group-hover:text-blue-400">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-400">{item.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+  const equestrianServices = [
+    {
+      title: "Equestrian Business Websites",
+      desc: "Specialised websites for equestrian businesses including riding schools, livery yards, trainers, horses for sale, and equine service providers. We understand the unique needs of the British equestrian industry.",
+      icon: <Heart className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Riding school websites",
+        "Livery yard management",
+        "Trainer portfolios",
+        "Horses for sale platforms",
+        "Equine contractor websites",
+      ],
+    },
+    {
+      title: "Agricultural Business Solutions",
+      desc: "Comprehensive digital solutions for agricultural businesses, farms, and rural enterprises. From machinery sales to livestock management, we build platforms that work for your business.",
+      icon: <Target className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Machinery sales websites",
+        "Contractor service platforms",
+        "Livestock management",
+        "Agricultural e-commerce",
+      ],
+    },
+    {
+      title: "Rural Business Development",
+      desc: "Digital transformation for rural businesses, helping traditional enterprises thrive in the modern digital landscape whilst maintaining their authentic character and local connections.",
+      icon: <TrendingUp className="h-6 w-6 text-[#3CAAFF]" />,
+      features: [
+        "Local business websites",
+        "Community platforms",
+        "Rural e-commerce",
+        "Digital marketing",
+      ],
+    },
+  ];
 
-function ContactSection({ navigate }: { navigate: (path: string) => void }) {
+  const pastProjects = [
+    {
+      name: "Gallop Riding School",
+      type: "Equestrian Business",
+      description: "Complete website redesign with booking system and student portal",
+      year: "2024",
+    },
+    {
+      name: "Green Meadows Farm",
+      type: "Agricultural Business",
+      description: "E-commerce platform for farm products and CSA management",
+      year: "2023",
+    },
+    {
+      name: "Elite Equestrian Training",
+      type: "Equestrian Services",
+      description: "Professional trainer website with lesson scheduling and payment integration",
+      year: "2023",
+    },
+    {
+      name: "Rural Roots Market",
+      type: "Agricultural Retail",
+      description: "Online marketplace connecting local farmers with consumers",
+      year: "2022",
+    },
+  ];
+
   return (
-    <section className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ background: "url(/noise.png), linear-gradient(90deg, #0A0A0A 0%, #10131A 100%)", opacity: 0.25 }} />
-      <div className="absolute top-20 right-20 w-32 h-32 bg-[#3CAAFF]/5 rounded-full blur-2xl" />
-      <div className="absolute bottom-20 left-20 w-40 h-40 bg-[#00E0FF]/5 rounded-full blur-2xl" />
+    <section ref={ref} className="relative py-32 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-10 left-10 w-64 h-64 bg-[#3CAAFF]/5 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-10 right-10 w-48 h-48 bg-[#00E0FF]/5 rounded-full blur-3xl"
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 60, scale: 0.95 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-          viewport={{ once: true, amount: 0.3 }}
-          className="grid gap-16 md:grid-cols-2 items-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-24"
         >
-          <div>
-              <h2 className="mb-8 text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-                Ready to Transform
-                <br />
-                <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-                  Your Business?
-                </span>
-            </h2>
-              <p className="mb-8 text-lg text-[#BDBDBD] leading-relaxed">
-              Let's create something extraordinary together. Contact us today to discuss your
-                project and discover how we can help elevate your business to new heights.
-            </p>
-            <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-[#BDBDBD]">
-                  <Star className="h-5 w-5 text-[#3CAAFF]" />
-                <span>Free initial consultation</span>
-              </li>
-                <li className="flex items-center gap-3 text-[#BDBDBD]">
-                  <Zap className="h-5 w-5 text-[#3CAAFF]" />
-                <span>Quick response time</span>
-              </li>
-                <li className="flex items-center gap-3 text-[#BDBDBD]">
-                  <Check className="h-5 w-5 text-[#3CAAFF]" />
-                <span>No-obligation quote</span>
-              </li>
-            </ul>
-          </div>
-          <div className="text-center">
-            <button
-              onClick={() => {
-                navigate("/contact");
-                setTimeout(() => window.scrollTo(0, 0));
-              }}
-                className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-12 py-4 text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25 hover:scale-105"
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
+            Business Websites
+            <br />
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              & Equestrian Expertise
+            </span>
+          </h2>
+          <p className="text-[#BDBDBD] max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
+            With years of experience in the British equestrian and agricultural sectors, we understand the unique challenges and opportunities facing rural businesses. Our portfolio includes everything from horses for sale platforms to contractor and machinery websites. Contact us to see more of our previous work.
+          </p>
+        </motion.div>
+
+        {/* Services Grid */}
+        <div className="grid md:grid-cols-3 gap-8 mb-24">
+          {equestrianServices.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="group relative rounded-2xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-8 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
             >
-              Contact Us Now
-              <ArrowRight className="ml-2 h-6 w-6 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
+              <motion.div 
+                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#3CAAFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+              <div className="relative z-10">
+                <motion.div 
+                  className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 transition-all duration-300 group-hover:bg-[#3CAAFF]/20"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {service.icon}
+                </motion.div>
+                <h3 className="mb-4 text-xl font-semibold text-white group-hover:text-[#3CAAFF] transition-colors duration-300">
+                  {service.title}
+                </h3>
+                <p className="text-[#BDBDBD] leading-relaxed mb-6">
+                  {service.desc}
+                </p>
+                <div className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <motion.div 
+                      key={feature} 
+                      className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ 
+                        duration: 0.5, 
+                        delay: index * 0.2 + featureIndex * 0.1 
+                      }}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
+                      <span className="font-medium">{feature}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Experience Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-center mb-16"
+        >
+          <h3 className="text-3xl font-bold text-white mb-4">
+            Our Wealth of Experience
+          </h3>
+          <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg">
+            We've successfully delivered projects across the equestrian and agricultural sectors, building lasting relationships with our clients.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center gap-8">
+          {equestrianServices.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group relative rounded-xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-6 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
+            >
+              <motion.div 
+                className="absolute inset-0 rounded-xl bg-gradient-to-br from-[#3CAAFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-xs font-medium text-[#3CAAFF] bg-[#3CAAFF]/10 px-2 py-1 rounded-full">
+                    {service.title.split(' ')[0]}
+                  </span>
+                  <span className="text-xs text-[#BDBDBD]">
+                    Expertise
+                  </span>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2 group-hover:text-[#3CAAFF] transition-colors duration-300">
+                  {service.title}
+                </h4>
+                <p className="text-sm text-[#BDBDBD] leading-relaxed">
+                  {service.desc}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Call to Action */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="text-center mt-16"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-8 py-3 text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25"
+          >
+            Contact Us to See Previous Work
+            <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+          </motion.button>
         </motion.div>
       </div>
     </section>
@@ -761,8 +974,245 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
+ * ENHANCED GLOBAL REACH SECTION
+ * ------------------------------------------------------------------------------------------------------------------ */
+const globalReachItems = [
+  {
+    title: "Digital Presence",
+    description: "Establish a strong online presence that works for you 24/7, reaching potential clients worldwide.",
+    icon: <Globe className="h-6 w-6 text-[#3CAAFF]" />,
+  },
+  {
+    title: "Mobile Accessibility",
+    description: "Ensure your services are accessible to clients on any device, anywhere in the world.",
+    icon: <Smartphone className="h-6 w-6 text-[#3CAAFF]" />,
+  },
+  {
+    title: "Social Media Integration",
+    description: "Seamlessly connect your website with social platforms to expand your reach and engagement.",
+    icon: <Share2 className="h-6 w-6 text-[#3CAAFF]" />,
+  },
+  {
+    title: "Search Visibility",
+    description: "Optimise your online presence to be easily found by those searching for your services.",
+    icon: <Search className="h-6 w-6 text-[#3CAAFF]" />,
+  },
+];
+
+function GlobalReachSection() {
+  const { ref, isInView } = useSmoothScroll();
+
+  return (
+    <section ref={ref} className="relative bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A] py-32 overflow-hidden">
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-10 left-10 w-64 h-64 bg-[#3CAAFF]/5 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-10 right-10 w-48 h-48 bg-[#00E0FF]/5 rounded-full blur-3xl"
+      />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
+        >
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
+            Digital Reach &
+            <br />
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              Connectivity
+            </span>
+          </h2>
+          <p className="text-[#BDBDBD] max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
+            Expand your influence and connect with clients globally through a powerful digital presence.
+          </p>
+        </motion.div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {globalReachItems.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="group relative rounded-2xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-8 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
+            >
+              <motion.div 
+                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#3CAAFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              />
+              <div className="relative z-10">
+                <motion.div 
+                  className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 transition-all duration-300 group-hover:bg-[#3CAAFF]/20"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {item.icon}
+                </motion.div>
+                <h3 className="mb-4 text-xl font-semibold text-white group-hover:text-[#3CAAFF] transition-colors duration-300">
+                  {item.title}
+                </h3>
+                <p className="text-[#BDBDBD] leading-relaxed">{item.description}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** --------------------------------------------------------------------------------------------------------------------
+ * ENHANCED CONTACT SECTION
+ * ------------------------------------------------------------------------------------------------------------------ */
+function ContactSection({ navigate }: { navigate: (path: string) => void }) {
+  const { ref, isInView } = useSmoothScroll();
+
+  return (
+    <section ref={ref} className="relative py-32 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-20 right-20 w-32 h-32 bg-[#3CAAFF]/5 rounded-full blur-2xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-20 left-20 w-40 h-40 bg-[#00E0FF]/5 rounded-full blur-2xl"
+      />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="grid gap-16 md:grid-cols-2 items-center"
+        >
+          <div>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mb-8 text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight"
+            >
+              Ready to Transform
+              <br />
+              <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+                Your Business?
+              </span>
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="mb-8 text-lg text-[#BDBDBD] leading-relaxed"
+            >
+              Let's create something extraordinary together. Contact us today to discuss your
+              project and discover how we can help elevate your business to new heights.
+            </motion.p>
+            <motion.ul 
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="space-y-4"
+            >
+              <motion.li 
+                className="flex items-center gap-3 text-[#BDBDBD]"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Star className="h-5 w-5 text-[#3CAAFF]" />
+                <span>Free initial consultation</span>
+              </motion.li>
+              <motion.li 
+                className="flex items-center gap-3 text-[#BDBDBD]"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Zap className="h-5 w-5 text-[#3CAAFF]" />
+                <span>Quick response time</span>
+              </motion.li>
+              <motion.li 
+                className="flex items-center gap-3 text-[#BDBDBD]"
+                whileHover={{ x: 5 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Check className="h-5 w-5 text-[#3CAAFF]" />
+                <span>No-obligation quote</span>
+              </motion.li>
+            </motion.ul>
+          </div>
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <motion.button
+              onClick={() => {
+                navigate("/contact");
+                setTimeout(() => window.scrollTo(0, 0));
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-12 py-4 text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25"
+            >
+              Contact Us Now
+              <ArrowRight className="ml-2 h-6 w-6 transition-transform group-hover:translate-x-1" />
+            </motion.button>
+          </motion.div>
+        </motion.div>
+      </div>
+      
+      {/* Smooth transition element */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#0A0A0A] to-transparent pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+      />
+    </section>
+  );
+}
+
+/** --------------------------------------------------------------------------------------------------------------------
  * MAIN PAGE COMPONENT
- *  • Mounts PageBackground once and gives consistent fade between route transitions.
  * ------------------------------------------------------------------------------------------------------------------ */
 export default function ServicesPage() {
   const navigate = useNavigate();
@@ -770,14 +1220,12 @@ export default function ServicesPage() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   
   useEffect(() => {
-    // Immediate mount to prevent flash
     setMounted(true);
     window.scrollTo({ top: 0 });
   }, []);
 
   return (
     <>
-      {/* Background always renders immediately */}
       <PageBackground />
       
       <AnimatePresence mode="wait">
@@ -787,12 +1235,13 @@ export default function ServicesPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="relative bg-transparent text-[#F5F5F7]"
           >
             <HeroSection isMobile={isMobile} />
             <BrandingIdentitySection isMobile={isMobile} />
             <ServicesSection isMobile={isMobile} />
+            <BusinessWebsitesSection isMobile={isMobile} />
             <GlobalReachSection />
             <ContactSection navigate={navigate} />
           </motion.main>
