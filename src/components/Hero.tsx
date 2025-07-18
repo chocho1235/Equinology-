@@ -183,7 +183,7 @@ const Hero = ({ isMobile }: HeroProps) => {
                 transition={{ duration: 0.8, delay: 0.3 }}
                 className="text-lg lg:text-xl text-[#B8BCC4] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light mt-4"
               >
-                Professional digital solutions that drive business growth. From consultation to delivery, we create exceptional experiences that exceed expectations.
+                Professional web design and development services for businesses of all sizes. We specialise in equestrian and agricultural sectors while delivering exceptional results across industries. From stunning websites to high-converting platforms, we create digital solutions that drive growth and exceed expectations.
               </motion.p>
 
               {/* CTA buttons */}
