@@ -23,15 +23,32 @@
     <meta name="target" content="all" />
     <meta name="HandheldFriendly" content="true" />
     <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Equinology" />
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://equinology.co.uk/" />
+    
+    <!-- Security headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     
     <!-- Fix preload with proper crossorigin -->
     <link rel="modulepreload" href="/src/main.tsx" as="script" crossorigin />
     
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+    
+    <!-- DNS prefetch for performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
     
     <!-- Prevent layout shifts -->
     <style>
@@ -59,6 +76,16 @@
     </style>
     
     <title>Web Design UK | Affordable Web Design Services | Equestrian & Business Websites</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EWWMP2EZ0E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-EWWMP2EZ0E');
+    </script>
     
     <!-- Primary Meta Tags -->
     <meta name="title" content="Web Design UK | Affordable Web Design Services | Equestrian & Business Websites">
@@ -150,9 +177,84 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Equinology Digital Agency",
+      "description": "Professional web design services across the UK. Specialising in equestrian, agricultural, and business websites. Affordable web design from £299.",
+      "url": "https://equinology.co.uk",
+      "telephone": "+44",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "GB"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "addressCountry": "GB"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "United Kingdom"
+      },
+      "serviceArea": {
+        "@type": "Country",
+        "name": "United Kingdom"
+      },
+      "priceRange": "££",
+      "openingHours": "Mo-Fr 09:00-17:00",
+      "sameAs": []
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does web design cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our web design services start from £299, offering affordable professional websites for businesses of all sizes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you specialise in equestrian websites?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we specialise in equestrian and agricultural web design, with extensive experience in these sectors."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to build a website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most websites are completed within 2-4 weeks, depending on complexity and requirements."
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Register service worker for better performance
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

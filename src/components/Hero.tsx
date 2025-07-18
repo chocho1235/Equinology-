@@ -248,7 +248,7 @@ const Hero = ({ isMobile }: HeroProps) => {
                   <div className="aspect-w-4 aspect-h-3 rounded-3xl overflow-visible">
                     <img
                       src="/ChatGPT Image Jun 20, 2025, 01_54_47 PM.png"
-                      alt="Elegant Horse"
+                      alt="Professional equestrian web design services - Elegant horse illustration representing our expertise in equestrian and agricultural website development"
                       className={`object-contain w-full h-full rounded-3xl transition-opacity duration-700 ${
                         imageLoaded ? 'opacity-100' : 'opacity-0'
                       }`}
@@ -256,6 +256,8 @@ const Hero = ({ isMobile }: HeroProps) => {
                       width={600}
                       height={450}
                       onLoad={() => setImageLoaded(true)}
+                      decoding="async"
+                      fetchPriority="high"
                     />
                     {!imageLoaded && (
                       <div className="absolute inset-0 animate-pulse" />

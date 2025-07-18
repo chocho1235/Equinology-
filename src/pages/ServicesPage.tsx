@@ -32,6 +32,7 @@ import {
 } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
+import SEOHead from '../components/SEOHead';
 
 /** --------------------------------------------------------------------------------------------------------------------
  * ENHANCED PAGE BACKGROUND
@@ -1226,6 +1227,30 @@ export default function ServicesPage() {
 
   return (
     <>
+      <SEOHead
+        title="Web Design Services UK | Professional Website Development | Equinology"
+        description="Professional web design services across the UK. Specialising in equestrian, agricultural, and business websites. Affordable web design from £299. Expert web developers delivering stunning, high-converting websites."
+        keywords="web design services UK, professional website development, equestrian web design, agricultural web design, business website design, affordable web design, custom website development, responsive web design, WordPress development, e-commerce websites, UK web designer, digital agency services"
+        canonical="/services"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Web Design Services",
+          "description": "Professional web design services across the UK. Specialising in equestrian, agricultural, and business websites.",
+          "provider": {
+            "@type": "Organisation",
+            "name": "Equinology Digital Agency"
+          },
+          "serviceType": "Web Design",
+          "areaServed": "GB",
+          "offers": {
+            "@type": "Offer",
+            "price": "299",
+            "priceCurrency": "GBP",
+            "description": "Affordable web design starting from £299"
+          }
+        }}
+      />
       <PageBackground />
       
       <AnimatePresence mode="wait">

@@ -2,6 +2,7 @@ import React, { lazy } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Breadcrumb from './components/Breadcrumb';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -16,6 +17,7 @@ const ContactPage = lazy(() => import('./pages/ContactPage'));
 const Layout: React.FC = () => (
   <>
     <Header />
+    <Breadcrumb />
     <main className="min-h-screen">
       <Outlet />
     </main>

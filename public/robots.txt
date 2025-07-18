@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://equinology.co.uk/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Disallow any admin or private areas (if they exist)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Allow all important pages
+Allow: /
+Allow: /services
+Allow: /contact
+Allow: /blog
+Allow: /articles 
