@@ -486,7 +486,7 @@ Mockups are digital or physical representations of your product. They show how y
    - Make it easy to understand
 
 2. **Be Realistic**
-   - Use accurate colors
+   - Use accurate colours
    - Show proper scale
    - Consider materials
 
@@ -614,7 +614,7 @@ In today's digital world, a professional website is essential for any equine bus
 ### Must-Have Features
 - Responsive design
 - Fast loading
-- SEO optimization
+- SEO optimisation
 - Security features
 - Analytics tracking
 
@@ -874,9 +874,9 @@ Design navigation menus that work well with touch interactions, including:
 ### 1. Mobile-First Approach
 Start designing for mobile devices first, then scale up to larger screens. This ensures your core content and functionality work on the most constrained devices.
 
-### 2. Performance Optimization
-- Optimize images for different screen densities
-- Minimize HTTP requests
+### 2. Performance Optimisation
+- Optimise images for different screen densities
+- Minimise HTTP requests
 - Use efficient CSS and JavaScript
 - Implement lazy loading for images
 

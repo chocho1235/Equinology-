@@ -81,7 +81,7 @@ const Facilities = ({ isMobile }: FacilitiesProps) => {
       features: [
         "Custom design and development",
         "Responsive across all devices",
-        "SEO optimization built-in",
+        "SEO optimisation built-in",
         "Performance-focused architecture"
       ],
       icon: <Globe className="w-6 h-6 text-blue-400" />,
