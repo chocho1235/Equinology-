@@ -80,7 +80,7 @@ const Header = () => {
         }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
             <a href="/" className="flex items-center">
-              <img src={logo} className="w-40 h-auto drop-shadow-lg" alt="Logo" />
+              <img src={logo} className="w-40 h-auto drop-shadow-lg" alt="Equinology Digital Agency logo" />
             </a>
 
             <div className="hidden md:flex space-x-6">
@@ -123,7 +123,7 @@ const Header = () => {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
             <a href="/" className="flex items-center">
-              <img src={logo} className="w-40 h-auto drop-shadow-lg" alt="Logo" />
+              <img src={logo} className="w-40 h-auto drop-shadow-lg" alt="Equinology Digital Agency logo" />
             </a>
 
             <div className="hidden md:flex space-x-6">
