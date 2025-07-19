@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Contact } from '../components/Contact';
 import ProcessSteps from '../components/ProcessSteps';
+import SEOHead from '../components/SEOHead';
 
 // Lazy load the SwirlBackground component
 const SwirlBackground = lazy(() => import('../components/background/SwirlBackground'));
@@ -215,12 +216,19 @@ const Benefits = () => {
 };
 
 const ContactPage = () => (
-  <div className="bg-black min-h-screen">
-    <ContactHero />
-    <Benefits />
-    <ProcessSteps />
-    <Contact />
-  </div>
+  <>
+    <SEOHead
+      title="Contact Equinology Digital Agency"
+      description="Get in touch with our team for professional web design and digital solutions."
+      canonical="/contact"
+    />
+    <div className="bg-black min-h-screen">
+      <ContactHero />
+      <Benefits />
+      <ProcessSteps />
+      <Contact />
+    </div>
+  </>
 );
 
 export default ContactPage;

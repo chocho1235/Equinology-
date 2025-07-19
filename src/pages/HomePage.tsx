@@ -9,6 +9,7 @@ import OngoingProjects from '../components/OngoingProjects';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { useMediaQuery } from 'react-responsive';
+import SEOHead from '../components/SEOHead';
 
 interface CardProps {
   title: string;
@@ -19,9 +20,15 @@ interface CardProps {
 
 const HomePage = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
-  
+
   return (
-    <div className="bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A] to-[#0F0F0F] relative">
+    <>
+      <SEOHead
+        title="Web Design UK | Equinology Digital Agency"
+        description="Affordable web design services for equestrian, agricultural and business websites across the UK."
+        canonical="/"
+      />
+      <div className="bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A] to-[#0F0F0F] relative">
       {/* Global Enhanced Background */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(60,170,255,0.08)_0%,transparent_50%)]" />
@@ -42,7 +49,7 @@ const HomePage = () => {
         <Facilities isMobile={isMobile} />
         <Testimonials isMobile={isMobile} />
       </div>
-    </div>
+    </>
   );
 };
 
