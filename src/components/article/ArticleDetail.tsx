@@ -6,8 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize from 'rehype-sanitize';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Clock, User } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
-import TimeAgo from 'react-timeago';
+import SEOHead from '../SEOHead';
 import { useNavigate } from 'react-router-dom';
 
 interface ArticleDetailProps {
@@ -22,6 +21,33 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ post, onBackClick }) => {
     return <div className="text-center py-20">Article not found</div>;
   }
 
+  const canonical = `/articles/${post.slug}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.summary,
+    image: post.coverImage || post.image,
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
+    datePublished: new Date(post.timestamp).toISOString(),
+    dateModified: new Date(post.timestamp).toISOString(),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://equinology.co.uk${canonical}`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Equinology Digital Agency",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://equinology.co.uk/logo512.png",
+      },
+    },
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -29,10 +55,14 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ post, onBackClick }) => {
       transition={{ duration: 0.5 }}
       className="container mx-auto px-4 py-8 max-w-6xl w-full"
     >
-      <Helmet>
-        <title>{`${post.title} | Digital Insights`}</title>
-        <meta name="description" content={post.summary} />
-      </Helmet>
+      <SEOHead
+        title={`${post.title} | Digital Insights`}
+        description={post.summary}
+        canonical={canonical}
+        ogImage={post.coverImage || post.image}
+        structuredData={structuredData}
+        ogType="article"
+      />
 
       <div className="mb-6">
         <button 
