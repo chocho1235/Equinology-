@@ -58,7 +58,7 @@ const Footer = () => {
           {/* Column 1: Brand & Description */}
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="inline-flex items-center mb-6 group">
-              <img src={logo} className="w-64 h-auto drop-shadow-lg" alt="Logo" />
+              <img src={logo} className="w-64 h-auto drop-shadow-lg" alt="Equinology Digital Agency logo" />
             </Link>
             <p className="text-[#777777] text-sm leading-relaxed">
               Expert web design services for businesses worldwide. Specialising in custom websites, equine sales platforms, and software solutions that combine our expertise with modern web design.
