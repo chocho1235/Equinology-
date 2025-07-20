@@ -137,23 +137,23 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center">
+    <section className="relative min-h-screen flex items-center justify-center z-10">
       {/* Unique Three.js background for services page */}
       <Suspense fallback={null}>
-        <ServicesHeroBackground />
+        <ServicesHeroBackground isMobile={isMobile} />
       </Suspense>
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <motion.div 
-          ref={contentRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ 
-            duration: 0.8, 
-            ease: [0.25, 0.46, 0.45, 0.94] 
-          }}
-          className="text-center space-y-8"
-        >
+              <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <motion.div 
+            ref={contentRef}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ 
+              duration: 0.8, 
+              ease: [0.25, 0.46, 0.45, 0.94] 
+            }}
+            className="text-center space-y-8 relative z-30"
+          >
           {/* Enhanced badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -172,12 +172,14 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight drop-shadow-2xl"
           >
-            Crafting Digital
-            <br />
-            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
-              Excellence
+            <span className="relative z-10">
+              Crafting Digital
+              <br />
+              <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent drop-shadow-lg">
+                Excellence
+              </span>
             </span>
           </motion.h1>
 
@@ -185,7 +187,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-base sm:text-lg md:text-xl text-[#BDBDBD] max-w-3xl mx-auto leading-relaxed font-light px-4"
+            className="text-base sm:text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed font-light px-4 drop-shadow-lg backdrop-blur-sm"
           >
             We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
           </motion.p>
@@ -195,7 +197,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-[#BDBDBD] px-4"
+            className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-white/90 px-4 backdrop-blur-sm"
           >
             <motion.div 
               whileHover={{ scale: 1.05, y: -2 }}
@@ -446,7 +448,6 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
  * ENHANCED SERVICES SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function ServicesSection({ isMobile }: { isMobile: boolean }) {
-  const { ref, isInView } = useSmoothScroll();
   
   const services = [
     {
@@ -606,21 +607,22 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-32" id="services">
+    <section className="relative py-32 z-20" id="services">
       {/* Visual anchor point */}
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
         initial={{ scaleY: 0 }}
         whileInView={{ scaleY: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -640,11 +642,12 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ 
-                duration: 0.8, 
-                delay: index * 0.2 
+                duration: 0.6, 
+                delay: index * 0.1 
               }}
+              viewport={{ once: true, margin: "-50px" }}
               className="group relative grid md:grid-cols-2 gap-12 items-center"
             >
               <motion.div 
@@ -688,11 +691,12 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
                       key={feature} 
                       className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
                       initial={{ opacity: 0, x: -10 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      whileInView={{ opacity: 1, x: 0 }}
                       transition={{ 
-                        duration: 0.5, 
-                        delay: index * 0.2 + featureIndex * 0.1 
+                        duration: 0.4, 
+                        delay: index * 0.1 + featureIndex * 0.05 
                       }}
+                      viewport={{ once: true, margin: "-50px" }}
                     >
                       <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
                       <span className="font-medium">{feature}</span>
@@ -712,7 +716,6 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
  * BUSINESS WEBSITES & EQUESTRIAN EXPERTISE SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
-  const { ref, isInView } = useSmoothScroll();
 
   const equestrianServices = [
     {
@@ -779,7 +782,7 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-32 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+    <section className="relative py-32 z-20">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -808,8 +811,9 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -830,8 +834,9 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
               whileHover={{ scale: 1.02, y: -5 }}
               className="group relative rounded-2xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-8 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
             >
@@ -860,11 +865,12 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
                       key={feature} 
                       className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
                       initial={{ opacity: 0, x: -10 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      whileInView={{ opacity: 1, x: 0 }}
                       transition={{ 
-                        duration: 0.5, 
-                        delay: index * 0.2 + featureIndex * 0.1 
+                        duration: 0.4, 
+                        delay: index * 0.1 + featureIndex * 0.05 
                       }}
+                      viewport={{ once: true, margin: "-50px" }}
                     >
                       <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
                       <span className="font-medium">{feature}</span>
@@ -879,8 +885,9 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
         {/* Experience Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-16"
         >
           <h3 className="text-3xl font-bold text-white mb-4">
@@ -896,8 +903,9 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.6 + index * 0.1 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
               whileHover={{ scale: 1.05, y: -5 }}
               className="group relative rounded-xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-6 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
             >
@@ -929,8 +937,9 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
         {/* Call to Action */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 1 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mt-16"
         >
           <motion.button
@@ -974,10 +983,8 @@ const globalReachItems = [
 ];
 
 function GlobalReachSection() {
-  const { ref, isInView } = useSmoothScroll();
-
   return (
-    <section ref={ref} className="relative bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A] py-32">
+    <section className="relative py-32 z-20">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -1006,8 +1013,9 @@ function GlobalReachSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-20"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -1027,8 +1035,9 @@ function GlobalReachSection() {
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
               whileHover={{ scale: 1.05, y: -5 }}
               className="group relative rounded-2xl bg-gradient-to-br from-[#111111] to-[#1A1A1A] p-8 border border-[#3CAAFF]/10 hover:border-[#3CAAFF]/20 transition-all duration-300"
             >
@@ -1224,7 +1233,7 @@ export default function ServicesPage() {
           }
         }}
       />
-      <PageBackground />
+      {/* <PageBackground /> */}
       
       <AnimatePresence mode="wait">
         {mounted && (
@@ -1234,7 +1243,7 @@ export default function ServicesPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative text-[#F5F5F7]"
+            className="relative text-[#F5F5F7] z-10"
           >
             <HeroSection isMobile={isMobile} />
             <BrandingIdentitySection isMobile={isMobile} />
