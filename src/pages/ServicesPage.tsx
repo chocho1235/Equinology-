@@ -233,72 +233,223 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
       {/* Enhanced intuitive scroll indicator */}
       <AnimatePresence>
         {showScrollIndicator && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-              enter: { delay: 1.2, duration: 0.8 },
-              exit: { duration: 0.5 }
-            }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
-          >
-        {/* Scroll hint container */}
-        <motion.div
-          onClick={handleScrollToServices}
-          className="group cursor-pointer flex flex-col items-center gap-4 scroll-indicator"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {/* Animated scroll line */}
-          <motion.div
-            className="relative w-px h-24 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded-full"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
-          >
+          <>
+            {/* Desktop scroll indicator */}
             <motion.div
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF] rounded-full"
-              animate={{
-                y: ["0%", "100%"],
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ 
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut"
+                enter: { delay: 1.2, duration: 0.8 },
+                exit: { duration: 0.5 }
               }}
-              style={{ height: "40%" }}
-            />
-          </motion.div>
-          
-          {/* Scroll text with animation */}
-          <motion.div
-            className="flex flex-col items-center gap-2"
-            animate={{ y: [0, -5, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <span className="text-sm tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300 font-medium">
-              Scroll to Explore
-            </span>
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
+            >
+              {/* Scroll hint container */}
+              <motion.div
+                onClick={handleScrollToServices}
+                className="group cursor-pointer flex flex-col items-center gap-4 scroll-indicator"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {/* Animated scroll line */}
+                <motion.div
+                  className="relative w-px h-24 overflow-hidden bg-gradient-to-b from-[#3CAAFF]/20 to-[#00E0FF]/20 rounded-full"
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{ duration: 1, delay: 1.5 }}
+                >
+                  <motion.div
+                    className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#3CAAFF] to-[#00E0FF] rounded-full"
+                    animate={{
+                      y: ["0%", "100%"],
+                    }}
+                    transition={{ 
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{ height: "40%" }}
+                  />
+                </motion.div>
+                
+                {/* Scroll text with animation */}
+                <motion.div
+                  className="flex flex-col items-center gap-2"
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <span className="text-sm tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300 font-medium">
+                    Scroll to Explore
+                  </span>
+                  <motion.div
+                    className="w-2 h-2 bg-[#3CAAFF] rounded-full"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </motion.div>
+              </motion.div>
+              
+              {/* Additional visual cue */}
+              <motion.div
+                className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60"
+                animate={{ opacity: [0.6, 0.2, 0.6] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent rounded-full" />
+              </motion.div>
+            </motion.div>
+
+            {/* Mobile swipe indicator */}
             <motion.div
-              className="w-2 h-2 bg-[#3CAAFF] rounded-full"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
-        
-        {/* Additional visual cue */}
-        <motion.div
-          className="absolute -bottom-16 left-1/2 -translate-x-1/2 opacity-60"
-          animate={{ opacity: [0.6, 0.2, 0.6] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-[#3CAAFF]/30 to-transparent rounded-full" />
-        </motion.div>
-          </motion.div>
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ 
+                enter: { delay: 1.2, duration: 0.8 },
+                exit: { duration: 0.5 }
+              }}
+              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-10 sm:hidden"
+            >
+              <motion.div
+                onClick={handleScrollToServices}
+                className="group cursor-pointer flex flex-col items-center gap-3"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {/* Swipe animation */}
+                <motion.div
+                  className="flex items-center gap-2"
+                  animate={{ x: [-10, 10, -10] }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <motion.div
+                    className="w-3 h-3 bg-[#3CAAFF] rounded-full"
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="w-2 h-2 bg-[#00E0FF] rounded-full"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1, delay: 0.3, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="w-2 h-2 bg-[#3CAAFF] rounded-full"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 1, delay: 0.6, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </motion.div>
+                
+                {/* Swipe text */}
+                <motion.div
+                  className="flex flex-col items-center gap-1"
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <span className="text-xs tracking-wider uppercase text-[#BDBDBD] group-hover:text-white transition-colors duration-300 font-medium">
+                    Swipe to Explore
+                  </span>
+                  <motion.div
+                    className="w-1 h-1 bg-[#3CAAFF] rounded-full"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
+    </section>
+  );
+}
+
+/** --------------------------------------------------------------------------------------------------------------------
+ * SERVICES INDEX & INTRODUCTION SECTION
+ * ------------------------------------------------------------------------------------------------------------------ */
+function ServicesIndexSection({ isMobile }: { isMobile: boolean }) {
+  const sections = [
+    {
+      id: "branding-identity",
+      title: "Brand Design & Identity",
+      description: "Creating distinctive brand identities that leave lasting impressions",
+      icon: <Palette className="h-5 w-5" />
+    },
+    {
+      id: "services",
+      title: "Web Solutions",
+      description: "Professional websites and applications that drive business growth",
+      icon: <Code className="h-5 w-5" />
+    },
+    {
+      id: "business-websites",
+      title: "Business & Equestrian",
+      description: "Specialised solutions for rural and equestrian businesses",
+      icon: <Heart className="h-5 w-5" />
+    },
+    {
+      id: "global-reach",
+      title: "Digital Reach",
+      description: "Expand your influence and connect with clients globally",
+      icon: <Globe className="h-5 w-5" />
+    }
+  ];
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section className="relative py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+            Our Services
+          </h2>
+          <p className="text-base text-[#BDBDBD] max-w-2xl mx-auto">
+            Choose the service that best fits your business needs
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="flex flex-wrap justify-center gap-4 sm:gap-6"
+        >
+          {sections.map((section, index) => (
+            <motion.button
+              key={section.id}
+              onClick={() => scrollToSection(section.id)}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex items-center gap-3 px-6 py-3 rounded-full bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 hover:bg-[#3CAAFF]/20 hover:border-[#3CAAFF]/40 transition-all duration-300 text-white font-medium"
+            >
+              {section.icon}
+              <span>{section.title}</span>
+              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </motion.button>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -307,7 +458,6 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
  * ENHANCED BRANDING & IDENTITY SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
-  const { ref, isInView } = useSmoothScroll();
   
   const items = [
     {
@@ -349,12 +499,21 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-16 sm:py-24 md:py-32">
+    <section id="branding-identity" className="relative py-16 sm:py-24 md:py-32">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-24"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
@@ -369,16 +528,17 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
           </p>
         </motion.div>
 
-        <div className="grid gap-16 md:gap-24">
+        <div className="grid gap-8 sm:gap-16 md:gap-24">
           {items.map((item, index) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ 
-                duration: 0.8, 
-                delay: index * 0.2 
+                duration: 0.6, 
+                delay: index * 0.1 
               }}
+              viewport={{ once: true, margin: "-50px" }}
               className="group relative grid md:grid-cols-2 gap-12 items-center"
             >
               <motion.div 
@@ -424,11 +584,12 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
                       key={feature} 
                       className="flex items-center gap-3 text-sm text-[#BDBDBD] group-hover:text-white transition-colors duration-300"
                       initial={{ opacity: 0, x: -10 }}
-                      animate={isInView ? { opacity: 1, x: 0 } : {}}
+                      whileInView={{ opacity: 1, x: 0 }}
                       transition={{ 
-                        duration: 0.5, 
-                        delay: index * 0.2 + featureIndex * 0.1 
+                        duration: 0.4, 
+                        delay: index * 0.1 + featureIndex * 0.05 
                       }}
+                      viewport={{ once: true, margin: "-50px" }}
                     >
                       <div className="w-2 h-2 rounded-full bg-[#3CAAFF] group-hover:scale-125 transition-transform duration-300" />
                       <span className="font-medium">{feature}</span>
@@ -607,7 +768,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section className="relative py-32 z-20" id="services">
+    <section id="services" className="relative py-32 z-20">
       {/* Visual anchor point */}
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
@@ -637,7 +798,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
           </p>
         </motion.div>
 
-        <div className="grid gap-16 md:gap-24">
+        <div className="grid gap-8 sm:gap-16 md:gap-24">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -782,7 +943,15 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section className="relative py-32 z-20">
+    <section id="business-websites" className="relative py-32 z-20">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
+      />
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -982,9 +1151,17 @@ const globalReachItems = [
   },
 ];
 
-function GlobalReachSection() {
+function GlobalReachSection({ isMobile }: { isMobile: boolean }) {
   return (
-    <section className="relative py-32 z-20">
+    <section id="global-reach" className="relative py-32 z-20">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
+      />
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -1070,11 +1247,17 @@ function GlobalReachSection() {
 /** --------------------------------------------------------------------------------------------------------------------
  * ENHANCED CONTACT SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
-function ContactSection({ navigate }: { navigate: (path: string) => void }) {
-  const { ref, isInView } = useSmoothScroll();
-
+function ContactSection({ navigate, isMobile }: { navigate: (path: string) => void; isMobile: boolean }) {
   return (
-    <section ref={ref} className="relative py-32 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+    <section className="relative py-32 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
+      />
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -1103,15 +1286,17 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-                      className="grid gap-8 md:gap-16 md:grid-cols-2 items-center"
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid gap-8 md:gap-16 md:grid-cols-2 items-center"
         >
           <div>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
               className="mb-8 text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight"
             >
               Ready to Transform
@@ -1122,8 +1307,9 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true, margin: "-50px" }}
               className="mb-8 text-lg text-[#BDBDBD] leading-relaxed"
             >
               Let's create something extraordinary together. Contact us today to discuss your
@@ -1131,8 +1317,9 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
             </motion.p>
             <motion.ul 
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true, margin: "-50px" }}
               className="space-y-4"
             >
               <motion.li 
@@ -1164,8 +1351,9 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
           <motion.div 
             className="text-center"
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true, margin: "-50px" }}
           >
             <motion.button
               onClick={() => {
@@ -1246,11 +1434,12 @@ export default function ServicesPage() {
             className="relative text-[#F5F5F7] z-10"
           >
             <HeroSection isMobile={isMobile} />
+            <ServicesIndexSection isMobile={isMobile} />
             <BrandingIdentitySection isMobile={isMobile} />
             <ServicesSection isMobile={isMobile} />
             <BusinessWebsitesSection isMobile={isMobile} />
-            <GlobalReachSection />
-            <ContactSection navigate={navigate} />
+            <GlobalReachSection isMobile={isMobile} />
+            <ContactSection navigate={navigate} isMobile={isMobile} />
           </motion.main>
         )}
       </AnimatePresence>
