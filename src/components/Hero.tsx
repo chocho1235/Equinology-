@@ -133,7 +133,7 @@ const Hero = ({ isMobile }: HeroProps) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-40 min-h-screen flex items-center">
+      <div className="relative z-40 min-h-screen flex items-center overflow-visible">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="text-center lg:text-left lg:grid lg:grid-cols-12 lg:gap-12 items-center w-full">
             <motion.div
@@ -257,7 +257,6 @@ const Hero = ({ isMobile }: HeroProps) => {
                       height={450}
                       onLoad={() => setImageLoaded(true)}
                       decoding="async"
-                      fetchPriority="high"
                     />
                     {!imageLoaded && (
                       <div className="absolute inset-0 animate-pulse" />

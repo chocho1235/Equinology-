@@ -137,7 +137,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center">
       {/* Enhanced background elements */}
       <motion.div 
         ref={ref}
@@ -170,7 +170,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
         </div>
       </motion.div>
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <motion.div 
           ref={contentRef}
           initial={{ opacity: 0, y: 30 }}
@@ -199,7 +199,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight"
           >
             Crafting Digital
             <br />
@@ -212,7 +212,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-xl text-[#BDBDBD] max-w-3xl mx-auto leading-relaxed font-light"
+            className="text-base sm:text-lg md:text-xl text-[#BDBDBD] max-w-3xl mx-auto leading-relaxed font-light px-4"
           >
             We transform ideas into exceptional digital solutions. Our expertise in web design and development helps businesses thrive in the digital landscape.
           </motion.p>
@@ -222,7 +222,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.7 }}
-            className="flex flex-wrap justify-center gap-8 text-[#BDBDBD]"
+            className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 text-[#BDBDBD] px-4"
           >
             <motion.div 
               whileHover={{ scale: 1.05, y: -2 }}
@@ -266,7 +266,7 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
               enter: { delay: 1.2, duration: 0.8 },
               exit: { duration: 0.5 }
             }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10"
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10 hidden sm:block"
           >
         {/* Scroll hint container */}
         <motion.div
@@ -374,7 +374,7 @@ function BrandingIdentitySection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-16 sm:py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -633,7 +633,7 @@ function ServicesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden" id="services">
+    <section ref={ref} className="relative py-32" id="services">
       {/* Visual anchor point */}
       <motion.div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
@@ -806,7 +806,7 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
   ];
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+    <section ref={ref} className="relative py-32 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -852,7 +852,7 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-24">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-24">
           {equestrianServices.map((service, index) => (
             <motion.div
               key={service.title}
@@ -1004,7 +1004,7 @@ function GlobalReachSection() {
   const { ref, isInView } = useSmoothScroll();
 
   return (
-    <section ref={ref} className="relative bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A] py-32 overflow-hidden">
+    <section ref={ref} className="relative bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A] py-32">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -1092,7 +1092,7 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
   const { ref, isInView } = useSmoothScroll();
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
+    <section ref={ref} className="relative py-32 bg-gradient-to-br from-[#0A0A0A] via-[#0B0D12] to-[#10131A]">
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
@@ -1123,7 +1123,7 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="grid gap-16 md:grid-cols-2 items-center"
+                      className="grid gap-8 md:gap-16 md:grid-cols-2 items-center"
         >
           <div>
             <motion.h2 
@@ -1192,7 +1192,7 @@ function ContactSection({ navigate }: { navigate: (path: string) => void }) {
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-12 py-4 text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25"
+              className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-8 sm:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25"
             >
               Contact Us Now
               <ArrowRight className="ml-2 h-6 w-6 transition-transform group-hover:translate-x-1" />
@@ -1261,7 +1261,7 @@ export default function ServicesPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="relative bg-transparent text-[#F5F5F7]"
+            className="relative text-[#F5F5F7]"
           >
             <HeroSection isMobile={isMobile} />
             <BrandingIdentitySection isMobile={isMobile} />
