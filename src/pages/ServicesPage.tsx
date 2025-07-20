@@ -30,9 +30,10 @@ import {
   useTransform,
   useInView,
 } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { useMediaQuery } from 'react-responsive';
 import SEOHead from '../components/SEOHead';
+import ServicesHeroBackground from '../components/background/ServicesHeroBackground';
 
 /** --------------------------------------------------------------------------------------------------------------------
  * ENHANCED PAGE BACKGROUND
@@ -103,7 +104,6 @@ function useParallaxScroll(speed: number = 0.5) {
  * ENHANCED HERO SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function HeroSection({ isMobile }: { isMobile: boolean }) {
-  const { ref, y, opacity } = useParallaxScroll(0.3);
   const { ref: contentRef, isInView } = useSmoothScroll();
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
 
@@ -138,37 +138,10 @@ function HeroSection({ isMobile }: { isMobile: boolean }) {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center">
-      {/* Enhanced background elements */}
-      <motion.div 
-        ref={ref}
-        style={{ y, opacity }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
-          <motion.div
-            animate={{
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-[#3CAAFF]/10 rounded-full"
-          />
-          <motion.div
-            animate={{
-              rotate: [360, 0],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-[#00E0FF]/10 rounded-full"
-          />
-        </div>
-      </motion.div>
+      {/* Unique Three.js background for services page */}
+      <Suspense fallback={null}>
+        <ServicesHeroBackground />
+      </Suspense>
 
       <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <motion.div 
