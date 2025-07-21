@@ -74,6 +74,15 @@
       .motion-container {
         position: relative;
       }
+      
+      /* SEO content for crawlers */
+      .seo-hidden {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
     </style>
     
     <title>Web Design UK | Equestrian & Agricultural Websites | £299</title>
@@ -96,7 +105,7 @@
     <meta property="og:url" content="https://www.equinology.co.uk/">
     <meta property="og:title" content="Web Design UK | Equestrian & Agricultural Websites | £299">
     <meta property="og:description" content="Professional web design services across the UK. Specialising in equestrian and agricultural websites. Affordable web design from £299.">
-    <meta property="og:image" content="https://equinology.co.uk/cardpreview.png">
+    <meta property="og:image" content="https://equinology.co.uk/cardpreview-optimized.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:locale" content="en_GB">
@@ -107,7 +116,7 @@
     <meta property="twitter:url" content="https://www.equinology.co.uk/">
     <meta property="twitter:title" content="Web Design UK | Equestrian & Agricultural Websites | £299">
     <meta property="twitter:description" content="Professional web design services across the UK. Specialising in equestrian and agricultural websites. Affordable web design from £299.">
-    <meta property="twitter:image" content="https://equinology.co.uk/cardpreview.png">
+    <meta property="twitter:image" content="https://equinology.co.uk/cardpreview-optimized.png">
 
     <!-- Schema.org markup for Google -->
     <script type="application/ld+json">
@@ -241,7 +250,7 @@
   </head>
   <body>
     <!-- SEO Content for crawlers -->
-    <div style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">
+    <div class="seo-hidden">
       <h1>Professional Web Design Services UK - Equestrian & Agricultural Websites</h1>
       <p>Equinology Digital Agency specialises in professional web design services across the UK. We create stunning, high-converting websites for equestrian businesses, agricultural companies, and businesses of all sizes. Our expert team delivers exceptional results that drive business growth and exceed client expectations.</p>
       <h2>Our Web Design Services</h2>

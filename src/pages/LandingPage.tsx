@@ -7,7 +7,7 @@ const LandingPage = () => {
         {/* Card Preview Image */}
         <div className="w-full aspect-[16/9] sm:aspect-[1200/630] relative">
           <img
-            src="/cardpreview.png"
+            src="/cardpreview-optimized.png"
             alt="Equinology Digital Agency"
             className="w-full h-full object-cover rounded-lg shadow-xl"
           />

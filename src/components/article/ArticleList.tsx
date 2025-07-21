@@ -75,7 +75,7 @@ const ArticleList: React.FC<ArticleListProps> = ({ posts, isGridView, onViewTogg
                   : "h-48 md:h-40 md:w-64 flex-shrink-0"
               }`}>
                 <img
-                  src={post.image}
+                  src={post.coverImage || post.image}
                   alt={`${post.title} - Article Summary`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
                 />

@@ -7,11 +7,11 @@ interface BusinessWebsiteImagesProps {
 
 const images = [
   {
-    src: "/Screenshot 2025-05-26 at 14.15.47.png",
+    src: "/Screenshot 2025-05-26 at 14.15.47-optimized.png",
     alt: "Business website example screenshot",
   },
   {
-    src: "/Screenshot 2025-05-26 at 14.28.04.png",
+    src: "/Screenshot 2025-05-26 at 14.28.04-optimized.png",
     alt: "Additional website screenshot 1",
   },
   {
