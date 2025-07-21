@@ -14,7 +14,7 @@ const projects = [
     id: 1,
     title: "Horse Listing Aggregator Platform",
     subtitle: "FindMyHorse.co.uk",
-    description: "A centralized platform that aggregates horse listings from multiple selling platforms, making it easier for buyers to find horses and for sellers to reach more customers.",
+    description: "A centralised platform that aggregates horse listings from multiple selling platforms, making it easier for buyers to find horses and for sellers to reach more customers.",
     status: "Beta Testing",
     progress: 85,
     category: "Web Platform",
