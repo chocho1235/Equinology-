@@ -51,12 +51,18 @@ export default function ThreeBackground() {
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const canvasRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Add a small delay to ensure smooth loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
 
     const handleScroll = () => {
       if (!ticking.current) {
@@ -76,10 +82,13 @@ export default function ThreeBackground() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
+    };
   }, []);
 
-  if (!mounted || hasError) return null;
+  if (!mounted || hasError || isLoading) return null;
 
   return (
     <div 
