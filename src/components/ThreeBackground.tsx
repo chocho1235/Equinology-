@@ -50,6 +50,7 @@ export default function ThreeBackground() {
   const { isMobile } = useAnimation();
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
@@ -78,7 +79,7 @@ export default function ThreeBackground() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (!mounted) return null;
+  if (!mounted || hasError) return null;
 
   return (
     <div 
@@ -97,9 +98,13 @@ export default function ThreeBackground() {
           antialias: false,
           alpha: true,
           powerPreference: "high-performance",
-          depth: false // Disable depth testing for better performance
+          depth: false, // Disable depth testing for better performance
+          failIfMajorPerformanceCaveat: false,
+          preserveDrawingBuffer: false,
+          stencil: false
         }}
         style={{ mixBlendMode: 'screen' }}
+        onError={() => setHasError(true)}
       >
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={0.5} />
