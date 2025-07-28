@@ -162,10 +162,26 @@ const ContactHero = () => {
 // Benefits section
 const Benefits = () => {
   const benefits = [
-    { icon: Calendar, title: 'Fast Turnaround', desc: 'Most projects completed within a week.' },
-    { icon: Users, title: 'Expert Team', desc: 'Dedicated specialists at your service.' },
-    { icon: Shield, title: 'Secure & Reliable', desc: 'Enterprise-grade security standards.' },
-    { icon: CheckCircle, title: 'Quality Assured', desc: 'Thorough testing and optimisation.' }
+    { 
+      icon: Calendar, 
+      title: 'Swift & Efficient Delivery', 
+      desc: 'We understand the value of your time. Most projects are completed within a week, with regular updates and transparent communication throughout the process.' 
+    },
+    { 
+      icon: Users, 
+      title: 'Passionate Expert Team', 
+      desc: 'Our dedicated specialists bring years of experience and genuine enthusiasm to every project. We\'re not just developers – we\'re creative problem-solvers who care about your success.' 
+    },
+    { 
+      icon: Shield, 
+      title: 'Trusted & Secure Partnership', 
+      desc: 'Your business is precious to us. We implement enterprise-grade security standards and maintain the highest levels of confidentiality, ensuring your data and projects are always protected.' 
+    },
+    { 
+      icon: CheckCircle, 
+      title: 'Excellence in Every Detail', 
+      desc: 'We believe in doing things properly. Every project undergoes thorough testing, optimisation, and quality assurance to ensure it not only meets but exceeds your expectations.' 
+    }
   ];
 
   return (
@@ -217,9 +233,9 @@ const Benefits = () => {
 const ContactPage = () => (
   <div className="bg-black min-h-screen">
     <ContactHero />
+    <Contact />
     <Benefits />
     <ProcessSteps />
-    <Contact />
   </div>
 );
 

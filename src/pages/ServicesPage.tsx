@@ -392,6 +392,12 @@ function ServicesIndexSection({ isMobile }: { isMobile: boolean }) {
       icon: <Heart className="h-5 w-5" />
     },
     {
+      id: "drone-photography",
+      title: "Drone Photography",
+      description: "Professional aerial photography and videography services",
+      icon: <Camera className="h-5 w-5" />
+    },
+    {
       id: "global-reach",
       title: "Digital Reach",
       description: "Expand your influence and connect with clients globally",
@@ -407,8 +413,8 @@ function ServicesIndexSection({ isMobile }: { isMobile: boolean }) {
   };
 
   return (
-    <section className="relative py-12 sm:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 sm:py-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -416,11 +422,11 @@ function ServicesIndexSection({ isMobile }: { isMobile: boolean }) {
           viewport={{ once: true, margin: "-50px" }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Our Services
           </h2>
-          <p className="text-base text-[#BDBDBD] max-w-2xl mx-auto">
-            Choose the service that best fits your business needs
+          <p className="text-lg text-[#BDBDBD] max-w-2xl mx-auto">
+            Click or tap below to navigate to your desired section
           </p>
         </motion.div>
 
@@ -441,7 +447,7 @@ function ServicesIndexSection({ isMobile }: { isMobile: boolean }) {
               viewport={{ once: true, margin: "-50px" }}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="group flex items-center gap-3 px-6 py-3 rounded-full bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 hover:bg-[#3CAAFF]/20 hover:border-[#3CAAFF]/40 transition-all duration-300 text-white font-medium"
+              className="group flex items-center gap-3 px-6 py-4 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 hover:bg-[#3CAAFF]/20 hover:border-[#3CAAFF]/40 transition-all duration-300 text-white font-medium"
             >
               {section.icon}
               <span>{section.title}</span>
@@ -1126,6 +1132,619 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
 }
 
 /** --------------------------------------------------------------------------------------------------------------------
+ * DRONE PHOTOGRAPHY SECTION
+ * ------------------------------------------------------------------------------------------------------------------ */
+function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; navigate: (path: string) => void }) {
+  const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const toggleVideoExpansion = () => {
+    setIsVideoExpanded(!isVideoExpanded);
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const pricingPackages = [
+    {
+      name: "Basic Package",
+      price: "£299",
+      description: "Perfect for small businesses and property marketing",
+      features: [
+        "2 hours of aerial filming",
+        "Basic colour correction",
+        "Raw footage included",
+        "2 edited clips (30-60 seconds)",
+        "Social media ready formats",
+        "Delivery within 5 days"
+      ],
+      popular: false
+    },
+    {
+      name: "Professional Package",
+      price: "£599",
+      description: "Our most popular choice for comprehensive coverage",
+      features: [
+        "4 hours of aerial filming",
+        "Professional colour grading",
+        "Cinematic camera movements",
+        "5 edited clips (60-90 seconds)",
+        "Background music included",
+        "Multiple format delivery",
+        "Delivery within 7 days",
+        "1 revision included"
+      ],
+      popular: true
+    },
+    {
+      name: "Premium Package",
+      price: "£999",
+      description: "Complete production with custom graphics and music",
+      features: [
+        "Full day aerial filming",
+        "Advanced colour grading",
+        "Custom graphics & branding",
+        "Professional voice-over",
+        "Multiple video formats",
+        "Social media campaign",
+        "Website integration",
+        "Unlimited revisions",
+        "Delivery within 10 days"
+      ],
+      popular: false
+    }
+  ];
+
+
+
+  const faqs = [
+    {
+      question: "What areas do you cover for drone photography?",
+      answer: "We proudly serve the entire UK with our professional drone photography services! From the stunning Scottish Highlands to the beautiful Cornish coast, we travel anywhere to capture your perfect aerial shots. We specialise in rural areas, equestrian facilities, agricultural properties, and business locations - no location is too remote for us!"
+    },
+    {
+      question: "How quickly can I get my drone footage?",
+      answer: "Lightning fast! We deliver your stunning aerial footage within just 48 hours of filming. That's right - from capture to your inbox in under 2 days! We understand you need your content quickly for marketing, social media, or urgent projects, so we've streamlined our process to get you results fast without compromising on quality."
+    },
+    {
+      question: "What makes your drone photography special?",
+      answer: "Our drone photography stands out because we combine cutting-edge 4K technology with artistic vision and years of experience. We don't just take aerial photos - we create cinematic masterpieces that tell your story. Every shot is carefully planned and professionally edited to showcase your property, business, or event in the most stunning way possible."
+    },
+    {
+      question: "Are you fully licensed and insured?",
+      answer: "Absolutely! We're fully CAA licensed and comprehensively insured drone operators. Your peace of mind is our priority. We carry extensive public liability insurance and hold all necessary permissions to fly legally and safely. You can trust us to operate professionally and responsibly on your property."
+    },
+    {
+      question: "Can you capture special events and occasions?",
+      answer: "Absolutely! We love bringing the magic of aerial photography to special moments. From romantic weddings and agricultural shows to equestrian events and corporate functions - we'll work around your schedule to capture those unforgettable moments from above. Our flexible approach means we can accommodate last-minute bookings and special requests."
+    }
+  ];
+
+  return (
+    <section id="drone-photography" className="relative py-32 z-20">
+      {/* Visual anchor point */}
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-16 bg-gradient-to-b from-[#3CAAFF] to-transparent opacity-60"
+        initial={{ scaleY: 0 }}
+        whileInView={{ scaleY: 1 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, margin: "-50px" }}
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.1, 0.2, 0.1],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute top-10 left-10 w-64 h-64 bg-[#3CAAFF]/5 rounded-full blur-3xl"
+      />
+      <motion.div
+        animate={{
+          scale: [1.1, 1, 1.1],
+          opacity: [0.15, 0.25, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute bottom-10 right-10 w-48 h-48 bg-[#00E0FF]/5 rounded-full blur-3xl"
+      />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, margin: "-50px" }}
+          className="text-center mb-24"
+        >
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-snug mb-6">
+            Drone Photography
+            <br />
+            <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] bg-clip-text text-transparent">
+              & Aerial Services
+            </span>
+          </h2>
+          <p className="text-[#BDBDBD] max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
+            Capture your business from a unique perspective with our professional drone photography services. Perfect for showcasing properties, events, and creating stunning visual content for your website.
+          </p>
+        </motion.div>
+
+        <div className="space-y-24">
+          {/* Enhanced Video Section with Controls */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="relative"
+          >
+            {/* Normal Video Container */}
+            {!isVideoExpanded && (
+              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8 border border-[#3CAAFF]/10">
+                <div className="relative">
+                  <video
+                    ref={videoRef}
+                    src="/Equinology Drone Preview.mov"
+                    className="w-full h-[600px] object-cover rounded-xl"
+                    autoPlay
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    preload="auto"
+                    poster="/lane edited xlol 2.jpg"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  {/* Video Controls */}
+                  <div className="absolute bottom-4 right-4 flex gap-3">
+                    <motion.button
+                      onClick={toggleMute}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title={isMuted ? "Unmute" : "Mute"}
+                    >
+                      {isMuted ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        </svg>
+                      )}
+                    </motion.button>
+                    
+                    <motion.button
+                      onClick={toggleVideoExpansion}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title="Enter fullscreen"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                </div>
+                
+                <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl"></div>
+              </div>
+            )}
+
+            {/* Fullscreen Video Container */}
+            {isVideoExpanded && (
+              <div className="fixed inset-0 z-50 bg-black">
+                <div className="h-full w-full flex items-center justify-center">
+                  <video
+                    ref={videoRef}
+                    src="/Equinology Drone Preview.mov"
+                    className="h-full w-full object-contain"
+                    autoPlay
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    preload="auto"
+                    poster="/lane edited xlol 2.jpg"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  {/* Video Controls */}
+                  <div className="absolute bottom-4 right-4 flex gap-3 z-10">
+                    <motion.button
+                      onClick={toggleMute}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title={isMuted ? "Unmute" : "Mute"}
+                    >
+                      {isMuted ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        </svg>
+                      )}
+                    </motion.button>
+                    
+                    <motion.button
+                      onClick={toggleVideoExpansion}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title="Exit fullscreen"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Pricing Packages */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="space-y-12"
+          >
+            <div className="text-center">
+              <h3 className="text-3xl font-bold text-white mb-4">Our Service Packages</h3>
+              <p className="text-[#BDBDBD] max-w-2xl mx-auto">
+                We offer flexible drone photography packages tailored to your specific needs. Contact us to discuss your requirements and receive a custom quote.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {pricingPackages.map((pkg, index) => (
+                <motion.div
+                  key={pkg.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  className={`relative bg-[#111111]/70 backdrop-blur-md p-8 rounded-2xl border transition-all duration-300 hover:scale-105 ${
+                    pkg.popular 
+                      ? 'border-[#3CAAFF]/50 shadow-lg shadow-[#3CAAFF]/10' 
+                      : 'border-[#3CAAFF]/10 hover:border-[#3CAAFF]/30'
+                  }`}
+                >
+                  {pkg.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <span className="bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] text-[#0A0A0A] px-4 py-1 rounded-full text-sm font-semibold">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="text-center mb-6">
+                    <h4 className="text-xl font-semibold text-white mb-2">{pkg.name}</h4>
+                    <p className="text-[#BDBDBD] text-sm">{pkg.description}</p>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    {pkg.features.map((feature, featureIndex) => (
+                      <motion.div 
+                        key={feature}
+                        className="flex items-center gap-3 text-sm text-[#BDBDBD]"
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 + featureIndex * 0.05 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                      >
+                        <Check className="w-4 h-4 text-[#3CAAFF] flex-shrink-0" />
+                        <span>{feature}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <div className={`w-full py-3 px-6 rounded-xl font-semibold text-center transition-all duration-300 ${
+                    pkg.popular
+                      ? 'bg-gradient-to-r from-[#3CAAFF]/20 to-[#00E0FF]/20 border border-[#3CAAFF]/30 text-[#3CAAFF]'
+                      : 'bg-[#3CAAFF]/5 border border-[#3CAAFF]/20 text-[#BDBDBD]'
+                  }`}>
+                    <span className="text-sm">Enquire</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+
+
+          {/* FAQ Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="space-y-12"
+          >
+            <div className="text-center">
+              <div className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-[#111111]/80 to-[#111111]/90 backdrop-blur-xl border border-[#3CAAFF]/30 shadow-[0_0_30px_rgba(60,170,255,0.1)] mb-8">
+                <MessageSquare className="w-6 h-6 text-[#3CAAFF]" />
+                <span className="text-white/90 font-semibold text-base">Common Questions</span>
+              </div>
+              <h3 className="text-3xl font-bold text-white mb-4">Frequently Asked Questions</h3>
+              <p className="text-[#BDBDBD] max-w-2xl mx-auto">
+                Discover everything you need to know about our exceptional drone photography services. From lightning-fast delivery to stunning cinematic results - we're here to make your aerial vision a reality!
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              <div className="grid gap-6">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    className="group"
+                  >
+                    <div className="bg-[#111111]/70 backdrop-blur-md rounded-2xl border border-[#3CAAFF]/10 overflow-hidden transition-all duration-300 hover:border-[#3CAAFF]/20 hover:bg-[#111111]/80">
+                      <button
+                        onClick={() => setActiveFAQ(activeFAQ === index ? null : index)}
+                        className="w-full p-8 text-left flex items-center justify-between hover:bg-[#3CAAFF]/5 transition-all duration-300 group-hover:bg-[#3CAAFF]/5"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#3CAAFF]/10 border border-[#3CAAFF]/20 flex items-center justify-center group-hover:bg-[#3CAAFF]/20 transition-all duration-300">
+                            <span className="text-[#3CAAFF] font-semibold text-sm">{index + 1}</span>
+                          </div>
+                          <h4 className="text-white font-semibold text-lg pr-4 leading-relaxed">{faq.question}</h4>
+                        </div>
+                        <motion.div
+                          animate={{ rotate: activeFAQ === index ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-[#3CAAFF] flex-shrink-0 p-2 rounded-full bg-[#3CAAFF]/10 group-hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </motion.div>
+                      </button>
+                      <motion.div
+                        initial={false}
+                        animate={{ 
+                          height: activeFAQ === index ? 'auto' : 0,
+                          opacity: activeFAQ === index ? 1 : 0
+                        }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-8 pb-8">
+                          <div className="pl-12 border-l-2 border-[#3CAAFF]/20">
+                            <p className="text-[#BDBDBD] leading-relaxed text-base">
+                              {faq.answer}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Restructured Content - Three Column Layout */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Service Overview */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="space-y-6"
+            >
+              <div className="bg-[#111111]/70 backdrop-blur-md p-6 rounded-2xl border border-[#3CAAFF]/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20">
+                    <Camera className="h-6 w-6 text-[#3CAAFF]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Service Overview
+                  </h3>
+                </div>
+                
+                <p className="text-[#BDBDBD] leading-relaxed mb-4">
+                  Our professional drone photography service delivers stunning 4K aerial perspectives of your business, property, or events. We capture production-ready content with professional editing packages.
+                </p>
+
+                <div className="space-y-3">
+                  {[
+                    "4K ultra-high definition footage",
+                    "Production-ready content delivery",
+                    "Professional editing packages",
+                    "Property showcase videos",
+                    "Event coverage & highlights",
+                    "Marketing content creation"
+                  ].map((feature, index) => (
+                    <motion.div 
+                      key={feature} 
+                      className="flex items-center gap-3 text-sm text-[#BDBDBD]"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                    >
+                      <div className="w-2 h-2 rounded-full bg-[#3CAAFF]" />
+                      <span className="font-medium">{feature}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Ideal Applications */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="space-y-6"
+            >
+              <div className="bg-[#111111]/70 backdrop-blur-md p-6 rounded-2xl border border-[#3CAAFF]/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20">
+                    <Target className="h-6 w-6 text-[#3CAAFF]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Ideal Applications
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                  {[
+                    "Equestrian facilities & riding schools",
+                    "Agricultural properties & farms",
+                    "Rural businesses & contractors",
+                    "Event venues & wedding locations",
+                    "Property marketing & real estate",
+                    "Business promotion & marketing",
+                    "Construction sites & development",
+                    "Tourism & hospitality venues",
+                    "Sports facilities & arenas",
+                    "Industrial sites & manufacturing"
+                  ].map((item, index) => (
+                    <motion.div 
+                      key={item}
+                      className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                    >
+                      <Check className="w-4 h-4 text-[#3CAAFF] flex-shrink-0" />
+                      <span>{item}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Technical Excellence */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="space-y-6"
+            >
+              <div className="bg-[#111111]/70 backdrop-blur-md p-6 rounded-2xl border border-[#3CAAFF]/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-[#3CAAFF]/10 border border-[#3CAAFF]/20">
+                    <Zap className="h-6 w-6 text-[#3CAAFF]" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white">
+                    Technical Excellence
+                  </h3>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#3CAAFF] mb-2">Equipment & Quality</h4>
+                    <div className="space-y-2">
+                      {[
+                        "4K Ultra HD resolution",
+                        "Cinematic camera movements",
+                        "Professional colour grading",
+                        "Multiple format delivery",
+                        "Raw footage included",
+                        "Licensed & insured pilot"
+                      ].map((item, index) => (
+                        <motion.div 
+                          key={item}
+                          className="flex items-center gap-2 text-sm text-[#BDBDBD]"
+                          initial={{ opacity: 0, y: 5 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                        >
+                          <Check className="w-4 h-4 text-[#3CAAFF] flex-shrink-0" />
+                          <span>{item}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="text-sm font-semibold text-[#3CAAFF] mb-2">Editing Packages</h4>
+                    <div className="space-y-2">
+                      {[
+                        "Basic: Raw footage + colour correction",
+                        "Standard: Edited highlights + social clips",
+                        "Premium: Full production + music & graphics",
+                        "Custom: Tailored to your specific needs"
+                      ].map((item, index) => (
+                        <motion.div 
+                          key={item}
+                          className="flex items-start gap-2 text-sm text-[#BDBDBD]"
+                          initial={{ opacity: 0, x: -5 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                          viewport={{ once: true, margin: "-50px" }}
+                        >
+                          <div className="w-2 h-2 rounded-full bg-[#3CAAFF] mt-2 flex-shrink-0" />
+                          <span>{item}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Call to Action */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true, margin: "-50px" }}
+            className="text-center"
+          >
+            <motion.button
+              onClick={() => navigate('/contact')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center rounded-full bg-gradient-to-r from-[#3CAAFF] to-[#00E0FF] px-8 py-3 text-lg font-semibold text-[#0A0A0A] transition-all duration-300 hover:shadow-lg hover:shadow-[#3CAAFF]/25"
+            >
+              Enquire About Drone Photography
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </motion.button>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** --------------------------------------------------------------------------------------------------------------------
  * ENHANCED GLOBAL REACH SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 const globalReachItems = [
@@ -1438,6 +2057,7 @@ export default function ServicesPage() {
             <BrandingIdentitySection isMobile={isMobile} />
             <ServicesSection isMobile={isMobile} />
             <BusinessWebsitesSection isMobile={isMobile} />
+            <DronePhotographySection isMobile={isMobile} navigate={navigate} />
             <GlobalReachSection isMobile={isMobile} />
             <ContactSection navigate={navigate} isMobile={isMobile} />
           </motion.main>
