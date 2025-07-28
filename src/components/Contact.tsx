@@ -42,7 +42,7 @@ export const Contact: React.FC = () => {
               <img
                 src="/lane edited xlol 2.jpg"
                 alt="Countryside lane in Battle, East Sussex"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[600px] md:h-[700px] lg:h-[800px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
