@@ -1137,6 +1137,7 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
 function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; navigate: (path: string) => void }) {
   const [isVideoExpanded, setIsVideoExpanded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -1148,6 +1149,17 @@ function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; na
     if (videoRef.current) {
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
+    }
+  };
+
+  const togglePause = () => {
+    if (videoRef.current) {
+      if (isPaused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+      setIsPaused(!isPaused);
     }
   };
 
