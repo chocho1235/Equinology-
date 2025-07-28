@@ -1321,6 +1321,26 @@ function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; na
                   </video>
                   
                   {/* Video Controls */}
+                  <div className="absolute bottom-4 left-4">
+                    <motion.button
+                      onClick={togglePause}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title={isPaused ? "Play" : "Pause"}
+                    >
+                      {isPaused ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                    </motion.button>
+                  </div>
+                  
                   <div className="absolute bottom-4 right-4 flex gap-3">
                     <motion.button
                       onClick={toggleMute}
@@ -1379,6 +1399,26 @@ function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; na
                   </video>
                   
                   {/* Video Controls */}
+                  <div className="absolute bottom-4 left-4 z-10">
+                    <motion.button
+                      onClick={togglePause}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
+                      title={isPaused ? "Play" : "Pause"}
+                    >
+                      {isPaused ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                    </motion.button>
+                  </div>
+                  
                   <div className="absolute bottom-4 right-4 flex gap-3 z-10">
                     <motion.button
                       onClick={toggleMute}
