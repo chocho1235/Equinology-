@@ -17,7 +17,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   description = 'Professional web design services across the UK. Specialising in equestrian and agricultural websites. Affordable web design from £299.',
   keywords = 'web design UK, cheap web design, affordable web design, equestrian web design, agricultural web design, horses for sale website, business website design, web development UK, website designer, local web design, professional web design, responsive web design, e-commerce website, WordPress web design, custom website design, small business website, UK web designer, web design services, website development, digital agency UK',
   canonical = 'https://equinology.co.uk',
-      ogImage = 'https://equinology.co.uk/cardpreview-optimized.png',
+      ogImage = 'https://equinology.co.uk/ChatGPT Image Jun 20, 2025, 01_54_47 PM-optimized (1).svg',
   ogType = 'website',
   structuredData,
   noIndex = false,

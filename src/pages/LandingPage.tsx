@@ -7,7 +7,7 @@ const LandingPage = () => {
         {/* Card Preview Image */}
         <div className="w-full aspect-[16/9] sm:aspect-[1200/630] relative">
           <img
-            src="/cardpreview-optimized.png"
+            src="/ChatGPT Image Jun 20, 2025, 01_54_47 PM-optimized (1).svg?v=1"
             alt="Equinology Digital Agency"
             className="w-full h-full object-cover rounded-lg shadow-xl"
           />
