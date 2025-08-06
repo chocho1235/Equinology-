@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import VideoPlayer from '../components/VideoPlayer';
 
 const LandingPage = () => {
   return (
@@ -11,6 +12,24 @@ const LandingPage = () => {
             alt="Equinology Digital Agency"
             className="w-full h-full object-cover rounded-lg shadow-xl"
           />
+        </div>
+
+        {/* Welcome Video */}
+        <div className="w-full aspect-[16/9] relative">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-4 border border-[#3CAAFF]/10 shadow-xl">
+            <VideoPlayer
+              src="/Sequence 01_1.mp4"
+              poster="/lane edited xlol 2.jpg"
+              className="w-full h-full rounded-xl"
+              autoPlay={false}
+              muted={true}
+              loop={true}
+              controls={true}
+              showCustomControls={true}
+            />
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#3CAAFF]/20 rounded-full blur-lg"></div>
+            <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-[#00E0FF]/20 rounded-full blur-lg"></div>
+          </div>
         </div>
 
         {/* Bio Text */}

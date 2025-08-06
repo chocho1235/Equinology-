@@ -34,6 +34,7 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useMediaQuery } from 'react-responsive';
 import SEOHead from '../components/SEOHead';
 import ServicesHeroBackground from '../components/background/ServicesHeroBackground';
+import VideoPlayer from '../components/VideoPlayer';
 
 /** --------------------------------------------------------------------------------------------------------------------
  * ENHANCED PAGE BACKGROUND
@@ -1135,33 +1136,7 @@ function BusinessWebsitesSection({ isMobile }: { isMobile: boolean }) {
  * DRONE PHOTOGRAPHY SECTION
  * ------------------------------------------------------------------------------------------------------------------ */
 function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; navigate: (path: string) => void }) {
-  const [isVideoExpanded, setIsVideoExpanded] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  const toggleVideoExpansion = () => {
-    setIsVideoExpanded(!isVideoExpanded);
-  };
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
-  const togglePause = () => {
-    if (videoRef.current) {
-      if (isPaused) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-      setIsPaused(!isPaused);
-    }
-  };
 
   const pricingPackages = [
     {
@@ -1294,7 +1269,7 @@ function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; na
         </motion.div>
 
         <div className="space-y-24">
-          {/* Enhanced Video Section with Controls */}
+          {/* Enhanced Video Section with VideoPlayer Component */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1302,158 +1277,19 @@ function DronePhotographySection({ isMobile, navigate }: { isMobile: boolean; na
             viewport={{ once: true, margin: "-50px" }}
             className="relative"
           >
-            {/* Normal Video Container */}
-            {!isVideoExpanded && (
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8 border border-[#3CAAFF]/10">
-                <div className="relative">
-                  <video
-                    ref={videoRef}
-                    src="/Equinology Drone Preview.mov"
-                    className="w-full h-[600px] object-cover rounded-xl"
-                    autoPlay
-                    muted={isMuted}
-                    loop
-                    playsInline
-                    preload="auto"
-                    poster="/lane edited xlol 2.jpg"
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                  {/* Video Controls */}
-                  <div className="absolute bottom-4 left-4">
-                    <motion.button
-                      onClick={togglePause}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title={isPaused ? "Play" : "Pause"}
-                    >
-                      {isPaused ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      )}
-                    </motion.button>
-                  </div>
-                  
-                  <div className="absolute bottom-4 right-4 flex gap-3">
-                    <motion.button
-                      onClick={toggleMute}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title={isMuted ? "Unmute" : "Mute"}
-                    >
-                      {isMuted ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        </svg>
-                      )}
-                    </motion.button>
-                    
-                    <motion.button
-                      onClick={toggleVideoExpansion}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title="Enter fullscreen"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
-                    </motion.button>
-                  </div>
-                </div>
-                
-                <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl"></div>
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl"></div>
-              </div>
-            )}
-
-            {/* Fullscreen Video Container */}
-            {isVideoExpanded && (
-              <div className="fixed inset-0 z-50 bg-black">
-                <div className="h-full w-full flex items-center justify-center">
-                  <video
-                    ref={videoRef}
-                    src="/Equinology Drone Preview.mov"
-                    className="h-full w-full object-contain"
-                    autoPlay
-                    muted={isMuted}
-                    loop
-                    playsInline
-                    preload="auto"
-                    poster="/lane edited xlol 2.jpg"
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                  
-                  {/* Video Controls */}
-                  <div className="absolute bottom-4 left-4 z-10">
-                    <motion.button
-                      onClick={togglePause}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title={isPaused ? "Play" : "Pause"}
-                    >
-                      {isPaused ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      )}
-                    </motion.button>
-                  </div>
-                  
-                  <div className="absolute bottom-4 right-4 flex gap-3 z-10">
-                    <motion.button
-                      onClick={toggleMute}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title={isMuted ? "Unmute" : "Mute"}
-                    >
-                      {isMuted ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                        </svg>
-                      )}
-                    </motion.button>
-                    
-                    <motion.button
-                      onClick={toggleVideoExpansion}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="p-3 rounded-full bg-[#0A0A0A]/80 backdrop-blur-sm border border-[#3CAAFF]/30 text-white hover:bg-[#3CAAFF]/20 transition-all duration-300"
-                      title="Exit fullscreen"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </motion.button>
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-8 border border-[#3CAAFF]/10">
+              <VideoPlayer
+                src="/Equinology Drone Preview.mov"
+                className="w-full h-[400px] sm:h-[600px] rounded-xl"
+                autoPlay={true}
+                muted={true}
+                loop={true}
+                controls={false}
+                showCustomControls={true}
+              />
+              <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#3CAAFF]/20 rounded-full blur-xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-[#00E0FF]/20 rounded-full blur-xl"></div>
+            </div>
           </motion.div>
 
           {/* Pricing Packages */}

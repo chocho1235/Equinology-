@@ -6,6 +6,7 @@ import FlagCarousel from '../components/FlagCarousel';
 import Facilities from '../components/Facilities';
 import Testimonials from '../components/Testimonials';
 import OngoingProjects from '../components/OngoingProjects';
+import VideoPlayer from '../components/VideoPlayer';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -35,6 +36,49 @@ const HomePage = () => {
       {/* Content with relative positioning */}
       <div className="relative z-10">
         <Hero isMobile={isMobile} />
+        
+        {/* Welcome Video Section */}
+        <section className="relative py-8 sm:py-16 lg:py-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="text-center mb-8 sm:mb-12"
+            >
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
+                Welcome to Equinology
+              </h2>
+              <p className="text-sm sm:text-base lg:text-lg text-[#BDBDBD] max-w-2xl mx-auto px-2 sm:px-0">
+                Discover our digital expertise and see how we transform businesses through innovative web solutions
+              </p>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="w-full aspect-[16/9] relative mx-auto max-w-4xl"
+            >
+              <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#0A0A0A] to-[#10131A] p-2 sm:p-4 border border-[#3CAAFF]/10 shadow-xl">
+                <VideoPlayer
+                  src="/Sequence 01_1.mp4"
+                  className="w-full h-full rounded-lg sm:rounded-xl"
+                  autoPlay={false}
+                  muted={true}
+                  loop={true}
+                  controls={true}
+                  showCustomControls={true}
+                />
+                <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-[#3CAAFF]/20 rounded-full blur-lg"></div>
+                <div className="absolute -bottom-1 -left-1 sm:-bottom-2 sm:-left-2 w-6 h-6 sm:w-8 sm:h-8 bg-[#00E0FF]/20 rounded-full blur-lg"></div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+        
         <Services />
         <OngoingProjects />
         <FlagCarousel />
