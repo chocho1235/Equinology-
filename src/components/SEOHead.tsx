@@ -13,11 +13,11 @@ interface SEOHeadProps {
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Web Design UK | Equestrian & Agricultural Websites | £299',
-  description = 'Professional web design services across the UK. Specialising in equestrian and agricultural websites. Affordable web design from £299.',
-  keywords = 'web design UK, cheap web design, affordable web design, equestrian web design, agricultural web design, horses for sale website, business website design, web development UK, website designer, local web design, professional web design, responsive web design, e-commerce website, WordPress web design, custom website design, small business website, UK web designer, web design services, website development, digital agency UK',
+  title = 'Equine Web Design UK | Equestrian & Agricultural Websites | Equinology',
+  description = 'British equine web design for equestrian and rural businesses. Specialising in fast, accessible websites that convert, crafted in the UK.',
+  keywords = 'equine web design, equestrian web design, equine website designer UK, equestrian websites UK, rural business web design, agricultural web design, British web design, accessible web design, SEO for equestrian businesses',
   canonical = 'https://equinology.co.uk',
-      ogImage = 'https://equinology.co.uk/ChatGPT Image Jun 20, 2025, 01_54_47 PM-optimized (1).svg',
+  ogImage = 'https://equinology.co.uk/cardpreview-optimised.png',
   ogType = 'website',
   structuredData,
   noIndex = false,

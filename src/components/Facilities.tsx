@@ -85,7 +85,7 @@ const Facilities = ({ isMobile }: FacilitiesProps) => {
         "Performance-focused architecture"
       ],
       icon: <Globe className="w-6 h-6 text-blue-400" />,
-              image: "/Screenshot 2025-05-26 at 14.15.47-optimized.png"
+              image: "/Screenshot 2025-05-26 at 14.15.47-optimised.png"
     },
     {
       category: "Construction",

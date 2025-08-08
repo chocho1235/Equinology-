@@ -7,6 +7,7 @@ import Facilities from '../components/Facilities';
 import Testimonials from '../components/Testimonials';
 import OngoingProjects from '../components/OngoingProjects';
 import VideoPlayer from '../components/VideoPlayer';
+import SEOHead from '../components/SEOHead';
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { useMediaQuery } from 'react-responsive';
@@ -21,8 +22,50 @@ interface CardProps {
 const HomePage = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Equinology Digital Agency",
+        "url": "https://equinology.co.uk",
+        "inLanguage": "en-GB",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://equinology.co.uk/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "name": "Equinology Digital Agency",
+        "url": "https://equinology.co.uk",
+        "logo": "https://equinology.co.uk/logo.webp"
+      },
+      {
+        "@type": "VideoObject",
+        "name": "Welcome to Equinology",
+        "description": "Discover our digital expertise and how we transform businesses through innovative web solutions.",
+        "thumbnailUrl": [
+          "https://equinology.co.uk/cardpreview-optimised.png"
+        ],
+        "uploadDate": new Date().toISOString(),
+        "contentUrl": "https://equinology.co.uk/Sequence%2001_1.mp4",
+        "embedUrl": "https://equinology.co.uk/",
+        "duration": "PT30S"
+      }
+    ]
+  };
+
   return (
     <div className="bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A] to-[#0F0F0F] relative">
+      <SEOHead
+        title="Equine Web Design UK |  Websites for British Businesses | Equinology"
+        description="Specialists in British equine web design. We craft fast, accessible equestrian and rural business websites that convert."
+        canonical="/"
+        ogImage="https://equinology.co.uk/cardpreview-optimised.png"
+        structuredData={structuredData}
+      />
       {/* Global Enhanced Background */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(60,170,255,0.08)_0%,transparent_50%)]" />
