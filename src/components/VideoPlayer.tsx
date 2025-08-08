@@ -13,6 +13,7 @@ interface VideoPlayerProps {
   loop?: boolean;
   controls?: boolean;
   showCustomControls?: boolean;
+  preferNativeOnMobile?: boolean;
   onReady?: () => void;
   onPlay?: () => void;
   onPause?: () => void;
@@ -31,6 +32,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   loop = false,
   controls = true,
   showCustomControls = false,
+  preferNativeOnMobile = true,
   onReady,
   onPlay,
   onPause,
@@ -46,26 +48,40 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [videoPoster, setVideoPoster] = useState<string | undefined>(poster);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const getMimeType = (url: string): string | undefined => {
+    const lower = url.split('?')[0].toLowerCase();
+    if (lower.endsWith('.mp4')) return 'video/mp4';
+    if (lower.endsWith('.mov')) return 'video/quicktime';
+    if (lower.endsWith('.webm')) return 'video/webm';
+    return undefined;
+  };
 
   const captureFirstFrame = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-      
-      if (ctx) {
+      if (ctx && video.videoWidth && video.videoHeight) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
         try {
           const dataURL = canvas.toDataURL('image/jpeg', 0.8);
           setVideoPoster(dataURL);
-        } catch (error) {
-          console.warn('Could not capture video frame:', error);
+        } catch (_err) {
+          // ignore capture errors
         }
       }
     }
@@ -83,15 +99,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
-      const videoDuration = videoRef.current.duration;
-      setDuration(videoDuration);
-      
-      // Capture first frame if no poster is provided
+      setDuration(videoRef.current.duration || 0);
       if (!poster) {
-        // Set video to first frame
+        // Ensure we are at the beginning then capture after a tick
         videoRef.current.currentTime = 0;
-        // Capture frame after a short delay to ensure video is ready
-        setTimeout(captureFirstFrame, 100);
+        setTimeout(captureFirstFrame, 120);
       }
     }
     setIsReady(true);
@@ -133,7 +145,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play();
+        const playPromise = videoRef.current.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {
+            // If play is blocked, ensure native controls are visible on mobile
+          });
+        }
       }
     }
   };
@@ -167,14 +184,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const played = duration > 0 ? currentTime / duration : 0;
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
+  const useNativeControls = (preferNativeOnMobile && isMobile && controls) || (!showCustomControls && controls);
 
   return (
     <div 
@@ -184,12 +194,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     >
       <video
         ref={videoRef}
+        onClick={togglePlay}
+        onTouchEnd={togglePlay}
         src={src}
         poster={videoPoster}
         autoPlay={autoPlay}
         muted={isMuted}
         loop={loop}
-        controls={!showCustomControls && controls}
+        controls={useNativeControls}
+        preload="metadata"
+        playsInline
+        disablePictureInPicture
+        controlsList="nodownload noplaybackrate"
         style={{ 
           objectFit: 'contain', 
           width: '100%', 
@@ -202,13 +218,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onEnded={onEnded}
         onTimeUpdate={handleTimeUpdate}
         onError={handleError}
-        playsInline
-      />
+      >
+        {/* Provide a typed source for better mobile compatibility */}
+        {getMimeType(src) && (
+          <source src={src} type={getMimeType(src)} />
+        )}
+        Your browser does not support the video tag.
+      </video>
       
       {/* Hidden canvas for capturing video frames */}
       <canvas ref={canvasRef} style={{ display: 'none' }} />
 
-      {showCustomControls && (
+      {showCustomControls && !useNativeControls && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
